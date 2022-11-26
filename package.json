@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "prettier": "prettier --write --prose-wrap=always README.md package.json"
+  },
+  "devDependencies": {
+    "prettier": "^2.8.0"
+  }
+}
