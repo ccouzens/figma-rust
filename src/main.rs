@@ -7,42 +7,57 @@ struct GlobalProperties {
     name: String,
 }
 
-
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 struct Color {
-    #[serde(rename = "r")] 
+    #[serde(rename = "r")]
     red: f64,
-    #[serde(rename = "g")] 
+    #[serde(rename = "g")]
     green: f64,
-    #[serde(rename = "b")] 
+    #[serde(rename = "b")]
     blue: f64,
-    #[serde(rename = "a")] 
+    #[serde(rename = "a")]
     alpha: f64,
 }
 
-
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
-struct Canvas {
-    #[serde(flatten)] 
+struct Node {
+    #[serde(flatten)]
     global_properties: GlobalProperties,
-    background_color: Color,
+    #[serde(flatten)]
+    node_type: NodeType,
 }
 
-
 #[derive(Debug, Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
-struct Document {
-    #[serde(flatten)] 
-    global_properties: GlobalProperties,
-    children: Vec<Canvas>,
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+#[serde(tag = "type")]
+enum NodeType {
+    #[serde(rename_all = "camelCase")]
+    Document { children: Vec<Node> },
+    #[serde(rename_all = "camelCase")]
+    Canvas {
+        background_color: Color,
+        children: Vec<Node>,
+    },
+    #[serde(other)]
+    Unknown,
+}
+
+impl NodeType {
+    fn children(&self) -> &[Node] {
+        match self {
+            NodeType::Document { children } => &children,
+            NodeType::Canvas { children, .. } => &children,
+            NodeType::Unknown => &[],
+        }
+    }
 }
 
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 struct File {
-    document: Document,
+    document: Node,
     name: String,
     schema_version: u8,
     version: String,
