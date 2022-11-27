@@ -13,6 +13,20 @@ struct Color {
     alpha: f64,
 }
 
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+enum EasingType {
+    Bouncy,
+    CustomSpring,
+    EaseIn,
+    EaseInBack,
+    EaseOut,
+    EaseInAndOut,
+    Linear,
+    GentleSpring,
+    CustomBezier,
+}
+
 fn default_true() -> bool {
     true
 }
@@ -29,6 +43,17 @@ struct Node {
 }
 
 #[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+
+struct NodeTypeFrame {
+    children: Vec<Node>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    transition_duration: Option<f64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    transition_easing: Option<EasingType>,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 #[serde(tag = "type")]
 enum NodeType {
@@ -40,9 +65,15 @@ enum NodeType {
         children: Vec<Node>,
     },
     #[serde(rename_all = "camelCase")]
-    Frame { children: Vec<Node> },
+    Frame {
+        #[serde(flatten)]
+        base: NodeTypeFrame,
+    },
     #[serde(rename_all = "camelCase")]
-    Group { children: Vec<Node> },
+    Group {
+        #[serde(flatten)]
+        base: NodeTypeFrame,
+    },
     #[serde(rename_all = "camelCase")]
     Vector,
     #[serde(rename_all = "camelCase")]
@@ -82,8 +113,14 @@ impl NodeType {
         match self {
             NodeType::Document { children, .. } => &children,
             NodeType::Canvas { children, .. } => &children,
-            NodeType::Frame { children, .. } => &children,
-            NodeType::Group { children, .. } => &children,
+            NodeType::Frame {
+                base: NodeTypeFrame { children, .. },
+                ..
+            } => &children,
+            NodeType::Group {
+                base: NodeTypeFrame { children, .. },
+                ..
+            } => &children,
             NodeType::Vector => &[],
             NodeType::BooleanOperation { children, .. } => &children,
             NodeType::Star => &[],
