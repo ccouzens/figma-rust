@@ -17,14 +17,14 @@ struct Color {
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 enum EasingType {
     Bouncy,
+    CustomBezier,
     CustomSpring,
     EaseIn,
+    EaseInAndOut,
     EaseInBack,
     EaseOut,
-    EaseInAndOut,
-    Linear,
     GentleSpring,
-    CustomBezier,
+    Linear,
 }
 
 fn default_true() -> bool {
@@ -40,6 +40,18 @@ struct Node {
     visible: bool,
     #[serde(flatten)]
     node_type: NodeType,
+}
+
+impl Node {
+    fn children(&self) -> &[Node] {
+        self.node_type.children()
+    }
+
+    fn depth_first_iter(&self) -> impl Iterator<Item = &Self> {
+        NodeTypeDepthFirstIterator {
+            stack: vec![self.children().iter()],
+        }
+    }
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -108,21 +120,43 @@ enum NodeType {
     Unknown,
 }
 
+struct NodeTypeDepthFirstIterator<'a> {
+    stack: Vec<std::slice::Iter<'a, Node>>,
+}
+
+impl<'a> Iterator for NodeTypeDepthFirstIterator<'a> {
+    type Item = &'a Node;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        loop {
+            let mut bottom_of_stack = self.stack.pop()?;
+            match bottom_of_stack.next() {
+                None => continue,
+                Some(current) => {
+                    self.stack.push(bottom_of_stack);
+                    self.stack.push(current.children().iter());
+                    return Some(current);
+                }
+            }
+        }
+    }
+}
+
 impl NodeType {
     fn children(&self) -> &[Node] {
         match self {
-            NodeType::Document { children, .. } => &children,
-            NodeType::Canvas { children, .. } => &children,
+            NodeType::Document { children, .. } => children,
+            NodeType::Canvas { children, .. } => children,
             NodeType::Frame {
                 base: NodeTypeFrame { children, .. },
                 ..
-            } => &children,
+            } => children,
             NodeType::Group {
                 base: NodeTypeFrame { children, .. },
                 ..
-            } => &children,
+            } => children,
             NodeType::Vector => &[],
-            NodeType::BooleanOperation { children, .. } => &children,
+            NodeType::BooleanOperation { children, .. } => children,
             NodeType::Star => &[],
             NodeType::Line => &[],
             NodeType::Ellipse => &[],
@@ -130,9 +164,9 @@ impl NodeType {
             NodeType::Rectangle => &[],
             NodeType::Text { .. } => &[],
             NodeType::Slice => &[],
-            NodeType::Component { children, .. } => &children,
-            NodeType::ComponentSet { children, .. } => &children,
-            NodeType::Instance { children, .. } => &children,
+            NodeType::Component { children, .. } => children,
+            NodeType::ComponentSet { children, .. } => children,
+            NodeType::Instance { children, .. } => children,
             NodeType::Sticky { .. } => &[],
             NodeType::ShapeWithText { .. } => &[],
             NodeType::Connector { .. } => &[],
@@ -152,5 +186,8 @@ struct File {
 
 fn main() {
     let f: File = serde_json::from_reader(std::io::stdin()).unwrap();
-    println!("{}", serde_json::to_string_pretty(&f).unwrap());
+    for c in f.document.depth_first_iter() {
+        println!("{}", c.name);
+    }
+    // println!("{}", serde_json::to_string_pretty(&f).unwrap());
 }
