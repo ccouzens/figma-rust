@@ -43,6 +43,10 @@ struct Node {
 }
 
 impl Node {
+    fn frame_props(&self) -> Option<&NodeTypeFrame> {
+        self.node_type.frame_props()
+    }
+
     fn children(&self) -> &[Node] {
         self.node_type.children()
     }
@@ -105,11 +109,20 @@ enum NodeType {
     #[serde(rename_all = "camelCase")]
     Slice,
     #[serde(rename_all = "camelCase")]
-    Component { children: Vec<Node> },
+    Component {
+        #[serde(flatten)]
+        base: NodeTypeFrame,
+    },
     #[serde(rename_all = "camelCase")]
-    ComponentSet { children: Vec<Node> },
+    ComponentSet {
+        #[serde(flatten)]
+        base: NodeTypeFrame,
+    },
     #[serde(rename_all = "camelCase")]
-    Instance { children: Vec<Node> },
+    Instance {
+        #[serde(flatten)]
+        base: NodeTypeFrame,
+    },
     #[serde(rename_all = "camelCase")]
     Sticky { characters: String },
     #[serde(rename_all = "camelCase")]
@@ -130,19 +143,27 @@ impl<'a> Iterator for NodeTypeDepthFirstIterator<'a> {
     fn next(&mut self) -> Option<Self::Item> {
         loop {
             let mut bottom_of_stack = self.stack.pop()?;
-            match bottom_of_stack.next() {
-                None => continue,
-                Some(current) => {
-                    self.stack.push(bottom_of_stack);
-                    self.stack.push(current.children().iter());
-                    return Some(current);
-                }
+            if let Some(current) = bottom_of_stack.next() {
+                self.stack.push(bottom_of_stack);
+                self.stack.push(current.children().iter());
+                return Some(current);
             }
         }
     }
 }
 
 impl NodeType {
+    fn frame_props(&self) -> Option<&NodeTypeFrame> {
+        match self {
+            NodeType::Frame { base, .. }
+            | NodeType::Group { base, .. }
+            | NodeType::Component { base, .. }
+            | NodeType::ComponentSet { base, .. }
+            | NodeType::Instance { base, .. } => Some(base),
+            _ => None,
+        }
+    }
+
     fn children(&self) -> &[Node] {
         match self {
             NodeType::Document { children, .. } => children,
@@ -164,9 +185,18 @@ impl NodeType {
             NodeType::Rectangle => &[],
             NodeType::Text { .. } => &[],
             NodeType::Slice => &[],
-            NodeType::Component { children, .. } => children,
-            NodeType::ComponentSet { children, .. } => children,
-            NodeType::Instance { children, .. } => children,
+            NodeType::Component {
+                base: NodeTypeFrame { children, .. },
+                ..
+            } => children,
+            NodeType::ComponentSet {
+                base: NodeTypeFrame { children, .. },
+                ..
+            } => children,
+            NodeType::Instance {
+                base: NodeTypeFrame { children, .. },
+                ..
+            } => children,
             NodeType::Sticky { .. } => &[],
             NodeType::ShapeWithText { .. } => &[],
             NodeType::Connector { .. } => &[],
@@ -187,7 +217,21 @@ struct File {
 fn main() {
     let f: File = serde_json::from_reader(std::io::stdin()).unwrap();
     for c in f.document.depth_first_iter() {
-        println!("{}", c.name);
+        if let NodeType::Frame { .. } = &c.node_type {
+            if c.name.starts_with("_tokens/motion") {
+                println!("{}", c.name);
+                for c in c.depth_first_iter() {
+                    if c.name.starts_with("motion") {
+                        if let (Some(duration), Some(easing)) = (
+                            c.frame_props().and_then(|f| f.transition_duration),
+                            c.frame_props().and_then(|f| f.transition_easing.as_ref()),
+                        ) {
+                            println!("{}, {:?} {:?}", c.name, duration, easing);
+                        }
+                    }
+                }
+            }
+        }
     }
     // println!("{}", serde_json::to_string_pretty(&f).unwrap());
 }
