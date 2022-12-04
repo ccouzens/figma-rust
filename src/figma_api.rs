@@ -16,15 +16,19 @@ pub struct Color {
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum EasingType {
-    Bouncy,
-    CustomBezier,
-    CustomSpring,
+    Linear,
     EaseIn,
+    EaseOut,
     EaseInAndOut,
     EaseInBack,
-    EaseOut,
-    GentleSpring,
-    Linear,
+    EaseOutBack,
+    EaseInAndOutBack,
+    CustomBezier,
+    Gentle,
+    Quick,
+    Bouncy,
+    Slow,
+    CustomSpring,
 }
 
 fn default_true() -> bool {
