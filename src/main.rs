@@ -1,4 +1,6 @@
 mod figma_api;
+use indexmap::IndexMap;
+use serde::Serialize;
 use serde_json::json;
 
 fn filter_node_by_prefix<'a>(prefixes: &'a [&'a str]) -> impl Fn(&&figma_api::Node) -> bool + 'a {
@@ -8,10 +10,45 @@ fn filter_node_by_prefix<'a>(prefixes: &'a [&'a str]) -> impl Fn(&&figma_api::No
     }
 }
 
+#[derive(Debug, Serialize)]
+#[serde(untagged)]
+enum MapOrJson<'a> {
+    Map(IndexMap<&'a str, MapOrJson<'a>>),
+    Json(serde_json::Value),
+}
+
+fn insert_by_name<'a>(
+    output: &mut MapOrJson<'a>,
+    name: &[&'a str],
+    value: serde_json::Value,
+) -> bool {
+    match output {
+        MapOrJson::Map(map) => {
+            let head = name[0].trim();
+            let rest = &name[1..];
+            if rest.is_empty() {
+                match map.entry(head) {
+                    indexmap::map::Entry::Occupied(_) => false,
+                    indexmap::map::Entry::Vacant(vacancy) => {
+                        vacancy.insert(MapOrJson::Json(value));
+                        true
+                    }
+                }
+            } else {
+                let entry = map
+                    .entry(head)
+                    .or_insert_with(|| MapOrJson::Map(IndexMap::new()));
+                insert_by_name(entry, rest, value)
+            }
+        }
+        MapOrJson::Json(..) => false,
+    }
+}
+
 fn main() {
     let f: figma_api::File = serde_json::from_reader(std::io::stdin()).unwrap();
 
-    let mut output = Vec::new();
+    let mut output = MapOrJson::Map(IndexMap::new());
 
     for c in f
         .document
@@ -131,17 +168,14 @@ fn main() {
                 }
             });
 
-            // json.
-
-            output.push((c.name.as_str(), json));
+            if !insert_by_name(&mut output, &c.name.split('/').collect::<Vec<_>>(), json) {
+                eprintln!("Failed to insert {}", &c.name);
+            };
         }
     }
 
-    for (name, value) in output.iter() {
-        println!(
-            "{} {}",
-            name,
-            serde_json::to_string_pretty(value).unwrap_or_else(|_| "Err".into())
-        )
-    }
+    println!(
+        "{}",
+        serde_json::to_string_pretty(&output).unwrap_or_else(|_| "Err".into())
+    )
 }
