@@ -1,6 +1,7 @@
 mod figma_api;
 mod motion_tokens;
-use indexmap::IndexMap;
+mod size_tokens;
+use indexmap::{IndexMap};
 use serde::Serialize;
 
 fn node_match_prefix(prefixes: &[&str], node: &figma_api::Node) -> bool {
@@ -45,7 +46,18 @@ fn main() {
     let mut output = MapOrJson::Map(IndexMap::new());
 
     for c in f.document.depth_first_iter() {
-        if let Some(json) = motion_tokens::motion_tokens_filter_map(c) {
+        if let Some(json) =
+            size_tokens::as_size_token(c)
+        {
+            if !insert_by_name(&mut output, &c.name.split('/').collect::<Vec<_>>(), json) {
+                eprintln!("Failed to insert {}", &c.name);
+            };
+        }
+    }
+    for c in f.document.depth_first_iter() {
+        if let Some(json) =
+            motion_tokens::as_motion_token(c)
+        {
             if !insert_by_name(&mut output, &c.name.split('/').collect::<Vec<_>>(), json) {
                 eprintln!("Failed to insert {}", &c.name);
             };

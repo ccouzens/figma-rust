@@ -5,7 +5,7 @@ use crate::{
     node_match_prefix,
 };
 
-pub fn motion_tokens_filter_map(node: &Node) -> Option<serde_json::Value> {
+pub fn as_motion_token(node: &Node) -> Option<serde_json::Value> {
     if !node_match_prefix(&["motion"], node) {
         return None;
     }

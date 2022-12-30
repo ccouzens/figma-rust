@@ -1,7 +1,6 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
 pub struct Color {
     #[serde(rename = "r")]
     red: f64,
@@ -11,6 +10,14 @@ pub struct Color {
     blue: f64,
     #[serde(rename = "a")]
     alpha: f64,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct Rectangle {
+    pub x: Option<f64>,
+    pub y: Option<f64>,
+    pub width: Option<f64>,
+    pub height: Option<f64>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -71,6 +78,10 @@ pub struct NodeTypeFrame {
     pub transition_duration: Option<f64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub transition_easing: Option<EasingType>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub absolute_bounding_box: Option<Rectangle>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub absolute_render_bounds: Option<Rectangle>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
