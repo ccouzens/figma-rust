@@ -12,19 +12,15 @@ fn filter_node_by_prefix<'a>(prefixes: &'a [&'a str]) -> impl Fn(&&figma_api::No
 
 #[derive(Debug, Serialize)]
 #[serde(untagged)]
-enum MapOrJson<'a> {
-    Map(IndexMap<&'a str, MapOrJson<'a>>),
+enum MapOrJson {
+    Map(IndexMap<String, MapOrJson>),
     Json(serde_json::Value),
 }
 
-fn insert_by_name<'a>(
-    output: &mut MapOrJson<'a>,
-    name: &[&'a str],
-    value: serde_json::Value,
-) -> bool {
+fn insert_by_name<'a>(output: &mut MapOrJson, name: &[&'a str], value: serde_json::Value) -> bool {
     match output {
         MapOrJson::Map(map) => {
-            let head = name[0].trim();
+            let head = name[0].trim().to_lowercase();
             let rest = &name[1..];
             if rest.is_empty() {
                 match map.entry(head) {
