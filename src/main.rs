@@ -1,6 +1,7 @@
 mod figma_api;
 mod motion_tokens;
 mod size_tokens;
+mod breakpoint_tokens;
 mod spacing_tokens;
 use std::iter::once;
 
@@ -101,6 +102,9 @@ fn main() {
         &["size", "sizes"],
         size_tokens::as_size_token,
     );
+    token_transformer(&f, &mut output, &["breakpoints"], |node, _| {
+        breakpoint_tokens::as_breakpoint_token(node, &f)
+    });
     token_transformer(&f, &mut output, &["spacing"], |node, _| {
         spacing_tokens::as_spacing_token(node, &f)
     });
