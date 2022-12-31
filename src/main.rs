@@ -2,6 +2,7 @@ mod border_tokens;
 mod breakpoint_tokens;
 mod figma_api;
 mod motion_tokens;
+mod radius_tokens;
 mod size_tokens;
 mod spacing_tokens;
 use std::{borrow::Cow, iter::once};
@@ -118,6 +119,9 @@ fn main() {
     });
     token_transformer(&f, &mut output, &["borders", "border"], |node, _| {
         border_tokens::as_border_token(node, &f)
+    });
+    token_transformer(&f, &mut output, &["radius", "radii"], |node, _| {
+        radius_tokens::as_radius_token(node, &f)
     });
     token_transformer(&f, &mut output, &["motion"], |node, _| {
         motion_tokens::as_motion_token(node)
