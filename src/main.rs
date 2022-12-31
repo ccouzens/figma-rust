@@ -1,6 +1,7 @@
 mod figma_api;
 mod motion_tokens;
 mod size_tokens;
+mod spacing_tokens;
 use std::iter::once;
 
 use indexmap::IndexMap;
@@ -100,6 +101,9 @@ fn main() {
         &["size", "sizes"],
         size_tokens::as_size_token,
     );
+    token_transformer(&f, &mut output, &["spacing"], |node, _| {
+        spacing_tokens::as_spacing_token(node, &f)
+    });
     token_transformer(&f, &mut output, &["motion"], |node, _| {
         motion_tokens::as_motion_token(node)
     });

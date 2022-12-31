@@ -97,6 +97,14 @@ pub struct NodeTypeFrame {
     pub absolute_bounding_box: Option<Rectangle>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub absolute_render_bounds: Option<Rectangle>,
+    #[serde(default)]
+    pub padding_left: f64,
+    #[serde(default)]
+    pub padding_right: f64,
+    #[serde(default)]
+    pub padding_top: f64,
+    #[serde(default)]
+    pub padding_bottom: f64,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
