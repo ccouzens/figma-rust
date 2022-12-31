@@ -13,6 +13,23 @@ pub struct Color {
     alpha: f64,
 }
 
+impl Color {
+    pub fn to_rgba_string(&self) -> String {
+        format!(
+            "rgba({}, {}, {}, {})",
+            (self.red * 255.0).floor(),
+            (self.green * 255.0).floor(),
+            (self.blue * 255.0).floor(),
+            self.alpha
+        )
+    }
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct Paint {
+    pub color: Color,
+}
+
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Component {
     pub key: String,
@@ -44,6 +61,14 @@ pub enum EasingType {
     Bouncy,
     Slow,
     CustomSpring,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+pub enum StrokeAlign {
+    Inside,
+    Outside,
+    Center,
 }
 
 fn default_true() -> bool {
@@ -90,6 +115,9 @@ impl Node {
 #[serde(rename_all = "camelCase")]
 pub struct NodeTypeFrame {
     pub children: Vec<Node>,
+    pub strokes: Vec<Paint>,
+    pub stroke_weight: f64,
+    pub stroke_align: StrokeAlign,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub transition_duration: Option<f64>,
     #[serde(skip_serializing_if = "Option::is_none")]

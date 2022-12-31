@@ -1,3 +1,4 @@
+mod border_tokens;
 mod breakpoint_tokens;
 mod figma_api;
 mod motion_tokens;
@@ -114,6 +115,9 @@ fn main() {
     });
     token_transformer(&f, &mut output, &["spacing"], |node, _| {
         spacing_tokens::as_spacing_token(node, &f)
+    });
+    token_transformer(&f, &mut output, &["borders", "border"], |node, _| {
+        border_tokens::as_border_token(node, &f)
     });
     token_transformer(&f, &mut output, &["motion"], |node, _| {
         motion_tokens::as_motion_token(node)
