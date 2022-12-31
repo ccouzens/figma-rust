@@ -1,9 +1,9 @@
+mod breakpoint_tokens;
 mod figma_api;
 mod motion_tokens;
 mod size_tokens;
-mod breakpoint_tokens;
 mod spacing_tokens;
-use std::iter::once;
+use std::{borrow::Cow, iter::once};
 
 use indexmap::IndexMap;
 use serde::Serialize;
@@ -50,43 +50,50 @@ fn token_transformer(
     prefixes: &[&str],
     transformer: impl Fn(&figma_api::Node, &figma_api::File) -> Option<serde_json::Value>,
 ) {
-    let mut transform_and_add = |node: &figma_api::Node, name: &str| {
-        if node_match_prefix(prefixes, name) {
-            if let Some(json) = transformer(node, file) {
-                if !insert_by_name(output, &name.split('/').collect::<Vec<_>>(), json) {
-                    eprintln!("Failed to insert {}", name);
-                };
-            }
-        }
-    };
+    for nodes in file.document.depth_first_stack_iter() {
+        let node = *nodes.last().unwrap();
 
-    for node in file.document.depth_first_iter() {
-        match &node.node_type {
-            figma_api::NodeType::ComponentSet { base } => {
-                for child in base.children.iter() {
-                    let name = once(node.name.as_str())
-                        .chain(
-                            child
-                                .name
-                                .split(',')
-                                .map(str::trim)
-                                .filter(|n| !n.starts_with('_') && !n.starts_with('.'))
-                                .filter_map(|n| n.split('=').nth(1))
-                                .map(str::trim),
-                        )
-                        .fold(String::new(), |mut acc, p| {
-                            if !acc.is_empty() {
-                                acc.push('/');
-                            }
-                            acc.push_str(p);
-                            acc
-                        });
-                    transform_and_add(child, &name);
-                }
-            }
-            _ => {
-                transform_and_add(node, &node.name);
-            }
+        let parent = nodes.iter().nth_back(1).cloned();
+        let name = match parent {
+            Some(figma_api::Node {
+                name: parent_name,
+                node_type: figma_api::NodeType::ComponentSet { .. },
+                ..
+            }) => Cow::Owned(
+                once(parent_name.as_str())
+                    .chain(
+                        node.name
+                            .split(',')
+                            .map(str::trim)
+                            .filter(|n| !n.starts_with('_') && !n.starts_with('.'))
+                            .filter_map(|n| n.split('=').nth(1))
+                            .map(str::trim),
+                    )
+                    .fold(String::new(), |mut acc, p| {
+                        if !acc.is_empty() {
+                            acc.push('/');
+                        }
+                        acc.push_str(p);
+                        acc
+                    }),
+            ),
+            _ => Cow::Borrowed(&node.name),
+        };
+        if !nodes
+            .iter()
+            .rev()
+            .skip(1)
+            .any(|n| n.name.split('/').next().map(str::trim) == Some("_tokens"))
+        {
+            continue;
+        }
+        if !node_match_prefix(prefixes, &name) {
+            continue;
+        }
+        if let Some(json) = transformer(node, file) {
+            if !insert_by_name(output, &name.split('/').collect::<Vec<_>>(), json) {
+                eprintln!("Failed to insert {}", name);
+            };
         }
     }
 }

@@ -74,9 +74,10 @@ impl Node {
         self.node_type.children()
     }
 
-    pub fn depth_first_iter(&self) -> impl Iterator<Item = &Self> {
-        NodeTypeDepthFirstIterator {
-            stack: vec![self.children().iter()],
+    pub fn depth_first_stack_iter(&self) -> NodeDepthFirstStackIterator {
+        NodeDepthFirstStackIterator {
+            stack: vec![self],
+            iter_stack: vec![self.children().iter()],
         }
     }
 
@@ -184,20 +185,24 @@ pub enum NodeType {
     Unknown,
 }
 
-struct NodeTypeDepthFirstIterator<'a> {
-    stack: Vec<std::slice::Iter<'a, Node>>,
+pub struct NodeDepthFirstStackIterator<'a> {
+    iter_stack: Vec<std::slice::Iter<'a, Node>>,
+    stack: Vec<&'a Node>,
 }
 
-impl<'a> Iterator for NodeTypeDepthFirstIterator<'a> {
-    type Item = &'a Node;
+impl<'a> Iterator for NodeDepthFirstStackIterator<'a> {
+    type Item = Vec<&'a Node>;
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {
-            let mut bottom_of_stack = self.stack.pop()?;
-            if let Some(current) = bottom_of_stack.next() {
+            let mut bottom_of_iter_stack = self.iter_stack.pop()?;
+            let bottom_of_stack = self.stack.pop()?;
+            if let Some(current) = bottom_of_iter_stack.next() {
+                self.iter_stack.push(bottom_of_iter_stack);
+                self.iter_stack.push(current.children().iter());
                 self.stack.push(bottom_of_stack);
-                self.stack.push(current.children().iter());
-                return Some(current);
+                self.stack.push(current);
+                return Some(self.stack.clone());
             }
         }
     }

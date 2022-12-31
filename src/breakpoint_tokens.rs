@@ -1,4 +1,4 @@
-use crate::figma_api::{self, File, Node};
+use crate::figma_api::{File, Node};
 use serde::Serialize;
 use serde_json::json;
 
