@@ -1,19 +1,41 @@
+use crate::figma_api::{self, File, Node};
+use serde::Serialize;
 use serde_json::json;
 
-use crate::{figma_api::Node, node_match_prefix};
+#[derive(Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
+struct SizeToken<'a> {
+    category: &'a str,
+    export_key: &'a str,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    comment: Option<&'a str>,
+    value: f64,
+    r#type: &'a str,
+    unit: &'a str,
+}
 
-pub fn as_size_token(node: &Node) -> Option<serde_json::Value> {
-    if !node_match_prefix(&["size", "sizes"], node) {
+pub fn as_size_token(node: &Node, file: &File) -> Option<serde_json::Value> {
+    if !matches!(
+        node.node_type,
+        figma_api::NodeType::Component { .. }
+            | figma_api::NodeType::Rectangle { .. }
+            | figma_api::NodeType::Frame { .. }
+    ) {
         return None;
     }
-    let frame_props = node.frame_props()?;
-    let width = frame_props.absolute_bounding_box.as_ref()?.width?;
+    let width = node.absolute_bounding_box()?.width?;
+    let component = node.component(file);
 
-    Some(json!({
-        "category": "size",
-        "exportKey": "size",
-        "value": width,
-        "type": "number",
-        "unit": "pixel"
+    Some(json!(SizeToken {
+        category: "size",
+        export_key: "size",
+        comment: component.and_then(|c| if c.description.is_empty() {
+            None
+        } else {
+            Some(c.description.as_str())
+        }),
+        value: width,
+        r#type: "number",
+        unit: "pixel"
     }))
 }

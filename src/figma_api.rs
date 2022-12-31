@@ -1,3 +1,4 @@
+use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -10,6 +11,13 @@ pub struct Color {
     blue: f64,
     #[serde(rename = "a")]
     alpha: f64,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct Component {
+    pub key: String,
+    pub name: String,
+    pub description: String,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -54,6 +62,10 @@ pub struct Node {
 }
 
 impl Node {
+    pub fn absolute_bounding_box(&self) -> Option<&Rectangle> {
+        self.node_type.absolute_bounding_box()
+    }
+
     pub fn frame_props(&self) -> Option<&NodeTypeFrame> {
         self.node_type.frame_props()
     }
@@ -67,13 +79,16 @@ impl Node {
             stack: vec![self.children().iter()],
         }
     }
+
+    pub fn component<'a>(&self, file: &'a File) -> Option<&'a Component> {
+        file.components.get(&self.id)
+    }
 }
 
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
-
 pub struct NodeTypeFrame {
-    children: Vec<Node>,
+    pub children: Vec<Node>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub transition_duration: Option<f64>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -82,6 +97,13 @@ pub struct NodeTypeFrame {
     pub absolute_bounding_box: Option<Rectangle>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub absolute_render_bounds: Option<Rectangle>,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct NodeTypeVector {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub absolute_bounding_box: Option<Rectangle>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -106,7 +128,10 @@ pub enum NodeType {
         base: NodeTypeFrame,
     },
     #[serde(rename_all = "camelCase")]
-    Vector,
+    Vector {
+        #[serde(flatten)]
+        base: NodeTypeVector,
+    },
     #[serde(rename_all = "camelCase")]
     BooleanOperation { children: Vec<Node> },
     #[serde(rename_all = "camelCase")]
@@ -118,7 +143,10 @@ pub enum NodeType {
     #[serde(rename_all = "camelCase")]
     RegularPolygon,
     #[serde(rename_all = "camelCase")]
-    Rectangle,
+    Rectangle {
+        #[serde(flatten)]
+        base: NodeTypeVector,
+    },
     #[serde(rename_all = "camelCase")]
     Text { characters: String },
     #[serde(rename_all = "camelCase")]
@@ -168,6 +196,20 @@ impl<'a> Iterator for NodeTypeDepthFirstIterator<'a> {
 }
 
 impl NodeType {
+    fn absolute_bounding_box(&self) -> Option<&Rectangle> {
+        match self {
+            NodeType::Frame { base, .. }
+            | NodeType::Group { base, .. }
+            | NodeType::Component { base, .. }
+            | NodeType::ComponentSet { base, .. }
+            | NodeType::Instance { base, .. } => base.absolute_bounding_box.as_ref(),
+            NodeType::Vector { base, .. } | NodeType::Rectangle { base, .. } => {
+                base.absolute_bounding_box.as_ref()
+            }
+            _ => None,
+        }
+    }
+
     fn frame_props(&self) -> Option<&NodeTypeFrame> {
         match self {
             NodeType::Frame { base, .. }
@@ -191,13 +233,13 @@ impl NodeType {
                 base: NodeTypeFrame { children, .. },
                 ..
             } => children,
-            NodeType::Vector => &[],
+            NodeType::Vector { .. } => &[],
             NodeType::BooleanOperation { children, .. } => children,
             NodeType::Star => &[],
             NodeType::Line => &[],
             NodeType::Ellipse => &[],
             NodeType::RegularPolygon => &[],
-            NodeType::Rectangle => &[],
+            NodeType::Rectangle { .. } => &[],
             NodeType::Text { .. } => &[],
             NodeType::Slice => &[],
             NodeType::Component {
@@ -224,6 +266,7 @@ impl NodeType {
 #[serde(rename_all = "camelCase")]
 pub struct File {
     pub document: Node,
+    pub components: IndexMap<String, Component>,
     pub name: String,
     pub schema_version: u8,
     pub version: String,

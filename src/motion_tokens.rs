@@ -1,14 +1,8 @@
 use serde_json::json;
 
-use crate::{
-    figma_api::{self, Node},
-    node_match_prefix,
-};
+use crate::figma_api::{self, Node};
 
 pub fn as_motion_token(node: &Node) -> Option<serde_json::Value> {
-    if !node_match_prefix(&["motion"], node) {
-        return None;
-    }
     let frame_props = node.frame_props()?;
     let duration = frame_props.transition_duration?;
     let easing = frame_props.transition_easing.as_ref()?;
