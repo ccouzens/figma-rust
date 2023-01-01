@@ -94,6 +94,10 @@ fn default_true() -> bool {
     true
 }
 
+fn default_one() -> f64 {
+    1.0
+}
+
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Node {
@@ -116,6 +120,10 @@ impl Node {
 
     pub fn rectangle_corner_radii(&self) -> Option<[f64; 4]> {
         self.node_type.rectangle_corner_radii()
+    }
+
+    pub fn opacity(&self) -> Option<f64> {
+        self.node_type.opacity()
     }
 
     pub fn frame_props(&self) -> Option<&NodeTypeFrame> {
@@ -153,6 +161,8 @@ pub struct NodeTypeFrame {
     pub transition_duration: Option<f64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub transition_easing: Option<EasingType>,
+    #[serde(default = "default_one")]
+    pub opacity: f64,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub absolute_bounding_box: Option<Rectangle>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -170,6 +180,8 @@ pub struct NodeTypeFrame {
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct NodeTypeVector {
+    #[serde(default = "default_one")]
+    pub opacity: f64,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub absolute_bounding_box: Option<Rectangle>,
 }
@@ -273,14 +285,12 @@ impl<'a> Iterator for NodeDepthFirstStackIterator<'a> {
 
 impl NodeType {
     fn absolute_bounding_box(&self) -> Option<&Rectangle> {
-        match self {
-            NodeType::Vector { base, .. } | NodeType::Rectangle { base, .. } => {
-                base.absolute_bounding_box.as_ref()
-            }
-            _ => self
-                .frame_props()
-                .and_then(|fp| fp.absolute_bounding_box.as_ref()),
-        }
+        self.vector_props()
+            .and_then(|v| v.absolute_bounding_box.as_ref())
+            .or_else(|| {
+                self.frame_props()
+                    .and_then(|fp| fp.absolute_bounding_box.as_ref())
+            })
     }
 
     fn corner_radius(&self) -> Option<f64> {
@@ -311,6 +321,19 @@ impl NodeType {
                 }) => Some([*r, *r, *r, *r]),
                 _ => None,
             },
+        }
+    }
+
+    fn opacity(&self) -> Option<f64> {
+        self.vector_props()
+            .map(|v| v.opacity)
+            .or_else(|| self.frame_props().map(|fp| fp.opacity))
+    }
+
+    fn vector_props(&self) -> Option<&NodeTypeVector> {
+        match self {
+            NodeType::Vector { base, .. } | NodeType::Rectangle { base, .. } => Some(base),
+            _ => None,
         }
     }
 

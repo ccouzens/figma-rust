@@ -2,6 +2,7 @@ mod border_tokens;
 mod breakpoint_tokens;
 mod figma_api;
 mod motion_tokens;
+mod opacity_tokens;
 mod radius_tokens;
 mod size_tokens;
 mod spacing_tokens;
@@ -162,6 +163,9 @@ fn main() {
     });
     token_document_transformer(&f, &mut output, &["radius", "radii"], |node, _| {
         radius_tokens::as_radius_token(node, &f)
+    });
+    token_document_transformer(&f, &mut output, &["opacities", "opacity"], |node, _| {
+        opacity_tokens::as_opacity_token(node, &f)
     });
     token_document_transformer(&f, &mut output, &["motion"], |node, _| {
         motion_tokens::as_motion_token(node)
