@@ -9,6 +9,7 @@ use std::{borrow::Cow, iter::once};
 
 use indexmap::IndexMap;
 use serde::Serialize;
+use serde_json::json;
 
 fn node_match_prefix(prefixes: &[&str], name: &str) -> bool {
     let node_prefix = name.split('/').next().unwrap_or_default().trim();
@@ -126,6 +127,37 @@ fn main() {
     token_transformer(&f, &mut output, &["motion"], |node, _| {
         motion_tokens::as_motion_token(node)
     });
+
+    for style in f.styles.values() {
+        #[derive(Debug, Serialize)]
+        #[serde(rename_all = "camelCase")]
+        struct ColorToken<'a> {
+            category: &'a str,
+            export_key: &'a str,
+            #[serde(skip_serializing_if = "Option::is_none")]
+            comment: Option<&'a str>,
+            r#type: &'a str,
+        }
+
+        if style.style_type == figma_api::StyleType::Fill {
+            insert_by_name(
+                &mut output,
+                &once("color")
+                    .chain(style.name.split('/'))
+                    .collect::<Vec<_>>(),
+                json!(ColorToken {
+                    category: "color",
+                    export_key: "color",
+                    comment: if style.description.is_empty() {
+                        None
+                    } else {
+                        Some(&style.description)
+                    },
+                    r#type: "color"
+                }),
+            );
+        }
+    }
 
     println!(
         "{}",

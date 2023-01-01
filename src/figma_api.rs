@@ -37,6 +37,25 @@ pub struct Component {
     pub description: String,
 }
 
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+pub enum StyleType {
+    Fill,
+    Text,
+    Effect,
+    Grid,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Style {
+    pub key: String,
+    pub name: String,
+    pub description: String,
+    pub remote: bool,
+    pub style_type: StyleType,
+}
+
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Rectangle {
     pub x: Option<f64>,
@@ -324,6 +343,7 @@ impl NodeType {
 pub struct File {
     pub document: Node,
     pub components: IndexMap<String, Component>,
+    pub styles: IndexMap<String, Style>,
     pub name: String,
     pub schema_version: u8,
     pub version: String,
