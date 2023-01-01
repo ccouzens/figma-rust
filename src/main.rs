@@ -47,7 +47,7 @@ fn insert_by_name<'a>(output: &mut MapOrJson, name: &[&'a str], value: serde_jso
     }
 }
 
-fn token_transformer(
+fn token_document_transformer(
     file: &figma_api::File,
     output: &mut MapOrJson,
     prefixes: &[&str],
@@ -101,63 +101,76 @@ fn token_transformer(
     }
 }
 
-fn main() {
-    let f: figma_api::File = serde_json::from_reader(std::io::stdin()).unwrap();
-
-    let mut output = MapOrJson::Map(IndexMap::new());
-
-    token_transformer(
-        &f,
-        &mut output,
-        &["size", "sizes"],
-        size_tokens::as_size_token,
-    );
-    token_transformer(&f, &mut output, &["breakpoints"], |node, _| {
-        breakpoint_tokens::as_breakpoint_token(node, &f)
-    });
-    token_transformer(&f, &mut output, &["spacing"], |node, _| {
-        spacing_tokens::as_spacing_token(node, &f)
-    });
-    token_transformer(&f, &mut output, &["borders", "border"], |node, _| {
-        border_tokens::as_border_token(node, &f)
-    });
-    token_transformer(&f, &mut output, &["radius", "radii"], |node, _| {
-        radius_tokens::as_radius_token(node, &f)
-    });
-    token_transformer(&f, &mut output, &["motion"], |node, _| {
-        motion_tokens::as_motion_token(node)
-    });
-
+fn token_style_transformer(
+    f: &figma_api::File,
+    output: &mut MapOrJson,
+    name: &str,
+    style_type: figma_api::StyleType,
+) {
     for style in f.styles.values() {
         #[derive(Debug, Serialize)]
         #[serde(rename_all = "camelCase")]
-        struct ColorToken<'a> {
+        struct ExportToken<'a> {
             category: &'a str,
             export_key: &'a str,
             #[serde(skip_serializing_if = "Option::is_none")]
             comment: Option<&'a str>,
-            r#type: &'a str,
         }
 
-        if style.style_type == figma_api::StyleType::Fill {
+        if style.style_type == style_type
+            && !style
+                .name
+                .trim_start()
+                .starts_with(|c| c == '.' || c == '_' || c == '*')
+        {
             insert_by_name(
-                &mut output,
-                &once("color")
-                    .chain(style.name.split('/'))
-                    .collect::<Vec<_>>(),
-                json!(ColorToken {
-                    category: "color",
-                    export_key: "color",
+                output,
+                &once(name).chain(style.name.split('/')).collect::<Vec<_>>(),
+                json!(ExportToken {
+                    category: name,
+                    export_key: name,
                     comment: if style.description.is_empty() {
                         None
                     } else {
                         Some(&style.description)
                     },
-                    r#type: "color"
                 }),
             );
         }
     }
+}
+
+fn main() {
+    let f: figma_api::File = serde_json::from_reader(std::io::stdin()).unwrap();
+
+    let mut output = MapOrJson::Map(IndexMap::new());
+
+    token_document_transformer(
+        &f,
+        &mut output,
+        &["size", "sizes"],
+        size_tokens::as_size_token,
+    );
+    token_document_transformer(&f, &mut output, &["breakpoints"], |node, _| {
+        breakpoint_tokens::as_breakpoint_token(node, &f)
+    });
+    token_document_transformer(&f, &mut output, &["spacing"], |node, _| {
+        spacing_tokens::as_spacing_token(node, &f)
+    });
+    token_document_transformer(&f, &mut output, &["borders", "border"], |node, _| {
+        border_tokens::as_border_token(node, &f)
+    });
+    token_document_transformer(&f, &mut output, &["radius", "radii"], |node, _| {
+        radius_tokens::as_radius_token(node, &f)
+    });
+    token_document_transformer(&f, &mut output, &["motion"], |node, _| {
+        motion_tokens::as_motion_token(node)
+    });
+
+    token_style_transformer(&f, &mut output, "color", figma_api::StyleType::Fill);
+    token_style_transformer(&f, &mut output, "effect", figma_api::StyleType::Effect);
+    token_style_transformer(&f, &mut output, "font", figma_api::StyleType::Text);
+    token_style_transformer(&f, &mut output, "grid", figma_api::StyleType::Grid);
 
     println!(
         "{}",
