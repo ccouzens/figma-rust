@@ -1,9 +1,25 @@
-# Figma Rust
+# Figma API tooling
 
-An exploration of the Figma API and file structure using Rust.
+An experiment to see what can be achieved with the
+[Figma REST API](https://www.figma.com/developers/api).
 
-## Initial Project
+All commands require an API file to be provided on `stdin`.
 
-I will create a command line utility that will take a Figma file and output
-design tokens. The output will be interchangeable with the output of the
-[design tokens](https://github.com/lukasoppermann/design-tokens) plugin.
+```bash
+cargo run --release -- design-tokens < example-file.json
+# or
+curl -sH "X-Figma-Token: ${FIGMA_TOKEN}" https://api.figma.com/v1/files/2MQ759R5kJtzQn4qSHuqR7 | cargo run --release -- design-tokens
+```
+
+## Design tokens
+
+A `design-token` subcommand inspired by the
+[design-tokens Figma plugin](https://github.com/lukasoppermann/design-tokens).
+
+```bash
+cargo run --release -- design-tokens < example-file.json
+```
+
+Due to limitations with the Figma API, I do not recommend this command. Some
+basic information cannot be obtained through the API such as colour token values
+or font information. I do recommend the plugin.

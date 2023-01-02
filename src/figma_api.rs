@@ -371,3 +371,10 @@ pub struct File {
     pub schema_version: u8,
     pub version: String,
 }
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(untagged)]
+pub enum FileOrError {
+    File(File),
+    Err { status: u16, err: String },
+}

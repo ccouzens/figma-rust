@@ -1,7 +1,7 @@
 mod design_tokens;
 mod figma_api;
 
-use anyhow::{Context, Result};
+use anyhow::{bail, Context, Result};
 use clap::{Parser, Subcommand};
 
 #[derive(Debug, Parser)]
@@ -20,8 +20,15 @@ enum Commands {
 fn main() -> Result<()> {
     let args = Cli::parse();
 
-    let file: figma_api::File = serde_json::from_reader(std::io::stdin())
+    let file_or_error: figma_api::FileOrError = serde_json::from_reader(std::io::stdin())
         .context("Failed to parse Figma API file from stdin")?;
+
+    let file = match file_or_error {
+        figma_api::FileOrError::File(file) => file,
+        figma_api::FileOrError::Err { status, err } => {
+            bail!("HTTP {} response from figma: {}", status, err);
+        }
+    };
 
     match &args.command {
         Commands::DesignTokens => {
