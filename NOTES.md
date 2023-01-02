@@ -1,5 +1,7 @@
 # Notes
 
+## Document structure
+
 To get the structure of the document with most properties hidden. Useful to
 quickly explore the structure.
 
@@ -18,5 +20,5 @@ jq '.document | walk(
     else
         .
     end
-)' < example-figma-files/design-tokens-for-figma.json
+)' -C < example-figma-files/design-tokens-for-figma.json | less -R
 ```
