@@ -179,6 +179,9 @@ pub fn main(
         stderr,
         |node, _| radius_tokens::as_radius_token(node, &file),
     );
+    token_document_transformer(&file, &mut output, &["motion"], stderr, |node, _| {
+        motion_tokens::as_motion_token(node)
+    });
     token_document_transformer(
         &file,
         &mut output,
@@ -186,10 +189,6 @@ pub fn main(
         stderr,
         |node, _| opacity_tokens::as_opacity_token(node, &file),
     );
-    token_document_transformer(&file, &mut output, &["motion"], stderr, |node, _| {
-        motion_tokens::as_motion_token(node)
-    });
-
     token_style_transformer(
         &file,
         &mut output,
@@ -200,9 +199,9 @@ pub fn main(
     token_style_transformer(
         &file,
         &mut output,
-        "effect",
+        "grid",
         stderr,
-        figma_api::StyleType::Effect,
+        figma_api::StyleType::Grid,
     );
     token_style_transformer(
         &file,
@@ -214,11 +213,58 @@ pub fn main(
     token_style_transformer(
         &file,
         &mut output,
-        "grid",
+        "effect",
         stderr,
-        figma_api::StyleType::Grid,
+        figma_api::StyleType::Effect,
     );
 
     serde_json::to_writer_pretty(stdout, &output).context("Failed to write design tokens")?;
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn expected_stdout() {
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+        main(
+            &serde_json::from_str(include_str!(
+                "../../example-figma-files/design-tokens-for-figma.json"
+            ))
+            .unwrap(),
+            &mut stdout,
+            &mut stderr,
+        )
+        .unwrap();
+        // Don't use assert_eq! as the output is too long to sensibly read
+        assert!(String::from_utf8_lossy(&stdout) == include_str!("./example-output.json"));
+    }
+
+    #[test]
+    fn expected_stderr() {
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+        main(
+            &serde_json::from_str(include_str!(
+                "../../example-figma-files/design-tokens-for-figma.json"
+            ))
+            .unwrap(),
+            &mut stdout,
+            &mut stderr,
+        )
+        .unwrap();
+        assert_eq!(
+            String::from_utf8_lossy(&stderr),
+            r#"Failed to insert sizes/in variant 60
+Failed to insert sizes/in variant 90
+Failed to insert sizes/in variant 120
+Failed to insert sizes/40
+Failed to insert sizes/60
+Failed to insert sizes/80
+"#
+        );
+    }
 }

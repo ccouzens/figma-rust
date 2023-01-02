@@ -1,0 +1,815 @@
+{
+  "sizes": {
+    "plain token": {
+      "category": "size",
+      "exportKey": "size",
+      "value": 200.0,
+      "type": "number",
+      "unit": "pixel"
+    },
+    "token in frame": {
+      "category": "size",
+      "exportKey": "size",
+      "value": 200.0,
+      "type": "number",
+      "unit": "pixel"
+    },
+    "token in group": {
+      "category": "size",
+      "exportKey": "size",
+      "value": 200.0,
+      "type": "number",
+      "unit": "pixel"
+    },
+    "in variant 60": {
+      "category": "size",
+      "exportKey": "size",
+      "value": 60.0,
+      "type": "number",
+      "unit": "pixel"
+    },
+    "in variant 90": {
+      "category": "size",
+      "exportKey": "size",
+      "value": 90.0,
+      "type": "number",
+      "unit": "pixel"
+    },
+    "in variant 120": {
+      "category": "size",
+      "exportKey": "size",
+      "value": 120.0,
+      "type": "number",
+      "unit": "pixel"
+    },
+    "40": {
+      "category": "size",
+      "exportKey": "size",
+      "value": 40.0,
+      "type": "number",
+      "unit": "pixel"
+    },
+    "60": {
+      "category": "size",
+      "exportKey": "size",
+      "value": 60.0,
+      "type": "number",
+      "unit": "pixel"
+    },
+    "80": {
+      "category": "size",
+      "exportKey": "size",
+      "value": 80.0,
+      "type": "number",
+      "unit": "pixel"
+    },
+    "frame": {
+      "category": "size",
+      "exportKey": "size",
+      "value": 32.0,
+      "type": "number",
+      "unit": "pixel"
+    },
+    "rect": {
+      "category": "size",
+      "exportKey": "size",
+      "value": 32.0,
+      "type": "number",
+      "unit": "pixel"
+    },
+    "shape in component": {
+      "category": "size",
+      "exportKey": "size",
+      "comment": "Should use 32px not 20 from inside shape",
+      "value": 32.0,
+      "type": "number",
+      "unit": "pixel"
+    },
+    "32": {
+      "category": "size",
+      "exportKey": "size",
+      "comment": "32.72px spacer component",
+      "value": 32.7236328125,
+      "type": "number",
+      "unit": "pixel"
+    }
+  },
+  "breakpoints": {
+    "lg": {
+      "category": "breakpoint",
+      "exportKey": "breakpoint",
+      "value": 1280.0,
+      "type": "number",
+      "unit": "pixel"
+    },
+    "sm": {
+      "category": "breakpoint",
+      "exportKey": "breakpoint",
+      "value": 768.0,
+      "type": "number",
+      "unit": "pixel"
+    },
+    "md": {
+      "category": "breakpoint",
+      "exportKey": "breakpoint",
+      "value": 1024.0,
+      "type": "number",
+      "unit": "pixel"
+    }
+  },
+  "spacing": {
+    "10": {
+      "category": "spacing",
+      "exportKey": "spacing",
+      "top": {
+        "value": 10.0,
+        "type": "number",
+        "unit": "pixel"
+      },
+      "right": {
+        "value": 10.0,
+        "type": "number",
+        "unit": "pixel"
+      },
+      "bottom": {
+        "value": 10.0,
+        "type": "number",
+        "unit": "pixel"
+      },
+      "left": {
+        "value": 10.0,
+        "type": "number",
+        "unit": "pixel"
+      }
+    },
+    "mixed": {
+      "category": "spacing",
+      "exportKey": "spacing",
+      "top": {
+        "value": 10.0,
+        "type": "number",
+        "unit": "pixel"
+      },
+      "right": {
+        "value": 20.0,
+        "type": "number",
+        "unit": "pixel"
+      },
+      "bottom": {
+        "value": 30.0,
+        "type": "number",
+        "unit": "pixel"
+      },
+      "left": {
+        "value": 20.0,
+        "type": "number",
+        "unit": "pixel"
+      }
+    },
+    "top": {
+      "category": "spacing",
+      "exportKey": "spacing",
+      "top": {
+        "value": 10.0,
+        "type": "number",
+        "unit": "pixel"
+      },
+      "right": {
+        "value": 0.0,
+        "type": "number",
+        "unit": "pixel"
+      },
+      "bottom": {
+        "value": 0.0,
+        "type": "number",
+        "unit": "pixel"
+      },
+      "left": {
+        "value": 0.0,
+        "type": "number",
+        "unit": "pixel"
+      }
+    }
+  },
+  "borders": {
+    "single": {
+      "category": "border",
+      "exportKey": "border",
+      "strokeAlign": {
+        "value": "inside",
+        "type": "string"
+      },
+      "strokeCap": {
+        "value": "none",
+        "type": "string"
+      },
+      "strokeJoin": {
+        "value": "miter",
+        "type": "string"
+      },
+      "strokeMiterLimit": {
+        "value": 4,
+        "type": "number",
+        "unit": "degree"
+      },
+      "strokeWeight": {
+        "value": 5.0,
+        "type": "number",
+        "unit": "pixel"
+      },
+      "stroke": {
+        "value": "rgba(0, 0, 0, 1)",
+        "type": "color"
+      }
+    },
+    "dashed outside": {
+      "category": "border",
+      "exportKey": "border",
+      "strokeAlign": {
+        "value": "outside",
+        "type": "string"
+      },
+      "strokeCap": {
+        "value": "none",
+        "type": "string"
+      },
+      "strokeJoin": {
+        "value": "miter",
+        "type": "string"
+      },
+      "strokeMiterLimit": {
+        "value": 4,
+        "type": "number",
+        "unit": "degree"
+      },
+      "strokeWeight": {
+        "value": 5.0,
+        "type": "number",
+        "unit": "pixel"
+      },
+      "stroke": {
+        "value": "rgba(0, 0, 0, 1)",
+        "type": "color"
+      }
+    },
+    "single (style)": {
+      "category": "border",
+      "exportKey": "border",
+      "strokeAlign": {
+        "value": "inside",
+        "type": "string"
+      },
+      "strokeCap": {
+        "value": "none",
+        "type": "string"
+      },
+      "strokeJoin": {
+        "value": "miter",
+        "type": "string"
+      },
+      "strokeMiterLimit": {
+        "value": 4,
+        "type": "number",
+        "unit": "degree"
+      },
+      "strokeWeight": {
+        "value": 5.0,
+        "type": "number",
+        "unit": "pixel"
+      },
+      "stroke": {
+        "value": "rgba(4, 74, 255, 1)",
+        "type": "color"
+      }
+    }
+  },
+  "radius": {
+    "5": {
+      "category": "radius",
+      "exportKey": "radius",
+      "radius": {
+        "value": 5.0,
+        "type": "number",
+        "unit": "pixel"
+      },
+      "radiusType": {
+        "value": "single",
+        "type": "string"
+      },
+      "radii": {
+        "topLeft": {
+          "value": 5.0,
+          "type": "number",
+          "unit": "pixel"
+        },
+        "topRight": {
+          "value": 5.0,
+          "type": "number",
+          "unit": "pixel"
+        },
+        "bottomRight": {
+          "value": 5.0,
+          "type": "number",
+          "unit": "pixel"
+        },
+        "bottomLeft": {
+          "value": 5.0,
+          "type": "number",
+          "unit": "pixel"
+        }
+      }
+    }
+  },
+  "radii": {
+    "smoothing": {
+      "category": "radius",
+      "exportKey": "radius",
+      "radius": {
+        "value": 10.0,
+        "type": "number",
+        "unit": "pixel"
+      },
+      "radiusType": {
+        "value": "single",
+        "type": "string"
+      },
+      "radii": {
+        "topLeft": {
+          "value": 10.0,
+          "type": "number",
+          "unit": "pixel"
+        },
+        "topRight": {
+          "value": 10.0,
+          "type": "number",
+          "unit": "pixel"
+        },
+        "bottomRight": {
+          "value": 10.0,
+          "type": "number",
+          "unit": "pixel"
+        },
+        "bottomLeft": {
+          "value": 10.0,
+          "type": "number",
+          "unit": "pixel"
+        }
+      }
+    },
+    "mixed": {
+      "category": "radius",
+      "exportKey": "radius",
+      "radius": null,
+      "radiusType": {
+        "value": "mixed",
+        "type": "string"
+      },
+      "radii": {
+        "topLeft": {
+          "value": 5.5,
+          "type": "number",
+          "unit": "pixel"
+        },
+        "topRight": {
+          "value": 10.0,
+          "type": "number",
+          "unit": "pixel"
+        },
+        "bottomRight": {
+          "value": 15.0,
+          "type": "number",
+          "unit": "pixel"
+        },
+        "bottomLeft": {
+          "value": 20.0,
+          "type": "number",
+          "unit": "pixel"
+        }
+      }
+    }
+  },
+  "motion": {
+    "slide": {
+      "category": "motion",
+      "exportKey": "motion",
+      "type": {
+        "value": "scroll_animate",
+        "type": "string"
+      },
+      "duration": {
+        "value": 0.3,
+        "type": "number",
+        "unit": "s"
+      },
+      "easing": {
+        "value": "ease-out",
+        "type": "string"
+      },
+      "easingFunction": {
+        "x1": {
+          "value": 0.0,
+          "type": "number"
+        },
+        "x2": {
+          "value": 0.58,
+          "type": "number"
+        },
+        "y1": {
+          "value": 0.0,
+          "type": "number"
+        },
+        "y2": {
+          "value": 1.0,
+          "type": "number"
+        }
+      }
+    },
+    "move in": {
+      "category": "motion",
+      "exportKey": "motion",
+      "type": {
+        "value": "scroll_animate",
+        "type": "string"
+      },
+      "duration": {
+        "value": 0.5,
+        "type": "number",
+        "unit": "s"
+      },
+      "easing": {
+        "value": "ease-in",
+        "type": "string"
+      },
+      "easingFunction": {
+        "x1": {
+          "value": 0.42,
+          "type": "number"
+        },
+        "x2": {
+          "value": 1.0,
+          "type": "number"
+        },
+        "y1": {
+          "value": 0.0,
+          "type": "number"
+        },
+        "y2": {
+          "value": 1.0,
+          "type": "number"
+        }
+      }
+    },
+    "dissolve": {
+      "category": "motion",
+      "exportKey": "motion",
+      "type": {
+        "value": "scroll_animate",
+        "type": "string"
+      },
+      "duration": {
+        "value": 0.45,
+        "type": "number",
+        "unit": "s"
+      },
+      "easing": {
+        "value": "custom-cubic-bezier",
+        "type": "string"
+      },
+      "easingFunction": {
+        "x1": {
+          "value": 0.42,
+          "type": "number"
+        },
+        "x2": {
+          "value": 0.58,
+          "type": "number"
+        },
+        "y1": {
+          "value": 0.0,
+          "type": "number"
+        },
+        "y2": {
+          "value": 1.0,
+          "type": "number"
+        }
+      }
+    },
+    "smart": {
+      "category": "motion",
+      "exportKey": "motion",
+      "type": {
+        "value": "scroll_animate",
+        "type": "string"
+      },
+      "duration": {
+        "value": 0.5,
+        "type": "number",
+        "unit": "s"
+      },
+      "easing": {
+        "value": "linear",
+        "type": "string"
+      },
+      "easingFunction": {
+        "x1": {
+          "value": 0.0,
+          "type": "number"
+        },
+        "x2": {
+          "value": 1.0,
+          "type": "number"
+        },
+        "y1": {
+          "value": 0.0,
+          "type": "number"
+        },
+        "y2": {
+          "value": 1.0,
+          "type": "number"
+        }
+      }
+    },
+    "push": {
+      "category": "motion",
+      "exportKey": "motion",
+      "type": {
+        "value": "scroll_animate",
+        "type": "string"
+      },
+      "duration": {
+        "value": 0.5,
+        "type": "number",
+        "unit": "s"
+      },
+      "easing": {
+        "value": "ease-in-back",
+        "type": "string"
+      },
+      "easingFunction": {
+        "x1": {
+          "value": 0.3,
+          "type": "number"
+        },
+        "x2": {
+          "value": 0.7,
+          "type": "number"
+        },
+        "y1": {
+          "value": -0.05,
+          "type": "number"
+        },
+        "y2": {
+          "value": -0.5,
+          "type": "number"
+        }
+      }
+    },
+    "bouncy": {
+      "category": "motion",
+      "exportKey": "motion",
+      "type": {
+        "value": "scroll_animate",
+        "type": "string"
+      },
+      "duration": {
+        "value": 0.958216552734375,
+        "type": "number",
+        "unit": "s"
+      },
+      "easing": {
+        "value": "bouncy",
+        "type": "string"
+      },
+      "easingFunction": {
+        "mass": {
+          "value": 1,
+          "type": "number"
+        },
+        "stiffness": {
+          "value": 600,
+          "type": "number"
+        },
+        "damping": {
+          "value": 15,
+          "type": "number"
+        }
+      }
+    },
+    "custom spring": {
+      "category": "motion",
+      "exportKey": "motion",
+      "type": {
+        "value": "scroll_animate",
+        "type": "string"
+      },
+      "duration": {
+        "value": 0.7442555541992187,
+        "type": "number",
+        "unit": "s"
+      },
+      "easing": {
+        "value": "custom-spring",
+        "type": "string"
+      },
+      "easingFunction": {
+        "mass": {
+          "value": 1,
+          "type": "number"
+        },
+        "stiffness": {
+          "value": 100,
+          "type": "number"
+        },
+        "damping": {
+          "value": 15,
+          "type": "number"
+        }
+      }
+    },
+    "instant": {
+      "category": "motion",
+      "exportKey": "motion",
+      "type": {
+        "value": "scroll_animate",
+        "type": "string"
+      },
+      "duration": {
+        "value": 0.3,
+        "type": "number",
+        "unit": "s"
+      },
+      "easing": {
+        "value": "ease-in",
+        "type": "string"
+      },
+      "easingFunction": {
+        "x1": {
+          "value": 0.42,
+          "type": "number"
+        },
+        "x2": {
+          "value": 1.0,
+          "type": "number"
+        },
+        "y1": {
+          "value": 0.0,
+          "type": "number"
+        },
+        "y2": {
+          "value": 1.0,
+          "type": "number"
+        }
+      }
+    }
+  },
+  "opacities": {
+    "0.25": {
+      "category": "opacity",
+      "exportKey": "opacity",
+      "type": "number",
+      "value": 0.25
+    }
+  },
+  "opacity": {
+    "full": {
+      "category": "opacity",
+      "exportKey": "opacity",
+      "type": "number",
+      "value": 1.0
+    },
+    "half": {
+      "category": "opacity",
+      "exportKey": "opacity",
+      "type": "number",
+      "value": 0.5
+    }
+  },
+  "color": {
+    "colors": {
+      "multiple fills": {
+        "category": "color",
+        "exportKey": "color"
+      },
+      "single blue": {
+        "category": "color",
+        "exportKey": "color"
+      },
+      "empty": {
+        "category": "color",
+        "exportKey": "color"
+      },
+      "special characters": {
+        "😅": {
+          "category": "color",
+          "exportKey": "color",
+          "comment": "Emoji"
+        },
+        "änderung": {
+          "category": "color",
+          "exportKey": "color"
+        }
+      },
+      "ref blue": {
+        "category": "color",
+        "exportKey": "color",
+        "comment": "Some other description\nRef: colors.single blue"
+      },
+      "semi red": {
+        "category": "color",
+        "exportKey": "color",
+        "comment": "A red with a 50% opacity"
+      }
+    },
+    "gradient": {
+      "multiplegrad": {
+        "category": "color",
+        "exportKey": "color"
+      },
+      "single with multiple color stops": {
+        "category": "color",
+        "exportKey": "color",
+        "comment": "Four color stops from yellow to red"
+      }
+    },
+    "invalid": {
+      "unsupported image": {
+        "category": "color",
+        "exportKey": "color",
+        "comment": "Images are not supported"
+      }
+    }
+  },
+  "grid": {
+    "multiple": {
+      "category": "grid",
+      "exportKey": "grid",
+      "comment": "Grid / multiple description text"
+    },
+    "single": {
+      "category": "grid",
+      "exportKey": "grid"
+    },
+    "invalid": {
+      "no grid": {
+        "category": "grid",
+        "exportKey": "grid"
+      }
+    }
+  },
+  "font": {
+    "body": {
+      "h3": {
+        "category": "font",
+        "exportKey": "font",
+        "comment": "Comment for text style"
+      },
+      "h4 strike through": {
+        "category": "font",
+        "exportKey": "font",
+        "comment": "With stylisitc options"
+      },
+      "italic": {
+        "category": "font",
+        "exportKey": "font"
+      },
+      "extra bold condensed italic": {
+        "category": "font",
+        "exportKey": "font"
+      },
+      "medium extended italic": {
+        "category": "font",
+        "exportKey": "font"
+      },
+      "super": {
+        "category": "font",
+        "exportKey": "font"
+      }
+    }
+  },
+  "effect": {
+    "drop shadow (single)": {
+      "category": "effect",
+      "exportKey": "effect",
+      "comment": "Drop shadow single description"
+    },
+    "inner shadow (multiple)": {
+      "category": "effect",
+      "exportKey": "effect"
+    },
+    "layer blur": {
+      "category": "effect",
+      "exportKey": "effect"
+    },
+    "background blur": {
+      "category": "effect",
+      "exportKey": "effect"
+    },
+    "invalid": {
+      "none": {
+        "category": "effect",
+        "exportKey": "effect",
+        "comment": "Effect without effect"
+      }
+    }
+  }
+}
