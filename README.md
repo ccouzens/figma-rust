@@ -20,6 +20,6 @@ A `design-token` subcommand inspired by the
 cargo run --release -- design-tokens < example-file.json
 ```
 
-Due to limitations with the Figma API, I do not recommend this command. Some
+Due to limitations with the Figma API, I do not recommend this subcommand. Some
 basic information cannot be obtained through the API such as colour token values
 or font information. I do recommend the plugin.
