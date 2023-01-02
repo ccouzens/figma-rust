@@ -1,15 +1,21 @@
 .DEFAULT_GOAL := all
 
 example-figma-files = \
-example-figma-files/design-tokens-for-figma.json
+example-figma-files/design-tokens-for-figma.json \
+example-figma-files/gov-uk-design-system.json
 
 example-output-files = \
 src/design_tokens/example-output.json
 
-# https://www.figma.com/file/2MQ759R5kJtzQn4qSHuqR7/Design-Tokens-for-Figma
 example-figma-files/design-tokens-for-figma.json :
 	curl -sH "X-Figma-Token: ${FIGMA_TOKEN}" \
     'https://api.figma.com/v1/files/2MQ759R5kJtzQn4qSHuqR7' \
+	| jq > $@
+
+# My unchanged copy of https://www.figma.com/community/file/946837271092540314
+example-figma-files/gov-uk-design-system.json :
+	curl -sH "X-Figma-Token: ${FIGMA_TOKEN}" \
+    'https://api.figma.com/v1/files/VU1aDcxBJCKLw1e1vbFmur' \
 	| jq > $@
 
 src/design_tokens/example-output.json : example-figma-files/design-tokens-for-figma.json

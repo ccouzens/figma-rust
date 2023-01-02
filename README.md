@@ -11,6 +11,19 @@ cargo run -- design-tokens < example-figma-files/design-tokens-for-figma.json
 curl -sH "X-Figma-Token: ${FIGMA_TOKEN}" https://api.figma.com/v1/files/2MQ759R5kJtzQn4qSHuqR7 | cargo run -- design-tokens
 ```
 
+## Attribution
+
+I've included Figma files for testing and demonstrations. All the files are
+fetched from the API and the only change is pretty formatting the JSON. Where
+required by Figma I have made my own copy.
+
+https://www.figma.com/file/2MQ759R5kJtzQn4qSHuqR7/Design-Tokens-for-Figma by
+Lukas Oppermann and
+[used with permission](https://github.com/lukasoppermann/design-tokens/issues/238).
+
+https://www.figma.com/community/file/946837271092540314 by Joe Horton and
+licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+
 ## Design tokens
 
 A `design-token` subcommand inspired by the
