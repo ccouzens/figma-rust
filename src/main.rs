@@ -1,3 +1,4 @@
+mod component_interfaces;
 mod design_tokens;
 mod figma_api;
 
@@ -15,6 +16,8 @@ struct Cli {
 enum Commands {
     #[command(about = "Generate design tokens", long_about = Some("Generate design tokens. Not recommended due to limitations of the Figma API"))]
     DesignTokens,
+    #[command(about = "Generate TypeScript interfaces for components", long_about = None)]
+    ComponentInterfaces,
 }
 
 fn main() -> Result<()> {
@@ -38,6 +41,14 @@ fn main() -> Result<()> {
                 &mut std::io::stderr().lock(),
             )
             .context("Failed to generate design tokens")?;
+        }
+        Commands::ComponentInterfaces => {
+            component_interfaces::main(
+                &file,
+                &mut std::io::stdout().lock(),
+                &mut std::io::stderr().lock(),
+            )
+            .context("Failed to generate component interfaces")?;
         }
     }
     Ok(())
