@@ -266,7 +266,7 @@ pub struct NodeDepthFirstStackIterator<'a> {
 }
 
 impl<'a> Iterator for NodeDepthFirstStackIterator<'a> {
-    type Item = Vec<&'a Node>;
+    type Item = (&'a Node, Vec<&'a Node>);
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {
@@ -277,7 +277,7 @@ impl<'a> Iterator for NodeDepthFirstStackIterator<'a> {
                 self.iter_stack.push(current.children().iter());
                 self.stack.push(bottom_of_stack);
                 self.stack.push(current);
-                return Some(self.stack.clone());
+                return Some((current, self.stack.clone()));
             }
         }
     }

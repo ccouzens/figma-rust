@@ -55,9 +55,7 @@ fn token_document_transformer(
     stderr: &mut impl Write,
     transformer: impl Fn(&figma_api::Node, &figma_api::File) -> Option<serde_json::Value>,
 ) {
-    for nodes in file.document.depth_first_stack_iter() {
-        let node = *nodes.last().unwrap();
-
+    for (node, nodes) in file.document.depth_first_stack_iter() {
         let parent = nodes.iter().nth_back(1).cloned();
         let name = match parent {
             Some(figma_api::Node {
