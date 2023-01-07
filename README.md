@@ -24,13 +24,21 @@ Lukas Oppermann and
 https://www.figma.com/community/file/946837271092540314 by Joe Horton and
 licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 
+## Component interfaces
+
+Generate TypeScript props for components.
+
+```bash
+cargo run --release -- component-interfaces < example-figma-files/gov-uk-design-system.json > gov-uk-design-system-interfaces.ts
+```
+
 ## Design tokens
 
 A `design-token` subcommand inspired by the
 [design-tokens Figma plugin](https://github.com/lukasoppermann/design-tokens).
 
 ```bash
-cargo run --release -- design-tokens < example-file.json
+cargo run --release -- design-tokens < example-figma-files/design-tokens-for-figma.json
 ```
 
 Due to limitations with the Figma API, I do not recommend this subcommand. Some

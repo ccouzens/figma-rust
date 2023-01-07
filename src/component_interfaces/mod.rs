@@ -64,10 +64,10 @@ impl<'a> MapOrInterface<'a> {
                     indent(stdout, indentation).context(FAILED_TO_WRITE)?;
                     writeln!(
                         stdout,
-                        "{} {} {{",
+                        "export {} {} {{",
                         match value {
                             MapOrInterface::Map(_) => "namespace",
-                            MapOrInterface::Interface(_) => "export interface",
+                            MapOrInterface::Interface(_) => "interface",
                         },
                         to_identifier(key, true).context("Couldn't create name")?
                     )
