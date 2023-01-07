@@ -52,29 +52,27 @@ pub fn main(
     let mut transformed = MapOrInterface::Map(BTreeMap::new());
 
     for (node, parent_nodes) in file.document.depth_first_stack_iter() {
-        match node {
-            figma_api::Node {
-                node_type: figma_api::NodeType::ComponentSet { .. },
-                ..
-            } => {
-                let mut interface = Interface::default();
-                for instance in node.children() {
-                    for key_value in instance.name.split(", ") {
-                        if let Some((key, value)) = key_value.split_once("=") {
-                            interface.0.entry(key).or_default().insert(value);
-                        }
+        if let figma_api::Node {
+            node_type: figma_api::NodeType::ComponentSet { .. },
+            ..
+        } = node
+        {
+            let mut interface = Interface::default();
+            for instance in node.children() {
+                for key_value in instance.name.split(", ") {
+                    if let Some((key, value)) = key_value.split_once('=') {
+                        interface.0.entry(key).or_default().insert(value);
                     }
                 }
-                if !insert_by_name(&mut transformed, &parent_nodes[1..], interface) {
-                    writeln!(
-                        stderr,
-                        "Failed to insert {:?}",
-                        parent_nodes.iter().map(|n| &n.name).collect::<Vec<_>>()
-                    )
-                    .unwrap();
-                };
             }
-            _ => {}
+            if !insert_by_name(&mut transformed, &parent_nodes[1..], interface) {
+                writeln!(
+                    stderr,
+                    "Failed to insert {:?}",
+                    parent_nodes.iter().map(|n| &n.name).collect::<Vec<_>>()
+                )
+                .unwrap();
+            };
         };
     }
     serde_json::to_writer_pretty(stdout, &transformed)

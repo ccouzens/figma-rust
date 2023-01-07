@@ -123,8 +123,7 @@ fn token_style_transformer(
                 .name
                 .trim_start()
                 .starts_with(|c| c == '.' || c == '_' || c == '*')
-        {
-            if !insert_by_name(
+            && !insert_by_name(
                 output,
                 &once(name).chain(style.name.split('/')).collect::<Vec<_>>(),
                 json!(ExportToken {
@@ -136,10 +135,10 @@ fn token_style_transformer(
                         Some(&style.description)
                     },
                 }),
-            ) {
-                writeln!(stderr, "Failed to insert {}", name).unwrap();
-            };
-        }
+            )
+        {
+            writeln!(stderr, "Failed to insert {}", name).unwrap();
+        };
     }
 }
 
@@ -151,65 +150,65 @@ pub fn main(
     let mut output = MapOrJson::Map(IndexMap::new());
 
     token_document_transformer(
-        &file,
+        file,
         &mut output,
         &["size", "sizes"],
         stderr,
         size_tokens::as_size_token,
     );
-    token_document_transformer(&file, &mut output, &["breakpoints"], stderr, |node, _| {
-        breakpoint_tokens::as_breakpoint_token(node, &file)
+    token_document_transformer(file, &mut output, &["breakpoints"], stderr, |node, _| {
+        breakpoint_tokens::as_breakpoint_token(node, file)
     });
-    token_document_transformer(&file, &mut output, &["spacing"], stderr, |node, _| {
-        spacing_tokens::as_spacing_token(node, &file)
+    token_document_transformer(file, &mut output, &["spacing"], stderr, |node, _| {
+        spacing_tokens::as_spacing_token(node, file)
     });
     token_document_transformer(
-        &file,
+        file,
         &mut output,
         &["borders", "border"],
         stderr,
-        |node, _| border_tokens::as_border_token(node, &file),
+        |node, _| border_tokens::as_border_token(node, file),
     );
     token_document_transformer(
-        &file,
+        file,
         &mut output,
         &["radius", "radii"],
         stderr,
-        |node, _| radius_tokens::as_radius_token(node, &file),
+        |node, _| radius_tokens::as_radius_token(node, file),
     );
-    token_document_transformer(&file, &mut output, &["motion"], stderr, |node, _| {
+    token_document_transformer(file, &mut output, &["motion"], stderr, |node, _| {
         motion_tokens::as_motion_token(node)
     });
     token_document_transformer(
-        &file,
+        file,
         &mut output,
         &["opacities", "opacity"],
         stderr,
-        |node, _| opacity_tokens::as_opacity_token(node, &file),
+        |node, _| opacity_tokens::as_opacity_token(node, file),
     );
     token_style_transformer(
-        &file,
+        file,
         &mut output,
         "color",
         stderr,
         figma_api::StyleType::Fill,
     );
     token_style_transformer(
-        &file,
+        file,
         &mut output,
         "grid",
         stderr,
         figma_api::StyleType::Grid,
     );
     token_style_transformer(
-        &file,
+        file,
         &mut output,
         "font",
         stderr,
         figma_api::StyleType::Text,
     );
     token_style_transformer(
-        &file,
+        file,
         &mut output,
         "effect",
         stderr,

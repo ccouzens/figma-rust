@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
 
@@ -26,8 +28,53 @@ impl Color {
 }
 
 #[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PaintTypeGradient {}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+#[serde(tag = "type")]
+pub enum PaintType {
+    #[serde(rename_all = "camelCase")]
+    Solid {
+        color: Color,
+    },
+    GradientLinear {
+        #[serde(flatten)]
+        base: PaintTypeGradient,
+    },
+    GradientRadial {
+        #[serde(flatten)]
+        base: PaintTypeGradient,
+    },
+    GradientAngular {
+        #[serde(flatten)]
+        base: PaintTypeGradient,
+    },
+    GradientDiamond {
+        #[serde(flatten)]
+        base: PaintTypeGradient,
+    },
+    Image,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Paint {
-    pub color: Color,
+    #[serde(default = "default_true")]
+    pub visible: bool,
+    #[serde(default = "default_one")]
+    pub opacity: f64,
+    #[serde(flatten)]
+    pub paint_type: PaintType,
+}
+
+impl Paint {
+    pub fn color(&self) -> Option<&Color> {
+        match self.paint_type {
+            PaintType::Solid { ref color } => Some(color),
+            _ => None,
+        }
+    }
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -37,13 +84,22 @@ pub struct Component {
     pub description: String,
 }
 
-#[derive(Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Debug, Deserialize, Serialize, PartialEq, Eq, Hash)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum StyleType {
     Fill,
     Text,
     Effect,
     Grid,
+}
+
+#[derive(Debug, Deserialize, Serialize, PartialEq, Eq, Hash)]
+#[serde(rename_all = "camelCase")]
+pub enum StyleTypeMapKey {
+    Fills,
+    Grid,
+    Effect,
+    Strokes,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -150,6 +206,8 @@ impl Node {
 #[serde(rename_all = "camelCase")]
 pub struct NodeTypeFrame {
     pub children: Vec<Node>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub fills: Vec<Paint>,
     pub strokes: Vec<Paint>,
     pub stroke_weight: f64,
     pub stroke_align: StrokeAlign,
@@ -175,6 +233,8 @@ pub struct NodeTypeFrame {
     pub padding_top: f64,
     #[serde(default)]
     pub padding_bottom: f64,
+    #[serde(default, skip_serializing_if = "HashMap::is_empty")]
+    pub styles: HashMap<StyleTypeMapKey, String>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -184,6 +244,8 @@ pub struct NodeTypeVector {
     pub opacity: f64,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub absolute_bounding_box: Option<Rectangle>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub fills: Vec<Paint>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -232,7 +294,11 @@ pub enum NodeType {
         rectangle_corner_radii: Option<[f64; 4]>,
     },
     #[serde(rename_all = "camelCase")]
-    Text { characters: String },
+    Text {
+        #[serde(flatten)]
+        base: NodeTypeVector,
+        characters: String,
+    },
     #[serde(rename_all = "camelCase")]
     Slice,
     #[serde(rename_all = "camelCase")]
@@ -370,11 +436,4 @@ pub struct File {
     pub name: String,
     pub schema_version: u8,
     pub version: String,
-}
-
-#[derive(Debug, Deserialize, Serialize)]
-#[serde(untagged)]
-pub enum FileOrError {
-    File(File),
-    Err { status: u16, err: String },
 }
