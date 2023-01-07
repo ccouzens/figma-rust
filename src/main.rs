@@ -1,5 +1,4 @@
 mod component_interfaces;
-mod components_info;
 mod design_tokens;
 mod figma_api;
 
@@ -17,9 +16,7 @@ struct Cli {
 enum Commands {
     #[command(about = "Generate design tokens", long_about = Some("Generate design tokens. Not recommended due to limitations of the Figma API"))]
     DesignTokens,
-    #[command(about = "Generate JSON about the components", long_about = None)]
-    ComponentInfo,
-    #[command(about = "Generate TypeScript interfaces for components", long_about = None)]
+    #[command(about = "Generate TypeScript interfaces for the components", long_about = None)]
     ComponentInterfaces,
     #[command(about = "Echo the JSON back", long_about = None)]
     Echo,
@@ -56,14 +53,6 @@ fn main() -> Result<()> {
                 &mut std::io::stderr().lock(),
             )
             .context("Failed to generate component interfaces")?;
-        }
-        Commands::ComponentInfo => {
-            components_info::main(
-                &file,
-                &mut std::io::stdout().lock(),
-                &mut std::io::stderr().lock(),
-            )
-            .context("Failed to generate component info")?;
         }
         Commands::Echo => {
             serde_json::to_writer_pretty(std::io::stdout().lock(), &file)
