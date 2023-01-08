@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Button component</title>
+    <style type="text/css">
+      .button.button-type-primary.button-hover-false.button-focus-false.button-disabled-false {
+        padding: 8px 12px 7px;
+
+        background: #00703c;
+        box-shadow: inset 0px -2px 0px #002d18;
+        font-family: "GDS Transport Website";
+        font-style: normal;
+        font-weight: 300;
+        font-size: 19px;
+        line-height: 25px;
+        text-align: center;
+        color: #ffffff;
+      }
+
+      .button.button-type-primary.button-hover-false.button-focus-false.button-disabled-true {
+        padding: 8px 12px 7px;
+
+        background: #00703c;
+        opacity: 0.5;
+        box-shadow: inset 0px -2px 0px #002d18;
+        font-family: "GDS Transport Website";
+        font-style: normal;
+        font-weight: 300;
+        font-size: 19px;
+        line-height: 25px;
+        text-align: center;
+        color: #ffffff;
+      }
+
+      .button.button-type-primary.button-hover-true.button-focus-false.button-disabled-false {
+        padding: 8px 12px 7px;
+        background: #005a30;
+        box-shadow: inset 0px -2px 0px #002d18;
+        font-family: "GDS Transport Website";
+        font-style: normal;
+        font-weight: 300;
+        font-size: 19px;
+        line-height: 25px;
+        text-align: center;
+        color: #ffffff;
+      }
+    </style>
+  </head>
+  <body
+    style="
+      box-sizing: border-box;
+      position: relative;
+      width: 473px;
+      height: 345px;
+      background: #ffffff;
+      border: 1px dashed #7b61ff;
+      border-radius: 5px;
+    "
+  >
+    <div
+      class="button button-type-primary button-hover-false button-focus-false button-disabled-false"
+      style="position: absolute; left: 20px; top: 20px"
+    >
+      Button
+    </div>
+    <div
+      class="button button-type-primary button-hover-false button-focus-false button-disabled-true"
+      style="position: absolute; left: 20px; top: 280px"
+    >
+      Button
+    </div>
+    <div
+      class="button button-type-primary button-hover-true button-focus-false button-disabled-false"
+      style="position: absolute; left: 20px; top: 85px"
+    >
+      Button
+    </div>
+  </body>
+</html>
