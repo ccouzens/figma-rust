@@ -5,7 +5,8 @@ example-figma-files/design-tokens-for-figma.json \
 example-figma-files/gov-uk-design-system.json
 
 example-output-files = \
-src/design_tokens/example-output.json
+src/design_tokens/example-output.json \
+src/component_interfaces/example-output.ts
 
 example-figma-files/design-tokens-for-figma.json :
 	curl -sH "X-Figma-Token: ${FIGMA_TOKEN}" \
@@ -20,6 +21,9 @@ example-figma-files/gov-uk-design-system.json :
 
 src/design_tokens/example-output.json : example-figma-files/design-tokens-for-figma.json
 	cargo run -- design-tokens < $< > $@
+
+src/component_interfaces/example-output.ts : example-figma-files/gov-uk-design-system.json
+	cargo run -- component-interfaces < $< > $@
 
 .PHONY : all
 all : $(example-figma-files) $(example-output-files)
