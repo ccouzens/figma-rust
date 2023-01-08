@@ -37,7 +37,7 @@ interface ButtonProps extends GOVUKDesignSystemCommunityTypes["🗝️  Styles a
     onClick: () => void;
 };
 
-export const Button: React.FC<TagProps> = (props) => (
+export const Button: React.FC<ButtonProps> = (props) => (
 };
 ```
 
@@ -56,7 +56,7 @@ interface ButtonProps extends Omit<
     onClick: () => void;
 };
 
-export const Button: React.FC<TagProps> = (props) => (
+export const Button: React.FC<ButtonProps> = (props) => (
 };
 ```
 

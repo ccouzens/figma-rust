@@ -404,4 +404,399 @@ export const GOVUKDesignSystemCommunityConsts = {
 /**
  * Component types for Figma file GOV.UK Design System (Community)
  */
-export type GOVUKDesignSystemCommunityTypes = typeof GOVUKDesignSystemCommunityConsts;
+export interface GOVUKDesignSystemCommunityTypes {
+  "🗝️  Styles and Components": {
+    "Textarea": {
+      label: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Textarea"]["label"][number];
+      hint: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Textarea"]["hint"][number];
+      error: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Textarea"]["error"][number];
+      characterHint: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Textarea"]["characterHint"][number];
+    };
+
+    "Text input • Fluid": {
+      width: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Text input • Fluid"]["width"][number];
+      labelLegend: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Text input • Fluid"]["labelLegend"][number];
+      hint: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Text input • Fluid"]["hint"][number];
+      error: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Text input • Fluid"]["error"][number];
+    };
+
+    "Text input • Fixed": {
+      width: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Text input • Fixed"]["width"][number];
+      labelLegend: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Text input • Fixed"]["labelLegend"][number];
+      hint: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Text input • Fixed"]["hint"][number];
+      error: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Text input • Fixed"]["error"][number];
+    };
+
+    "Building blocks/Input • Affix/Label": {
+      type: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Input • Affix/Label"]["type"][number];
+    };
+
+    "Building blocks/Text input/Input": {
+      for: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Text input/Input"]["for"][number];
+      input: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Text input/Input"]["input"][number];
+      focus: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Text input/Input"]["focus"][number];
+      error: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Text input/Input"]["error"][number];
+    };
+
+    "Text input • Affix": {
+      width: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Text input • Affix"]["width"][number];
+      prefix: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Text input • Affix"]["prefix"][number];
+      suffix: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Text input • Affix"]["suffix"][number];
+      labelLegend: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Text input • Affix"]["labelLegend"][number];
+      hint: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Text input • Affix"]["hint"][number];
+      error: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Text input • Affix"]["error"][number];
+    };
+
+    "Tag": {
+      colour: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Tag"]["colour"][number];
+    };
+
+    "Building blocks/Tabs/List item": {
+      active: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Tabs/List item"]["active"][number];
+    };
+
+    "Building blocks/Table/Row": {
+      type: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Table/Row"]["type"][number];
+      columns: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Table/Row"]["columns"][number];
+    };
+
+    "Table": {
+      columns: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Table"]["columns"][number];
+      rows: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Table"]["rows"][number];
+    };
+
+    "Building blocks/Summary list/Row": {
+      border: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Summary list/Row"]["border"][number];
+      action: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Summary list/Row"]["action"][number];
+    };
+
+    "Summary list": {
+      border: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Summary list"]["border"][number];
+      action: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Summary list"]["action"][number];
+    };
+
+    "Building blocks/Select/Input": {
+      focus: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Select/Input"]["focus"][number];
+    };
+
+    "Select": {
+      legend: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Select"]["legend"][number];
+      hint: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Select"]["hint"][number];
+      error: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Select"]["error"][number];
+    };
+
+    "Section break": {
+      none: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Section break"]["none"][number];
+    };
+
+    "Building blocks/Radios/Item": {
+      type: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Radios/Item"]["type"][number];
+      selected: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Radios/Item"]["selected"][number];
+      focus: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Radios/Item"]["focus"][number];
+    };
+
+    "Radios • Stacked": {
+      legend: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Radios • Stacked"]["legend"][number];
+      hint: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Radios • Stacked"]["hint"][number];
+      error: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Radios • Stacked"]["error"][number];
+    };
+
+    "Building blocks/Radios/Input": {
+      selected: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Radios/Input"]["selected"][number];
+      focus: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Radios/Input"]["focus"][number];
+    };
+
+    "Building blocks/Radios/Group": {
+      options: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Radios/Group"]["options"][number];
+      orNone: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Radios/Group"]["orNone"][number];
+    };
+
+    "Building blocks/Radios • Small/Input": {
+      selected: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Radios • Small/Input"]["selected"][number];
+      hover: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Radios • Small/Input"]["hover"][number];
+      focus: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Radios • Small/Input"]["focus"][number];
+    };
+
+    "Building blocks/Radios • Small/Item": {
+      selected: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Radios • Small/Item"]["selected"][number];
+      hover: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Radios • Small/Item"]["hover"][number];
+      focus: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Radios • Small/Item"]["focus"][number];
+    };
+
+    "Building blocks/Radios • Small/Group": {
+      options: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Radios • Small/Group"]["options"][number];
+    };
+
+    "Radios • Stacked • Small": {
+      legend: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Radios • Stacked • Small"]["legend"][number];
+      hint: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Radios • Stacked • Small"]["hint"][number];
+      error: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Radios • Stacked • Small"]["error"][number];
+    };
+
+    "Radios • Inline • Small": {
+      legend: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Radios • Inline • Small"]["legend"][number];
+      hint: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Radios • Inline • Small"]["hint"][number];
+      error: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Radios • Inline • Small"]["error"][number];
+    };
+
+    "Radios • Inline": {
+      legend: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Radios • Inline"]["legend"][number];
+      hint: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Radios • Inline"]["hint"][number];
+      error: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Radios • Inline"]["error"][number];
+    };
+
+    "Phase banner": {
+      phase: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Phase banner"]["phase"][number];
+    };
+
+    "Building blocks/Pagination • Large/Link": {
+      action: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Pagination • Large/Link"]["action"][number];
+      state: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Pagination • Large/Link"]["state"][number];
+    };
+
+    "Building blocks/Pagination • Large/List item": {
+      active: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Pagination • Large/List item"]["active"][number];
+      state: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Pagination • Large/List item"]["state"][number];
+      digits: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Pagination • Large/List item"]["digits"][number];
+    };
+
+    "Pagination • Large": {
+      ellipses: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Pagination • Large"]["ellipses"][number];
+      previous: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Pagination • Large"]["previous"][number];
+      next: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Pagination • Large"]["next"][number];
+    };
+
+    "Icons/Pagination": {
+      type: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Icons/Pagination"]["type"][number];
+    };
+
+    "Building blocks/Pagination • Small/Link": {
+      action: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Pagination • Small/Link"]["action"][number];
+      hover: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Pagination • Small/Link"]["hover"][number];
+      focus: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Pagination • Small/Link"]["focus"][number];
+    };
+
+    "Notification banner": {
+      message: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Notification banner"]["message"][number];
+      body: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Notification banner"]["body"][number];
+    };
+
+    "List": {
+      list: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["List"]["list"][number];
+      leadIn: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["List"]["leadIn"][number];
+      spacing: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["List"]["spacing"][number];
+    };
+
+    "Links": {
+      size: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Links"]["size"][number];
+      colour: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Links"]["colour"][number];
+      underlined: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Links"]["underlined"][number];
+      state: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Links"]["state"][number];
+    };
+
+    "Inset text": {
+      list: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Inset text"]["list"][number];
+      link: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Inset text"]["link"][number];
+    };
+
+    "Headings": {
+      heading: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Headings"]["heading"][number];
+      caption: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Headings"]["caption"][number];
+      padding: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Headings"]["padding"][number];
+    };
+
+    "Building blocks/Header • Super/Navigation item": {
+      active: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Header • Super/Navigation item"]["active"][number];
+      state: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Header • Super/Navigation item"]["state"][number];
+    };
+
+    "Building blocks/Header • Super/Search": {
+      active: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Header • Super/Search"]["active"][number];
+      state: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Header • Super/Search"]["state"][number];
+    };
+
+    "Header • Super": {
+      breadcrumb: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Header • Super"]["breadcrumb"][number];
+    };
+
+    "Building blocks/Header/Navigation item": {
+      active: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Header/Navigation item"]["active"][number];
+      state: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Header/Navigation item"]["state"][number];
+    };
+
+    "Building blocks/Header/Logo": {
+      state: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Header/Logo"]["state"][number];
+    };
+
+    "Header": {
+      serviceName: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Header"]["serviceName"][number];
+      navigation: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Header"]["navigation"][number];
+      phase: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Header"]["phase"][number];
+      backLink: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Header"]["backLink"][number];
+    };
+
+    "Footer": {
+      navigation: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Footer"]["navigation"][number];
+      links: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Footer"]["links"][number];
+    };
+
+    "Building blocks/File upload/Input": {
+      focus: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/File upload/Input"]["focus"][number];
+    };
+
+    "File upload": {
+      label: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["File upload"]["label"][number];
+      hint: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["File upload"]["hint"][number];
+      error: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["File upload"]["error"][number];
+    };
+
+    "Error summary": {
+      errors: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Error summary"]["errors"][number];
+    };
+
+    "Building blocks/Details/Summary": {
+      expanded: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Details/Summary"]["expanded"][number];
+      state: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Details/Summary"]["state"][number];
+    };
+
+    "Icons/Details": {
+      expanded: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Icons/Details"]["expanded"][number];
+    };
+
+    "Details": {
+      expanded: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Details"]["expanded"][number];
+      focus: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Details"]["focus"][number];
+    };
+
+    "Date input": {
+      legend: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Date input"]["legend"][number];
+      hint: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Date input"]["hint"][number];
+      error: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Date input"]["error"][number];
+    };
+
+    "Cookie banner": {
+      responded: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Cookie banner"]["responded"][number];
+    };
+
+    "Building blocks/Checkbox • Small/Input": {
+      selected: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Checkbox • Small/Input"]["selected"][number];
+      hover: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Checkbox • Small/Input"]["hover"][number];
+      focus: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Checkbox • Small/Input"]["focus"][number];
+    };
+
+    "Building blocks/Checkbox • Small/Item": {
+      selected: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Checkbox • Small/Item"]["selected"][number];
+      hover: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Checkbox • Small/Item"]["hover"][number];
+      focus: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Checkbox • Small/Item"]["focus"][number];
+    };
+
+    "Building blocks/Checkbox • Small/Group": {
+      options: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Checkbox • Small/Group"]["options"][number];
+    };
+
+    "Checkboxes • Small": {
+      legend: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Checkboxes • Small"]["legend"][number];
+      hint: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Checkboxes • Small"]["hint"][number];
+      error: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Checkboxes • Small"]["error"][number];
+    };
+
+    "Building blocks/Checkboxes/Input": {
+      checked: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Checkboxes/Input"]["checked"][number];
+      focus: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Checkboxes/Input"]["focus"][number];
+    };
+
+    "Building blocks/Checkboxes/Item": {
+      type: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Checkboxes/Item"]["type"][number];
+      selected: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Checkboxes/Item"]["selected"][number];
+      focus: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Checkboxes/Item"]["focus"][number];
+    };
+
+    "Building blocks/Checkboxes/Group": {
+      options: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Checkboxes/Group"]["options"][number];
+      orNone: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Checkboxes/Group"]["orNone"][number];
+    };
+
+    "Checkboxes": {
+      legend: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Checkboxes"]["legend"][number];
+      hint: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Checkboxes"]["hint"][number];
+      error: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Checkboxes"]["error"][number];
+    };
+
+    "Building blocks/Content/Body": {
+      list: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Content/Body"]["list"][number];
+    };
+
+    "Button": {
+      type: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Button"]["type"][number];
+      hover: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Button"]["hover"][number];
+      focus: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Button"]["focus"][number];
+      disabled: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Button"]["disabled"][number];
+    };
+
+    "Breadcrumb": {
+      crumbs: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Breadcrumb"]["crumbs"][number];
+    };
+
+    "Icons/Back link": {
+      direction: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Icons/Back link"]["direction"][number];
+    };
+
+    "Back link": {
+      state: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Back link"]["state"][number];
+    };
+
+    "Building blocks/Accordion/Child": {
+      summary: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Accordion/Child"]["summary"][number];
+      expanded: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Accordion/Child"]["expanded"][number];
+      hover: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Accordion/Child"]["hover"][number];
+      focus: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Accordion/Child"]["focus"][number];
+    };
+
+    "Building blocks/Accordion/Button": {
+      expanded: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Accordion/Button"]["expanded"][number];
+      hover: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Accordion/Button"]["hover"][number];
+      focus: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Accordion/Button"]["focus"][number];
+    };
+
+    "Building blocks/Accordion/Summary": {
+      hover: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Accordion/Summary"]["hover"][number];
+      focus: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Accordion/Summary"]["focus"][number];
+    };
+
+    "Building blocks/Accordion/Heading": {
+      hover: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Accordion/Heading"]["hover"][number];
+      focus: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Accordion/Heading"]["focus"][number];
+    };
+
+    "Icons/Accordion": {
+      state: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Icons/Accordion"]["state"][number];
+      focus: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Icons/Accordion"]["focus"][number];
+    };
+
+    "Building blocks/Accordion/Toggle": {
+      action: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Accordion/Toggle"]["action"][number];
+      hover: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Accordion/Toggle"]["hover"][number];
+      active: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Accordion/Toggle"]["active"][number];
+    };
+
+    "Building blocks/Accordion/Toggle all": {
+      action: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Accordion/Toggle all"]["action"][number];
+      hover: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Accordion/Toggle all"]["hover"][number];
+      active: typeof GOVUKDesignSystemCommunityConsts["🗝️  Styles and Components"]["Building blocks/Accordion/Toggle all"]["active"][number];
+    };
+  };
+
+  "📚  Patterns": {
+    ".Building blocks/Step by step/Number": {
+      type: typeof GOVUKDesignSystemCommunityConsts["📚  Patterns"][".Building blocks/Step by step/Number"]["type"][number];
+    };
+
+    ".Building blocks/Step by step/or-and": {
+      type: typeof GOVUKDesignSystemCommunityConsts["📚  Patterns"][".Building blocks/Step by step/or-and"]["type"][number];
+    };
+
+    ".Building blocks/Task list/Item": {
+      state: typeof GOVUKDesignSystemCommunityConsts["📚  Patterns"][".Building blocks/Task list/Item"]["state"][number];
+    };
+  };
+};
