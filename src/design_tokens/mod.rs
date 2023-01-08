@@ -24,7 +24,7 @@ enum MapOrJson {
     Json(serde_json::Value),
 }
 
-fn insert_by_name<'a>(output: &mut MapOrJson, name: &[&'a str], value: serde_json::Value) -> bool {
+fn insert_by_name(output: &mut MapOrJson, name: &[&str], value: serde_json::Value) -> bool {
     match output {
         MapOrJson::Map(map) => {
             let head = name[0].trim().to_lowercase();

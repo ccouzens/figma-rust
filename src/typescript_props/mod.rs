@@ -168,7 +168,8 @@ impl<'a> MapOrInterface<'a> {
                         )
                         .context(FAILED_TO_WRITE)?;
                     }
-                    writeln!(stdout, r#"["{key_identifier}"][number];"#).context(FAILED_TO_WRITE)?;
+                    writeln!(stdout, r#"["{key_identifier}"][number];"#)
+                        .context(FAILED_TO_WRITE)?;
                 }
             }
         };
