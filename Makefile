@@ -20,10 +20,10 @@ example-figma-files/gov-uk-design-system.json :
 	| jq > $@
 
 src/design_tokens/example-output.json : example-figma-files/design-tokens-for-figma.json
-	cargo run -- design-tokens < $< > $@
+	cargo run --release -- design-tokens < $< > $@
 
 src/component_interfaces/example-output.ts : example-figma-files/gov-uk-design-system.json
-	cargo run -- component-interfaces < $< > $@
+	cargo run --release -- component-interfaces < $< > $@
 
 .PHONY : all
 all : $(example-figma-files) $(example-output-files)

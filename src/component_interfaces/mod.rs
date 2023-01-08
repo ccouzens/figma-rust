@@ -4,13 +4,19 @@ use super::figma_api;
 use anyhow::{Context, Result};
 use indexmap::{IndexMap, IndexSet};
 use serde::Serialize;
-use std::io::Write;
+use std::{borrow::Cow, io::Write};
 
 #[derive(Debug, Serialize)]
 #[serde(untagged)]
 enum MapOrInterface<'a> {
     Map(IndexMap<&'a str, MapOrInterface<'a>>),
     Interface(Interface<'a>),
+}
+
+#[derive(Debug, Serialize)]
+struct Interface<'a> {
+    types: IndexMap<&'a str, IndexSet<&'a str>>,
+    parent_nodes: Vec<&'a figma_api::Node>,
 }
 
 const FAILED_TO_WRITE: &str = "Failed to write";
@@ -54,7 +60,7 @@ fn to_identifier(raw: &str, capitalize: bool) -> Result<String> {
 }
 
 impl<'a> MapOrInterface<'a> {
-    fn output(&self, stdout: &mut impl Write, indentation: u16) -> Result<()> {
+    fn output_consts(&self, stdout: &mut impl Write, indentation: u16) -> Result<()> {
         match self {
             MapOrInterface::Map(mapping) => {
                 for (i, (&key, value)) in mapping.iter().enumerate() {
@@ -68,57 +74,59 @@ impl<'a> MapOrInterface<'a> {
                         key = serde_json::to_value(key.trim()).context("Couldn't create name")?
                     )
                     .context(FAILED_TO_WRITE)?;
-                    value.output(stdout, indentation + 1)?;
+                    value.output_consts(stdout, indentation + 1)?;
                     indent(stdout, indentation).context(FAILED_TO_WRITE)?;
-                    writeln!(stdout, "}};").context(FAILED_TO_WRITE)?;
+                    writeln!(stdout, "}},").context(FAILED_TO_WRITE)?;
                 }
             }
             MapOrInterface::Interface(interface) => {
-                for (&key, value) in interface.0.iter() {
+                for (&key, values) in interface.types.iter() {
                     indent(stdout, indentation).context(FAILED_TO_WRITE)?;
                     write!(
                         stdout,
-                        "{key}: ",
+                        "{key}: [",
                         key = to_identifier(key, false).context("Couldn't create name")?
                     )
                     .context(FAILED_TO_WRITE)?;
-                    if value.contains("True") && value.contains("False") && value.len() == 2 {
-                        write!(stdout, "boolean").context(FAILED_TO_WRITE)?;
-                    } else if let Ok(values) = value
+                    let ts_values: Vec<Cow<str>> = values
                         .iter()
-                        .map(|&v| str::parse::<f64>(v))
-                        .collect::<Result<Vec<f64>, _>>()
-                    {
-                        for (i, v) in values.iter().enumerate() {
-                            if i != 0 {
-                                write!(stdout, " | ").context(FAILED_TO_WRITE)?;
-                            }
-                            write!(stdout, "{}", v).context(FAILED_TO_WRITE)?;
+                        .map(|&v| match v {
+                            "True" => Some(Cow::Borrowed("true")),
+                            "False" => Some(Cow::Borrowed("false")),
+                            _ => None,
+                        })
+                        .collect::<Option<_>>()
+                        .map(Ok)
+                        .or_else(|| {
+                            values
+                                .iter()
+                                .map(|&v| str::parse::<f64>(v).ok().map(|_| Cow::Borrowed(v)))
+                                .collect::<Option<_>>()
+                                .map(Ok)
+                        })
+                        .unwrap_or_else(|| {
+                            values
+                                .iter()
+                                .map(|v| {
+                                    serde_json::to_string(v)
+                                        .map(Cow::Owned)
+                                        .context("Failed to convert to JSON string")
+                                })
+                                .collect()
+                        })?;
+                    for (i, v) in ts_values.iter().enumerate() {
+                        if i != 0 {
+                            write!(stdout, ", ").context(FAILED_TO_WRITE)?;
                         }
-                    } else {
-                        for (i, v) in value.iter().enumerate() {
-                            if i != 0 {
-                                write!(stdout, " | ").context(FAILED_TO_WRITE)?;
-                            }
-                            write!(
-                                stdout,
-                                "{}",
-                                serde_json::to_string(v)
-                                    .context("Failed to convert to JSON string")?
-                            )
-                            .context(FAILED_TO_WRITE)?;
-                        }
+                        write!(stdout, "{}", v).context(FAILED_TO_WRITE)?;
                     }
-                    writeln!(stdout, ";",).context(FAILED_TO_WRITE)?;
+                    writeln!(stdout, "],",).context(FAILED_TO_WRITE)?;
                 }
             }
         };
         Ok(())
     }
 }
-
-#[derive(Debug, Default, Serialize)]
-struct Interface<'a>(IndexMap<&'a str, IndexSet<&'a str>>);
 
 fn insert_by_name<'a>(
     transformed: &mut MapOrInterface<'a>,
@@ -161,11 +169,14 @@ pub fn main(
             ..
         } = node
         {
-            let mut interface = Interface::default();
+            let mut interface = Interface {
+                types: Default::default(),
+                parent_nodes: parent_nodes.clone(),
+            };
             for instance in node.children() {
                 for key_value in instance.name.split(", ") {
                     if let Some((key, value)) = key_value.split_once('=') {
-                        interface.0.entry(key).or_default().insert(value);
+                        interface.types.entry(key).or_default().insert(value);
                     }
                 }
             }
@@ -179,32 +190,42 @@ pub fn main(
             };
         };
     }
+    let main_identity = to_identifier(&file.name, true)
+        .context("Failed to convert file name to TypeScript identifier")?;
+
+    let const_identity = format!("{}Consts", main_identity);
     writeln!(
         stdout,
-        r#"/**
-* Component interfaces for Figma file {name}
-*
-* Generated by `figma-rust component-interfaces`
-*
-* Using file version {version}
-*/
-export interface {interface_name} {{"#,
-        name = &file.name,
+        r#"// Generated by `figma-rust component-interfaces
+// Using file version {version}"
+
+/**
+ * Component consts for Figma file {name}
+ */
+export const {const_identity} = {{"#,
         version = &file.version,
-        interface_name = to_identifier(&format!("{} interfaces", &file.name), true)
-            .context("Failed to convert file name to TypeScript identifier")?
+        name = &file.name,
     )
     .context(FAILED_TO_WRITE)?;
 
     transformed
-        .output(stdout, 1)
-        .context("Failed to write TypeScript")?;
+        .output_consts(stdout, 1)
+        .context("Failed to write TypeScript consts")?;
 
-    writeln!(stdout, "}};").context(FAILED_TO_WRITE)?;
+    writeln!(
+        stdout,
+        r#"}} as const;
+
+/**
+ * Component types for Figma file {name}
+ */
+export type {main_identity}Types = typeof {const_identity};"#,
+        name = &file.name,
+    )
+    .context(FAILED_TO_WRITE)?;
 
     Ok(())
 }
-
 
 #[cfg(test)]
 mod tests {

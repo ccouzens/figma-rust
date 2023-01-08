@@ -1,13 +1,14 @@
-# Component interfaces
+# Component types
 
-Generate TypeScript interfaces to use as props for your React (or other)
-components.
+Generate TypeScript types to use as props for your React (or other) components.
+Generate `const` values for looping through the possible values for
+[Storybook](https://storybook.js.org/).
 
 ## Example output discussed
 
 [example](./example-output.ts)
 
-A single nested interface is generated. You need to use
+A single nested type is generated. You need to use
 [Indexed Access](https://www.typescriptlang.org/docs/handbook/2/indexed-access-types.html)
 to get the component you need. For example:
 
