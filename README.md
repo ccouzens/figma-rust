@@ -24,15 +24,15 @@ Lukas Oppermann and
 https://www.figma.com/community/file/946837271092540314 by Joe Horton and
 licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 
-## Component interfaces
+## TypeScript props
 
 Generate TypeScript props for components.
 
 ```bash
-cargo run --release -- component-interfaces < example-figma-files/gov-uk-design-system.json > gov-uk-design-system-interfaces.ts
+cargo run --release -- typescript-props < example-figma-files/gov-uk-design-system.json > gov-uk-design-system-props.ts
 ```
 
-[Read more](src/component_interfaces/README.md)
+[Read more](src/typescript_props/README.md)
 
 ## Design tokens
 

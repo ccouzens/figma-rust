@@ -1,6 +1,6 @@
-mod component_interfaces;
 mod design_tokens;
 mod figma_api;
+mod typescript_props;
 
 use anyhow::{bail, Context, Result};
 use clap::{Parser, Subcommand};
@@ -16,8 +16,8 @@ struct Cli {
 enum Commands {
     #[command(about = "Generate design tokens", long_about = Some("Generate design tokens. Not recommended due to limitations of the Figma API"))]
     DesignTokens,
-    #[command(about = "Generate TypeScript interfaces for the components", long_about = None)]
-    ComponentInterfaces,
+    #[command(name = "typescript-props", about = "Generate TypeScript props for the components", long_about = None)]
+    TypeScriptProps,
     #[command(about = "Echo the JSON back", long_about = None)]
     Echo,
 }
@@ -34,6 +34,19 @@ fn main() -> Result<()> {
         bail!("HTTP {} response from figma: {}", status, err);
     }
 
+    match file_or_error
+        .get("schemaVersion")
+        .and_then(serde_json::Value::as_i64)
+    {
+        Some(0) => {}
+        _ => {
+            bail!(
+                r#"Compatible with "schemaVersion": 0, got {:?}"#,
+                file_or_error.get("schemaVersion")
+            );
+        }
+    }
+
     let file: figma_api::File =
         serde_json::from_value(file_or_error).context("Failed to parse JSON as Figma API")?;
 
@@ -46,13 +59,13 @@ fn main() -> Result<()> {
             )
             .context("Failed to generate design tokens")?;
         }
-        Commands::ComponentInterfaces => {
-            component_interfaces::main(
+        Commands::TypeScriptProps => {
+            typescript_props::main(
                 &file,
                 &mut std::io::stdout().lock(),
                 &mut std::io::stderr().lock(),
             )
-            .context("Failed to generate component interfaces")?;
+            .context("Failed to generate TypeScript props")?;
         }
         Commands::Echo => {
             serde_json::to_writer_pretty(std::io::stdout().lock(), &file)

@@ -1,7 +1,7 @@
-# Component types
+# TypeScript Props
 
-Generate TypeScript types to use as props for your React (or other) components.
-Generate `const` values for looping through the possible values for
+Generate TypeScript props to use for your React (or other) components. Generate
+`const` values for looping through the possible props for
 [Storybook](https://storybook.js.org/).
 
 ## Example output discussed
@@ -65,5 +65,5 @@ export const Button: React.FC<TagProps> = (props) => (
 The output can be piped through a formatter before saving to disk. For example
 
 ```bash
-cargo run -- component-interfaces < example-figma-files/gov-uk-design-system.json | npx prettier --parser typescript > src/component_interfaces/gov-uk-design-system-interfaces.ts
+cargo run -- typescript-props < example-figma-files/gov-uk-design-system.json | npx prettier --parser typescript > gov-uk-design-system-props.ts
 ```
