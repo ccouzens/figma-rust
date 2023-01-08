@@ -32,6 +32,8 @@ Generate TypeScript props for components.
 cargo run --release -- component-interfaces < example-figma-files/gov-uk-design-system.json > gov-uk-design-system-interfaces.ts
 ```
 
+[Read more](src/component_interfaces/README.md)
+
 ## Design tokens
 
 A `design-token` subcommand inspired by the
