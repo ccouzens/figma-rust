@@ -14,9 +14,9 @@ to get the component you need. For example:
 
 ```typescript
 import React from 'react';
-import type { GOVUKDesignSystemCommunityInterfaces } from './gov-uk-design-system-interfaces.ts';
+import type { GOVUKDesignSystemCommunityTypes } from './gov-uk-design-system-interfaces.ts';
 
-type TagProps = GOVUKDesignSystemCommunityInterfaces["🗝️  Styles and Components"]["Tag"];
+type TagProps = GOVUKDesignSystemCommunityTypes["🗝️  Styles and Components"]["Tag"];
 
 export const Tag: React.FC<TagProps> = ({
   children,
@@ -31,9 +31,9 @@ accessibility. For example:
 
 ```typescript
 import React from 'react';
-import type { GOVUKDesignSystemCommunityInterfaces } from './gov-uk-design-system-interfaces.ts';
+import type { GOVUKDesignSystemCommunityTypes } from './gov-uk-design-system-interfaces.ts';
 
-interface ButtonProps extends GOVUKDesignSystemCommunityInterfaces["🗝️  Styles and Components"]["Button"] {
+interface ButtonProps extends GOVUKDesignSystemCommunityTypes["🗝️  Styles and Components"]["Button"] {
     onClick: () => void;
 };
 
@@ -47,10 +47,10 @@ wanted in your TypeScript interface. For example `Hover` and `Focus` from
 
 ```typescript
 import React from 'react';
-import type { GOVUKDesignSystemCommunityInterfaces } from './gov-uk-design-system-interfaces.ts';
+import type { GOVUKDesignSystemCommunityTypes } from './gov-uk-design-system-interfaces.ts';
 
 interface ButtonProps extends Omit<
-    GOVUKDesignSystemCommunityInterfaces["🗝️  Styles and Components"]["Button"],
+    GOVUKDesignSystemCommunityTypes["🗝️  Styles and Components"]["Button"],
     'hover' | 'focus'
 > {
     onClick: () => void;
