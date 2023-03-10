@@ -1,5 +1,6 @@
 mod design_tokens;
 mod figma_api;
+mod to_html;
 mod typescript_props;
 
 use anyhow::{bail, Context, Result};
@@ -18,6 +19,11 @@ enum Commands {
     DesignTokens,
     #[command(name = "typescript-props", about = "Generate TypeScript props for the components", long_about = None)]
     TypeScriptProps,
+    #[command(name = "to-html", about = "Generate HTML and CSS of a component", long_about = None)]
+    ToHtml {
+        /// node-id within the Figma file to build HTML from
+        node_id: String,
+    },
     #[command(about = "Echo the JSON back", long_about = None)]
     Echo,
 }
@@ -66,6 +72,15 @@ fn main() -> Result<()> {
                 &mut std::io::stderr().lock(),
             )
             .context("Failed to generate TypeScript props")?;
+        }
+        Commands::ToHtml { node_id } => {
+            to_html::main(
+                &file,
+                &mut std::io::stdout().lock(),
+                &mut std::io::stderr().lock(),
+                &node_id.replace("%3A", ":"),
+            )
+            .context("Failed to generate HTML")?;
         }
         Commands::Echo => {
             serde_json::to_writer_pretty(std::io::stdout().lock(), &file)

@@ -185,6 +185,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "clap",
+ "horrorshow",
  "indexmap",
  "serde",
  "serde_json",
@@ -211,6 +212,12 @@ checksum = "ee512640fe35acbfb4bb779db6f0d80704c2cacfa2e39b601ef3e3f47d1ae4c7"
 dependencies = [
  "libc",
 ]
+
+[[package]]
+name = "horrorshow"
+version = "0.8.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8371fb981840150b1a54f7cb117bf6699f7466a1d4861daac33bc6fe2b5abea0"
 
 [[package]]
 name = "iana-time-zone"

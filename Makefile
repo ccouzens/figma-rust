@@ -34,6 +34,9 @@ src/design_tokens/example-output.json : example-figma-files/design-tokens-for-fi
 src/typescript_props/example-output.ts : example-figma-files/gov-uk-design-system.json
 	cargo run --release -- typescript-props < $< > $@
 
+src/to_html/example-output.html : example-figma-files/gov-uk-design-system.json
+	cargo run --release -- to-html 213:6 < $< | npx prettier --parser html > $@
+
 definitions.kt :
 	typeshare . --lang=kotlin --output-file=$@
 
