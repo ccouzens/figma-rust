@@ -3,6 +3,16 @@ use anyhow::{Context, Result};
 use horrorshow::{helper::doctype, html};
 use std::io::Write;
 
+fn create_css(properties: &[(&str, Option<&str>)]) -> String {
+    let mut output = String::new();
+    for (property, value) in properties {
+        if let Some(value) = value {
+            output.push_str(&format!("{property}: {value};"));
+        }
+    }
+    output
+}
+
 pub fn main(
     file: &figma_api::File,
     stdout: &mut impl Write,
@@ -16,43 +26,48 @@ pub fn main(
         .context(format!("Failed to find node with id {}", node_id))?
         .0;
 
-    let node_background_color = node
-        .fills()
-        .get(0)
-        .context("Expected to have a background fill")?
-        .color()
-        .context("Expected to have a background color")?;
-
-    let node_bounding_box = node
-        .absolute_bounding_box()
-        .context("Expected to have a render box")?;
-
-    let body_css = format!(
-        "
-    box-sizing: border-box;
-    position: relative;
-    width: {width}px;
-    height: {height}px;
-    background: {background_color};
-    border: 1px dashed {border_color};
-    border-radius: {border_radius}px;
-   ",
-        width = node_bounding_box
-            .width
-            .context("Expected to have a width")?,
-        height = node_bounding_box
-            .height
-            .context("Expected to have a height")?,
-        background_color = node_background_color.to_rgb_string(),
-        border_color = node
-            .strokes()
-            .get(0)
-            .context("Expected to have a border stroke")?
-            .color()
-            .context("Expected to have a border color")?
-            .to_rgb_string(),
-        border_radius = node.corner_radius().context("Expected a border radius")?
-    );
+    let body_css = create_css(&[
+        ("box-sizing", Some("border-box")),
+        ("position", Some("relative")),
+        (
+            "width",
+            node.absolute_bounding_box()
+                .and_then(|bb| bb.width)
+                .map(|width| format!("{width}px"))
+                .as_deref(),
+        ),
+        (
+            "height",
+            node.absolute_bounding_box()
+                .and_then(|bb| bb.height)
+                .map(|height| format!("{height}px"))
+                .as_deref(),
+        ),
+        (
+            "background-color",
+            node.fills()
+                .get(0)
+                .and_then(|fill| fill.color())
+                .map(|color| color.to_rgb_string())
+                .as_deref(),
+        ),
+        ("border-width", Some("1px")),
+        ("border-style", Some("dashed")),
+        (
+            "border-color",
+            node.strokes()
+                .get(0)
+                .and_then(|stroke| stroke.color())
+                .map(|color| color.to_rgb_string())
+                .as_deref(),
+        ),
+        (
+            "border-radius",
+            node.corner_radius()
+                .map(|radius| format!("{radius}px"))
+                .as_deref(),
+        ),
+    ]);
 
     writeln!(
         stdout,
@@ -65,15 +80,6 @@ pub fn main(
                     title : format!("{} component", node.name);
                     style(type="text/css");
                 }
-                body(style=format!("
-            box-sizing: border-box;
-            position: relative;
-            width: 473px;
-            height: 345px;
-            background: {};
-            border: 1px dashed #7b61ff;
-            border-radius: 5px;
-          ", node_background_color.to_rgb_string())) {}
                 body(style=&body_css) {}
             }
         }
