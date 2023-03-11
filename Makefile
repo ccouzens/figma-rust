@@ -7,7 +7,8 @@ example-figma-files/gov-uk-design-system-button.json
 
 example-output-files = \
 src/design_tokens/example-output.json \
-src/typescript_props/example-output.ts
+src/typescript_props/example-output.ts \
+src/to_html/example-output.html
 
 definition-files = \
 definitions.kt \
