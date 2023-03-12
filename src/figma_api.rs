@@ -190,6 +190,14 @@ impl Node {
         self.node_type.children()
     }
 
+    pub fn fills(&self) -> &[Paint] {
+        self.node_type.fills()
+    }
+
+    pub fn strokes(&self) -> &[Paint] {
+        self.node_type.strokes()
+    }
+
     pub fn depth_first_stack_iter(&self) -> NodeDepthFirstStackIterator {
         NodeDepthFirstStackIterator {
             stack: vec![self],
@@ -208,6 +216,7 @@ pub struct NodeTypeFrame {
     pub children: Vec<Node>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub fills: Vec<Paint>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub strokes: Vec<Paint>,
     pub stroke_weight: f64,
     pub stroke_align: StrokeAlign,
@@ -246,6 +255,8 @@ pub struct NodeTypeVector {
     pub absolute_bounding_box: Option<Rectangle>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub fills: Vec<Paint>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    strokes: Vec<Paint>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -319,7 +330,11 @@ pub enum NodeType {
     #[serde(rename_all = "camelCase")]
     Sticky { characters: String },
     #[serde(rename_all = "camelCase")]
-    ShapeWithText { characters: String },
+    ShapeWithText {
+        characters: String,
+        #[serde(default, skip_serializing_if = "Vec::is_empty")]
+        strokes: Vec<Paint>,
+    },
     #[serde(rename_all = "camelCase")]
     Connector { characters: String },
     #[serde(other)]
@@ -411,6 +426,24 @@ impl NodeType {
             | NodeType::ComponentSet { base, .. }
             | NodeType::Instance { base, .. } => Some(base),
             _ => None,
+        }
+    }
+
+    fn fills(&self) -> &[Paint] {
+        self.vector_props()
+            .map(|v| v.fills.as_slice())
+            .or_else(|| self.frame_props().map(|fp| fp.fills.as_slice()))
+            .unwrap_or(&[])
+    }
+
+    fn strokes(&self) -> &[Paint] {
+        match self {
+            NodeType::ShapeWithText { strokes, .. } => strokes,
+            _ => self
+                .vector_props()
+                .map(|v| v.strokes.as_slice())
+                .or_else(|| self.frame_props().map(|fp| fp.strokes.as_slice()))
+                .unwrap_or(&[]),
         }
     }
 
