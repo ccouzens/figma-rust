@@ -2,7 +2,8 @@
 
 example-figma-files = \
 example-figma-files/design-tokens-for-figma.json \
-example-figma-files/gov-uk-design-system.json
+example-figma-files/gov-uk-design-system.json \
+example-figma-files/gov-uk-design-system-button.json
 
 example-output-files = \
 src/design_tokens/example-output.json \
@@ -18,6 +19,9 @@ example-figma-files/gov-uk-design-system.json :
 	curl -sH "X-Figma-Token: ${FIGMA_TOKEN}" \
     'https://api.figma.com/v1/files/VU1aDcxBJCKLw1e1vbFmur' \
 	| jq > $@
+
+example-figma-files/gov-uk-design-system-button.json : example-figma-files/gov-uk-design-system.json
+	jq '.document.children[] | select(.name == "🗝️  Styles and Components").children[] | select(.name == "Button")' < $< > $@
 
 src/design_tokens/example-output.json : example-figma-files/design-tokens-for-figma.json
 	cargo run --release -- design-tokens < $< > $@
