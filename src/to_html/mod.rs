@@ -1,7 +1,39 @@
 use super::figma_api;
-use anyhow::{Context, Result};
+use anyhow::{anyhow, Context, Result};
 use horrorshow::{helper::doctype, html};
+use lightningcss::stylesheet::{MinifyOptions, ParserOptions, PrinterOptions, StyleSheet};
 use std::io::Write;
+
+fn create_css(selector: &str, properties: &[(&str, Option<&str>)]) -> Result<String> {
+    let mut style_sheet_text = format!("{selector} {{");
+    for (property, value) in properties {
+        if let Some(value) = value {
+            style_sheet_text.push_str(&format!("{property}: {value};"));
+        }
+    }
+    style_sheet_text.push('}');
+    let mut stylesheet = StyleSheet::parse(&style_sheet_text, ParserOptions::default())
+        .map_err(|err| anyhow!("Failed to parse CSS for {selector}\n{err}"))?;
+
+    stylesheet
+        .minify(MinifyOptions::default())
+        .with_context(|| format!("Failed to minify CSS for {selector}"))?;
+
+    Ok(stylesheet
+        .to_css(PrinterOptions::default())
+        .with_context(|| format!("Failed to print CSS for {selector}"))?
+        .code)
+}
+
+struct RenderProps<'a> {
+    body_css: &'a str,
+    component_title: &'a str,
+    examples: &'a [ExampleRenderProps],
+}
+
+struct ExampleRenderProps {
+    inline_css: String,
+}
 
 pub fn main(
     file: &figma_api::File,
@@ -13,46 +45,84 @@ pub fn main(
         .document
         .depth_first_stack_iter()
         .find(|(n, _)| n.id == node_id)
-        .context(format!("Failed to find node with id {}", node_id))?
+        .with_context(|| format!("Failed to find node with id {}", node_id))?
         .0;
 
-    let node_background_color = node
-        .fills()
-        .get(0)
-        .context("Expected to have a background fill")?
-        .color()
-        .context("Expected to have a background color")?;
-
-    let node_bounding_box = node
+    let absolute_bounding_box = node
         .absolute_bounding_box()
-        .context("Expected to have a render box")?;
+        .context("Failed to load bounding box")?;
 
-    let body_css = format!(
-        "
-    box-sizing: border-box;
-    position: relative;
-    width: {width}px;
-    height: {height}px;
-    background: {background_color};
-    border: 1px dashed {border_color};
-    border-radius: {border_radius}px;
-   ",
-        width = node_bounding_box
-            .width
-            .context("Expected to have a width")?,
-        height = node_bounding_box
-            .height
-            .context("Expected to have a height")?,
-        background_color = node_background_color.to_rgb_string(),
-        border_color = node
-            .strokes()
-            .get(0)
-            .context("Expected to have a border stroke")?
-            .color()
-            .context("Expected to have a border color")?
-            .to_rgb_string(),
-        border_radius = node.corner_radius().context("Expected a border radius")?
-    );
+    let node_offset_top = absolute_bounding_box.y.context("Failed to load y offset")?;
+    let node_offset_left = absolute_bounding_box.x.context("Failed to load x offset")?;
+
+    let body_css = create_css(
+        "body",
+        &[
+            ("box-sizing", Some("border-box")),
+            ("position", Some("relative")),
+            (
+                "width",
+                absolute_bounding_box
+                    .width
+                    .map(|width| format!("{width}px"))
+                    .as_deref(),
+            ),
+            (
+                "height",
+                absolute_bounding_box
+                    .height
+                    .map(|height| format!("{height}px"))
+                    .as_deref(),
+            ),
+            (
+                "background-color",
+                node.fills()
+                    .get(0)
+                    .and_then(|fill| fill.color())
+                    .map(|color| color.to_rgb_string())
+                    .as_deref(),
+            ),
+            ("border-width", Some("1px")),
+            ("border-style", Some("dashed")),
+            (
+                "border-color",
+                node.strokes()
+                    .get(0)
+                    .and_then(|stroke| stroke.color())
+                    .map(|color| color.to_rgb_string())
+                    .as_deref(),
+            ),
+            (
+                "border-radius",
+                node.corner_radius()
+                    .map(|radius| format!("{radius}px"))
+                    .as_deref(),
+            ),
+        ],
+    )?;
+
+    let mut example_render_props = Vec::new();
+
+    for component_node in node.children().iter() {
+        if let (Some(component_offset_top), Some(component_offset_left)) = (
+            component_node.absolute_bounding_box().and_then(|bb| bb.y),
+            component_node.absolute_bounding_box().and_then(|bb| bb.x),
+        ) {
+            example_render_props.push(ExampleRenderProps {
+                inline_css: format!(
+                    "position: absolute; top: {top}px; left: {left}px;",
+                    top = component_offset_top - node_offset_top,
+                    left = component_offset_left - node_offset_left
+                ),
+            });
+        }
+    }
+
+    let render_props = RenderProps {
+        body_css: &body_css,
+        component_title: &node.name,
+        examples: &example_render_props,
+    };
 
     writeln!(
         stdout,
@@ -62,19 +132,14 @@ pub fn main(
             html {
                 head {
                     meta(charset="utf-8");
-                    title : format!("{} component", node.name);
-                    style(type="text/css");
+                    title : format!("{} component", render_props.component_title);
+                    style(type="text/css"): render_props.body_css;
                 }
-                body(style=format!("
-            box-sizing: border-box;
-            position: relative;
-            width: 473px;
-            height: 345px;
-            background: {};
-            border: 1px dashed #7b61ff;
-            border-radius: 5px;
-          ", node_background_color.to_rgb_string())) {}
-                body(style=&body_css) {}
+                body {
+                    @ for example_render_prop in render_props.examples.iter() {
+                        div(style=&example_render_prop.inline_css): "button"
+                    }
+                }
             }
         }
     )
