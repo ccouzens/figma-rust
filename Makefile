@@ -17,7 +17,7 @@ example-figma-files/design-tokens-for-figma.json :
 # My unchanged copy of https://www.figma.com/community/file/946837271092540314
 example-figma-files/gov-uk-design-system.json :
 	curl -sH "X-Figma-Token: ${FIGMA_TOKEN}" \
-    'https://api.figma.com/v1/files/VU1aDcxBJCKLw1e1vbFmur' \
+    'https://api.figma.com/v1/files/x0ptBZeKChJWD4rOaOf4fs' \
 	| jq > $@
 
 example-figma-files/gov-uk-design-system-button.json : example-figma-files/gov-uk-design-system.json
