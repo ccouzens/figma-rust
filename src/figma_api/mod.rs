@@ -1,88 +1,15 @@
 use std::collections::HashMap;
 
-use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Deserialize, Serialize)]
-pub struct Color {
-    #[serde(rename = "r")]
-    red: f64,
-    #[serde(rename = "g")]
-    green: f64,
-    #[serde(rename = "b")]
-    blue: f64,
-    #[serde(rename = "a")]
-    alpha: f64,
-}
-
-impl Color {
-    pub fn to_rgba_string(&self) -> String {
-        format!(
-            "rgba({}, {}, {}, {})",
-            (self.red * 255.0).floor(),
-            (self.green * 255.0).floor(),
-            (self.blue * 255.0).floor(),
-            self.alpha
-        )
-    }
-}
-
-#[derive(Debug, Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
-pub struct PaintTypeGradient {}
-
-#[derive(Debug, Deserialize, Serialize)]
-#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
-#[serde(tag = "type")]
-pub enum PaintType {
-    #[serde(rename_all = "camelCase")]
-    Solid {
-        color: Color,
-    },
-    GradientLinear {
-        #[serde(flatten)]
-        base: PaintTypeGradient,
-    },
-    GradientRadial {
-        #[serde(flatten)]
-        base: PaintTypeGradient,
-    },
-    GradientAngular {
-        #[serde(flatten)]
-        base: PaintTypeGradient,
-    },
-    GradientDiamond {
-        #[serde(flatten)]
-        base: PaintTypeGradient,
-    },
-    Image,
-}
-
-#[derive(Debug, Deserialize, Serialize)]
-pub struct Paint {
-    #[serde(default = "default_true")]
-    pub visible: bool,
-    #[serde(default = "default_one")]
-    pub opacity: f64,
-    #[serde(flatten)]
-    pub paint_type: PaintType,
-}
-
-impl Paint {
-    pub fn color(&self) -> Option<&Color> {
-        match self.paint_type {
-            PaintType::Solid { ref color } => Some(color),
-            _ => None,
-        }
-    }
-}
-
-#[derive(Debug, Deserialize, Serialize)]
-pub struct Component {
-    pub key: String,
-    pub name: String,
-    pub description: String,
-}
+mod color;
+pub use self::color::Color;
+mod paint;
+pub use self::paint::Paint;
+mod file;
+pub use self::file::File;
+mod component;
+pub use self::component::Component;
 
 #[derive(Debug, Deserialize, Serialize, PartialEq, Eq, Hash)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
@@ -458,15 +385,4 @@ impl NodeType {
             },
         }
     }
-}
-
-#[derive(Debug, Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
-pub struct File {
-    pub document: Node,
-    pub components: IndexMap<String, Component>,
-    pub styles: IndexMap<String, Style>,
-    pub name: String,
-    pub schema_version: u8,
-    pub version: String,
 }
