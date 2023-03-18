@@ -10637,7 +10637,7 @@
                     "effects": [],
                     "transitionNodeID": "41634:14",
                     "transitionDuration": 300.0,
-                    "transitionEasing": "EASE_OUT"
+                    "transitionEasing": "CUSTOM_BEZIER"
                   },
                   {
                     "id": "41634:14",
@@ -16207,12 +16207,19 @@
       "styleType": "FILL",
       "remote": false,
       "description": "A red with a 50% opacity"
+    },
+    "52992:4": {
+      "key": "228084cb57ed974095da95eea6ac3dd3be0b6ba9",
+      "name": "Body/Variable Font",
+      "styleType": "TEXT",
+      "remote": false,
+      "description": ""
     }
   },
   "name": "Design Tokens for Figma",
-  "lastModified": "2022-12-05T13:02:37Z",
-  "thumbnailUrl": "https://s3-alpha.figma.com/thumbnails/28b4c2e5-ea36-44ea-9457-149a519a1dec?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWCS43CWNU7%2F20230108%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230108T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=44a38aa4c7bc4fb63e7451b70b164ff0df61c7fe06976e0ad90a190a7f8cad70",
-  "version": "2707979100",
+  "lastModified": "2023-03-15T16:02:52Z",
+  "thumbnailUrl": "https://s3-alpha.figma.com/thumbnails/df199dfe-4a44-4f26-a913-eca3c9133a0f?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWCZRVQCS5F%2F20230316%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230316T000000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=b644732c17c25fd3dfe7231db68badfaccf1e4ad3c23eae3298ea82f5c14532b",
+  "version": "3172855371",
   "role": "viewer",
   "editorType": "figma",
   "linkAccess": "view"

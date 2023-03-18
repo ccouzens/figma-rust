@@ -402,12 +402,12 @@
         "unit": "s"
       },
       "easing": {
-        "value": "ease-out",
+        "value": "custom-cubic-bezier",
         "type": "string"
       },
       "easingFunction": {
         "x1": {
-          "value": 0.0,
+          "value": 0.42,
           "type": "number"
         },
         "x2": {
@@ -781,6 +781,10 @@
         "exportKey": "font"
       },
       "super": {
+        "category": "font",
+        "exportKey": "font"
+      },
+      "variable font": {
         "category": "font",
         "exportKey": "font"
       }
