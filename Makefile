@@ -23,8 +23,8 @@ example-figma-files/design-tokens-for-figma.json :
 # My unchanged copy of https://www.figma.com/community/file/946837271092540314
 example-figma-files/gov-uk-design-system.json :
 	curl -sH "X-Figma-Token: ${FIGMA_TOKEN}" \
-    'https://api.figma.com/v1/files/x0ptBZeKChJWD4rOaOf4fs' \
-	| jq > $@
+	'https://api.figma.com/v1/files/x0ptBZeKChJWD4rOaOf4fs' \
+        | jq > $@
 
 example-figma-files/gov-uk-design-system-button.json : example-figma-files/gov-uk-design-system.json
 	jq '.document.children[] | select(.name == "🗝️  Styles and Components").children[] | select(.name == "Button")' < $< > $@
@@ -55,7 +55,7 @@ clean : cleanOutput cleanDownloads cleanDefinitions
 
 .PHONY : cleanDownloads
 cleanDownloads :
-	rm -f $(example-output-files)
+	rm -f $(example-figma-files)
 
 .PHONY : cleanOutput
 cleanOutput :
