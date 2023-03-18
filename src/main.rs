@@ -1,5 +1,5 @@
 mod design_tokens;
-mod figma_api;
+pub mod figma_api;
 mod to_html;
 mod typescript_props;
 
