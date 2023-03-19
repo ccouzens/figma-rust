@@ -25,23 +25,23 @@ pub enum StrokeAlign {
 pub struct Node {
     pub id: String,
     pub name: String,
-    #[serde(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
     visible: Option<bool>,
     #[serde(flatten)]
     pub node_type: NodeType,
-    #[serde(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
     children: Option<Vec<Node>>,
-    #[serde(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
     fills: Option<Vec<Paint>>,
-    #[serde(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
     strokes: Option<Vec<Paint>>,
-    #[serde(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
     stroke_weight: Option<f64>,
-    #[serde(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
     characters: Option<String>,
-    #[serde(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
     background_color: Option<Color>,
-    #[serde(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
     opacity: Option<f64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     absolute_bounding_box: Option<Rectangle>,
