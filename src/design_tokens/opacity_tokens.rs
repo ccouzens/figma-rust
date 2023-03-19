@@ -16,6 +16,6 @@ pub fn as_opacity_token(node: &Node, _file: &File) -> Option<serde_json::Value> 
         category: "opacity",
         export_key: "opacity",
         r#type: "number",
-        value: node.opacity()?
+        value: node.opacity()
     }))
 }

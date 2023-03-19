@@ -1,4 +1,4 @@
-use super::{default_one, Color, Component, EasingType, File, Paint, Rectangle};
+use super::{Color, Component, EasingType, File, Paint, Rectangle};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
@@ -39,6 +39,12 @@ pub struct Node {
     stroke_weight: Option<f64>,
     #[serde(default)]
     characters: Option<String>,
+    #[serde(default)]
+    background_color: Option<Color>,
+    #[serde(default)]
+    opacity: Option<f64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    absolute_bounding_box: Option<Rectangle>,
 }
 
 impl Node {
@@ -47,7 +53,7 @@ impl Node {
     }
 
     pub fn absolute_bounding_box(&self) -> Option<&Rectangle> {
-        self.node_type.absolute_bounding_box()
+        self.absolute_bounding_box.as_ref()
     }
 
     pub fn corner_radius(&self) -> Option<f64> {
@@ -58,8 +64,8 @@ impl Node {
         self.node_type.rectangle_corner_radii()
     }
 
-    pub fn opacity(&self) -> Option<f64> {
-        self.node_type.opacity()
+    pub fn opacity(&self) -> f64 {
+        self.opacity.unwrap_or(1.0)
     }
 
     pub fn frame_props(&self) -> Option<&NodeTypeFrame> {
@@ -106,10 +112,6 @@ pub struct NodeTypeFrame {
     pub transition_duration: Option<f64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub transition_easing: Option<EasingType>,
-    #[serde(default = "default_one")]
-    pub opacity: f64,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub absolute_bounding_box: Option<Rectangle>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub absolute_render_bounds: Option<Rectangle>,
     #[serde(default)]
@@ -125,23 +127,12 @@ pub struct NodeTypeFrame {
 }
 
 #[derive(Debug, Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
-pub struct NodeTypeVector {
-    #[serde(default = "default_one")]
-    pub opacity: f64,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub absolute_bounding_box: Option<Rectangle>,
-}
-
-#[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 #[serde(tag = "type")]
 pub enum NodeType {
     Document,
     #[serde(rename_all = "camelCase")]
-    Canvas {
-        background_color: Color,
-    },
+    Canvas,
     #[serde(rename_all = "camelCase")]
     Frame {
         #[serde(flatten)]
@@ -152,11 +143,7 @@ pub enum NodeType {
         #[serde(flatten)]
         base: NodeTypeFrame,
     },
-    #[serde(rename_all = "camelCase")]
-    Vector {
-        #[serde(flatten)]
-        base: NodeTypeVector,
-    },
+    Vector,
     BooleanOperation,
     Star,
     Line,
@@ -164,18 +151,12 @@ pub enum NodeType {
     RegularPolygon,
     #[serde(rename_all = "camelCase")]
     Rectangle {
-        #[serde(flatten)]
-        base: NodeTypeVector,
         #[serde(skip_serializing_if = "Option::is_none")]
         corner_radius: Option<f64>,
         #[serde(skip_serializing_if = "Option::is_none")]
         rectangle_corner_radii: Option<[f64; 4]>,
     },
-    #[serde(rename_all = "camelCase")]
-    Text {
-        #[serde(flatten)]
-        base: NodeTypeVector,
-    },
+    Text,
     Slice,
     #[serde(rename_all = "camelCase")]
     Component {
@@ -221,15 +202,6 @@ impl<'a> Iterator for NodeDepthFirstStackIterator<'a> {
 }
 
 impl NodeType {
-    fn absolute_bounding_box(&self) -> Option<&Rectangle> {
-        self.vector_props()
-            .and_then(|v| v.absolute_bounding_box.as_ref())
-            .or_else(|| {
-                self.frame_props()
-                    .and_then(|fp| fp.absolute_bounding_box.as_ref())
-            })
-    }
-
     fn corner_radius(&self) -> Option<f64> {
         match self {
             NodeType::Rectangle { corner_radius, .. } => *corner_radius,
@@ -258,19 +230,6 @@ impl NodeType {
                 }) => Some([*r, *r, *r, *r]),
                 _ => None,
             },
-        }
-    }
-
-    fn opacity(&self) -> Option<f64> {
-        self.vector_props()
-            .map(|v| v.opacity)
-            .or_else(|| self.frame_props().map(|fp| fp.opacity))
-    }
-
-    fn vector_props(&self) -> Option<&NodeTypeVector> {
-        match self {
-            NodeType::Vector { base, .. } | NodeType::Rectangle { base, .. } => Some(base),
-            _ => None,
         }
     }
 
