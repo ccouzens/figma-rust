@@ -37,6 +37,8 @@ pub struct Node {
     strokes: Option<Vec<Paint>>,
     #[serde(default)]
     stroke_weight: Option<f64>,
+    #[serde(default)]
+    characters: Option<String>,
 }
 
 impl Node {
@@ -135,10 +137,11 @@ pub struct NodeTypeVector {
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 #[serde(tag = "type")]
 pub enum NodeType {
-    #[serde(rename_all = "camelCase")]
     Document,
     #[serde(rename_all = "camelCase")]
-    Canvas { background_color: Color },
+    Canvas {
+        background_color: Color,
+    },
     #[serde(rename_all = "camelCase")]
     Frame {
         #[serde(flatten)]
@@ -154,15 +157,10 @@ pub enum NodeType {
         #[serde(flatten)]
         base: NodeTypeVector,
     },
-    #[serde(rename_all = "camelCase")]
     BooleanOperation,
-    #[serde(rename_all = "camelCase")]
     Star,
-    #[serde(rename_all = "camelCase")]
     Line,
-    #[serde(rename_all = "camelCase")]
     Ellipse,
-    #[serde(rename_all = "camelCase")]
     RegularPolygon,
     #[serde(rename_all = "camelCase")]
     Rectangle {
@@ -177,9 +175,7 @@ pub enum NodeType {
     Text {
         #[serde(flatten)]
         base: NodeTypeVector,
-        characters: String,
     },
-    #[serde(rename_all = "camelCase")]
     Slice,
     #[serde(rename_all = "camelCase")]
     Component {
@@ -196,12 +192,9 @@ pub enum NodeType {
         #[serde(flatten)]
         base: NodeTypeFrame,
     },
-    #[serde(rename_all = "camelCase")]
-    Sticky { characters: String },
-    #[serde(rename_all = "camelCase")]
-    ShapeWithText { characters: String },
-    #[serde(rename_all = "camelCase")]
-    Connector { characters: String },
+    Sticky,
+    ShapeWithText,
+    Connector,
 }
 
 pub struct NodeDepthFirstStackIterator<'a> {
