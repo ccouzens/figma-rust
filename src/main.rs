@@ -78,7 +78,7 @@ fn main() -> Result<()> {
                 &file,
                 &mut std::io::stdout().lock(),
                 &mut std::io::stderr().lock(),
-                &node_id.replace("%3A", ":"),
+                &node_id.replace("%3A", ":").replace('-', ":"),
             )
             .context("Failed to generate HTML")?;
         }
