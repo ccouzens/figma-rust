@@ -33,8 +33,15 @@ src/typescript_props/example-output.ts : example-figma-files/gov-uk-design-syste
 all : $(example-figma-files) $(example-output-files)
 
 .PHONY : clean
-clean :
-	rm -f $(example-figma-files) $(example-output-files)
+clean : cleanOutput cleanDownloads
+
+.PHONY : cleanDownloads
+cleanDownloads :
+	rm -f $(example-output-files)
+
+.PHONY : cleanOutput
+cleanOutput :
+	rm -f $(example-output-files)
 
 .PHONY : cleanAll
 cleanAll : clean

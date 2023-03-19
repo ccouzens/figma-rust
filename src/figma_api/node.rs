@@ -1,4 +1,4 @@
-use super::{default_one, default_true, Color, Component, EasingType, File, Paint, Rectangle};
+use super::{default_one, Color, Component, EasingType, File, Paint, Rectangle};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
@@ -25,13 +25,25 @@ pub enum StrokeAlign {
 pub struct Node {
     pub id: String,
     pub name: String,
-    #[serde(default = "default_true")]
-    pub visible: bool,
+    #[serde(default)]
+    visible: Option<bool>,
     #[serde(flatten)]
     pub node_type: NodeType,
+    #[serde(default)]
+    children: Option<Vec<Node>>,
+    #[serde(default)]
+    fills: Option<Vec<Paint>>,
+    #[serde(default)]
+    strokes: Option<Vec<Paint>>,
+    #[serde(default)]
+    stroke_weight: Option<f64>,
 }
 
 impl Node {
+    pub fn visible(&self) -> bool {
+        self.visible.unwrap_or(true)
+    }
+
     pub fn absolute_bounding_box(&self) -> Option<&Rectangle> {
         self.node_type.absolute_bounding_box()
     }
@@ -53,15 +65,15 @@ impl Node {
     }
 
     pub fn children(&self) -> &[Node] {
-        self.node_type.children()
+        self.children.as_deref().unwrap_or_default()
     }
 
     pub fn fills(&self) -> &[Paint] {
-        self.node_type.fills()
+        self.fills.as_deref().unwrap_or_default()
     }
 
     pub fn strokes(&self) -> &[Paint] {
-        self.node_type.strokes()
+        self.strokes.as_deref().unwrap_or_default()
     }
 
     pub fn depth_first_stack_iter(&self) -> NodeDepthFirstStackIterator {
@@ -74,17 +86,15 @@ impl Node {
     pub fn component<'a>(&self, file: &'a File) -> Option<&'a Component> {
         file.components.get(&self.id)
     }
+
+    pub fn stroke_weight(&self) -> Option<f64> {
+        self.stroke_weight
+    }
 }
 
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct NodeTypeFrame {
-    pub children: Vec<Node>,
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    pub fills: Vec<Paint>,
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    pub strokes: Vec<Paint>,
-    pub stroke_weight: f64,
     pub stroke_align: StrokeAlign,
     #[serde(skip_serializing_if = "Option::is_none")]
     corner_radius: Option<f64>,
@@ -119,10 +129,6 @@ pub struct NodeTypeVector {
     pub opacity: f64,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub absolute_bounding_box: Option<Rectangle>,
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    pub fills: Vec<Paint>,
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    strokes: Vec<Paint>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -130,12 +136,9 @@ pub struct NodeTypeVector {
 #[serde(tag = "type")]
 pub enum NodeType {
     #[serde(rename_all = "camelCase")]
-    Document { children: Vec<Node> },
+    Document,
     #[serde(rename_all = "camelCase")]
-    Canvas {
-        background_color: Color,
-        children: Vec<Node>,
-    },
+    Canvas { background_color: Color },
     #[serde(rename_all = "camelCase")]
     Frame {
         #[serde(flatten)]
@@ -152,7 +155,7 @@ pub enum NodeType {
         base: NodeTypeVector,
     },
     #[serde(rename_all = "camelCase")]
-    BooleanOperation { children: Vec<Node> },
+    BooleanOperation,
     #[serde(rename_all = "camelCase")]
     Star,
     #[serde(rename_all = "camelCase")]
@@ -196,15 +199,9 @@ pub enum NodeType {
     #[serde(rename_all = "camelCase")]
     Sticky { characters: String },
     #[serde(rename_all = "camelCase")]
-    ShapeWithText {
-        characters: String,
-        #[serde(default, skip_serializing_if = "Vec::is_empty")]
-        strokes: Vec<Paint>,
-    },
+    ShapeWithText { characters: String },
     #[serde(rename_all = "camelCase")]
     Connector { characters: String },
-    #[serde(other)]
-    Unknown,
 }
 
 pub struct NodeDepthFirstStackIterator<'a> {
@@ -292,36 +289,6 @@ impl NodeType {
             | NodeType::ComponentSet { base, .. }
             | NodeType::Instance { base, .. } => Some(base),
             _ => None,
-        }
-    }
-
-    fn fills(&self) -> &[Paint] {
-        self.vector_props()
-            .map(|v| v.fills.as_slice())
-            .or_else(|| self.frame_props().map(|fp| fp.fills.as_slice()))
-            .unwrap_or(&[])
-    }
-
-    fn strokes(&self) -> &[Paint] {
-        match self {
-            NodeType::ShapeWithText { strokes, .. } => strokes,
-            _ => self
-                .vector_props()
-                .map(|v| v.strokes.as_slice())
-                .or_else(|| self.frame_props().map(|fp| fp.strokes.as_slice()))
-                .unwrap_or(&[]),
-        }
-    }
-
-    fn children(&self) -> &[Node] {
-        match self {
-            NodeType::Document { children, .. } => children,
-            NodeType::Canvas { children, .. } => children,
-            NodeType::BooleanOperation { children, .. } => children,
-            _ => match self.frame_props() {
-                Some(NodeTypeFrame { children, .. }) => children,
-                None => &[],
-            },
         }
     }
 }

@@ -55,7 +55,7 @@ struct BorderToken<'a> {
 
 pub fn as_border_token(node: &Node, _file: &File) -> Option<serde_json::Value> {
     let frame_props = node.frame_props()?;
-    let stroke = frame_props.strokes.first()?;
+    let stroke = node.strokes().first()?;
 
     Some(json!(BorderToken {
         category: "border",
@@ -82,7 +82,7 @@ pub fn as_border_token(node: &Node, _file: &File) -> Option<serde_json::Value> {
             unit: "degree"
         },
         stroke_weight: StrokeWeight {
-            value: frame_props.stroke_weight,
+            value: node.stroke_weight()?,
             r#type: "number",
             unit: "pixel"
         },
