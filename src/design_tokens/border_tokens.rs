@@ -1,4 +1,4 @@
-use crate::figma_api::{self, File, Node};
+use crate::figma_api::{self, File, Node, NodeType};
 use serde::Serialize;
 use serde_json::json;
 
@@ -54,14 +54,23 @@ struct BorderToken<'a> {
 }
 
 pub fn as_border_token(node: &Node, _file: &File) -> Option<serde_json::Value> {
-    let frame_props = node.frame_props()?;
+    if !matches!(
+        node.node_type,
+        NodeType::Frame { .. }
+            | NodeType::Group { .. }
+            | NodeType::Component { .. }
+            | NodeType::ComponentSet { .. }
+            | NodeType::Instance { .. }
+    ) {
+        return None;
+    }
     let stroke = node.strokes().first()?;
 
     Some(json!(BorderToken {
         category: "border",
         export_key: "border",
         stroke_align: StrokeAlign {
-            value: match frame_props.stroke_align {
+            value: match node.stroke_align()? {
                 figma_api::StrokeAlign::Inside => "inside",
                 figma_api::StrokeAlign::Outside => "outside",
                 figma_api::StrokeAlign::Center => "center",

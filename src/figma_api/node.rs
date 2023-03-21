@@ -45,6 +45,8 @@ pub struct Node {
     opacity: Option<f64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     absolute_bounding_box: Option<Rectangle>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    stroke_align: Option<StrokeAlign>,
 }
 
 impl Node {
@@ -98,12 +100,15 @@ impl Node {
     pub fn stroke_weight(&self) -> Option<f64> {
         self.stroke_weight
     }
+
+    pub fn stroke_align(&self) -> Option<&StrokeAlign> {
+        self.stroke_align.as_ref()
+    }
 }
 
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct NodeTypeFrame {
-    pub stroke_align: StrokeAlign,
     #[serde(skip_serializing_if = "Option::is_none")]
     corner_radius: Option<f64>,
     #[serde(skip_serializing_if = "Option::is_none")]
