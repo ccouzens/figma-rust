@@ -5,10 +5,13 @@ use lightningcss::stylesheet::{MinifyOptions, ParserOptions, PrinterOptions, Sty
 use std::io::Write;
 
 fn create_css(selector: &str, properties: &[(&str, Option<&str>)]) -> Result<String> {
+    use std::fmt::Write;
+
     let mut style_sheet_text = format!("{selector} {{");
     for (property, value) in properties {
         if let Some(value) = value {
-            style_sheet_text.push_str(&format!("{property}: {value};"));
+            write!(&mut style_sheet_text, "{property}: {value};")
+                .context("Failed to write property to string")?;
         }
     }
     style_sheet_text.push('}');
