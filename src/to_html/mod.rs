@@ -1,14 +1,23 @@
+use crate::figma_api::NodeType;
+
+use self::css_properties::CssProperties;
+
 use super::figma_api;
 use anyhow::{anyhow, Context, Result};
 use horrorshow::{helper::doctype, html};
 use lightningcss::stylesheet::{MinifyOptions, ParserOptions, PrinterOptions, StyleSheet};
 use std::io::Write;
 
+mod css_properties;
+
 fn create_css(selector: &str, properties: &[(&str, Option<&str>)]) -> Result<String> {
+    use std::fmt::Write;
+
     let mut style_sheet_text = format!("{selector} {{");
     for (property, value) in properties {
         if let Some(value) = value {
-            style_sheet_text.push_str(&format!("{property}: {value};"));
+            write!(&mut style_sheet_text, "{property}: {value};")
+                .context("Failed to write property to string")?;
         }
     }
     style_sheet_text.push('}');
@@ -41,12 +50,16 @@ pub fn main(
     _stderr: &mut impl Write,
     node_id: &str,
 ) -> Result<()> {
-    let node = file
+    let (node, parents) = file
         .document
         .depth_first_stack_iter()
         .find(|(n, _)| n.id == node_id)
-        .with_context(|| format!("Failed to find node with id {}", node_id))?
-        .0;
+        .with_context(|| format!("Failed to find node with id {}", node_id))?;
+
+    let canvas = parents
+        .iter()
+        .find(|n| matches!(n.r#type, NodeType::Canvas))
+        .context("Failed to find canvas parent")?;
 
     let absolute_bounding_box = node
         .absolute_bounding_box()
@@ -55,51 +68,59 @@ pub fn main(
     let node_offset_top = absolute_bounding_box.y.context("Failed to load y offset")?;
     let node_offset_left = absolute_bounding_box.x.context("Failed to load x offset")?;
 
-    let body_css = create_css(
-        "body",
-        &[
-            ("box-sizing", Some("border-box")),
-            ("position", Some("relative")),
-            (
-                "width",
-                absolute_bounding_box
-                    .width
-                    .map(|width| format!("{width}px"))
-                    .as_deref(),
-            ),
-            (
-                "height",
-                absolute_bounding_box
-                    .height
-                    .map(|height| format!("{height}px"))
-                    .as_deref(),
-            ),
-            (
+    let body_css = format!(
+        "{}\n{}",
+        create_css(
+            "body",
+            &[
+                ("box-sizing", Some("border-box")),
+                ("position", Some("relative")),
+                (
+                    "width",
+                    absolute_bounding_box
+                        .width
+                        .map(|width| format!("{width}px"))
+                        .as_deref(),
+                ),
+                (
+                    "height",
+                    absolute_bounding_box
+                        .height
+                        .map(|height| format!("{height}px"))
+                        .as_deref(),
+                ),
+                (
+                    "background-color",
+                    node.fills()
+                        .get(0)
+                        .and_then(|fill| fill.color())
+                        .map(|color| color.to_rgb_string())
+                        .as_deref(),
+                ),
+                ("border-width", Some("1px")),
+                ("border-style", Some("dashed")),
+                (
+                    "border-color",
+                    node.strokes()
+                        .get(0)
+                        .and_then(|stroke| stroke.color())
+                        .map(|color| color.to_rgb_string())
+                        .as_deref(),
+                ),
+                ("border-radius", node.border_radius().as_deref(),),
+            ],
+        )?,
+        create_css(
+            "html",
+            &[(
                 "background-color",
-                node.fills()
-                    .get(0)
-                    .and_then(|fill| fill.color())
+                canvas
+                    .background_color()
                     .map(|color| color.to_rgb_string())
-                    .as_deref(),
-            ),
-            ("border-width", Some("1px")),
-            ("border-style", Some("dashed")),
-            (
-                "border-color",
-                node.strokes()
-                    .get(0)
-                    .and_then(|stroke| stroke.color())
-                    .map(|color| color.to_rgb_string())
-                    .as_deref(),
-            ),
-            (
-                "border-radius",
-                node.corner_radius()
-                    .map(|radius| format!("{radius}px"))
-                    .as_deref(),
-            ),
-        ],
-    )?;
+                    .as_deref()
+            )]
+        )?
+    );
 
     let mut example_render_props = Vec::new();
 
