@@ -23,14 +23,22 @@ pub enum StrokeAlign {
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Node {
+    /// A string uniquely identifying this node within the document.
     pub id: String,
+    /// The name given to the node by the user in the tool.
     pub name: String,
+    /// Whether or not the node is visible on the canvas.
     #[serde(skip_serializing_if = "Option::is_none")]
     visible: Option<bool>,
+    /// The type of the node, refer to table below for details.
     #[serde(flatten)]
     pub node_type: NodeType,
+    /// An array of nodes that are direct children of this node
     #[serde(skip_serializing_if = "Option::is_none")]
     children: Option<Vec<Node>>,
+    /// Background color of the canvas
+    #[serde(skip_serializing_if = "Option::is_none")]
+    background_color: Option<Color>,
     #[serde(skip_serializing_if = "Option::is_none")]
     fills: Option<Vec<Paint>>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -39,8 +47,6 @@ pub struct Node {
     stroke_weight: Option<f64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     characters: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    background_color: Option<Color>,
     #[serde(skip_serializing_if = "Option::is_none")]
     opacity: Option<f64>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -52,6 +58,10 @@ pub struct Node {
 impl Node {
     pub fn visible(&self) -> bool {
         self.visible.unwrap_or(true)
+    }
+
+    pub fn background_color(&self) -> Option<&Color> {
+        self.background_color.as_ref()
     }
 
     pub fn absolute_bounding_box(&self) -> Option<&Rectangle> {
