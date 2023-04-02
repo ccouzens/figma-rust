@@ -96,7 +96,7 @@ pub fn as_border_token(node: &Node, _file: &File) -> Option<serde_json::Value> {
             unit: "pixel"
         },
         stroke: Stroke {
-            value: stroke.color()?.to_rgba_string(),
+            value: stroke.color()?.to_rgb_string(),
             r#type: "color"
         }
     }))

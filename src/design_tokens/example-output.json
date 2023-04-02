@@ -218,7 +218,7 @@
         "unit": "pixel"
       },
       "stroke": {
-        "value": "rgba(0, 0, 0, 1)",
+        "value": "rgb(0, 0, 0, 1)",
         "type": "color"
       }
     },
@@ -248,7 +248,7 @@
         "unit": "pixel"
       },
       "stroke": {
-        "value": "rgba(0, 0, 0, 1)",
+        "value": "rgb(0, 0, 0, 1)",
         "type": "color"
       }
     },
@@ -278,7 +278,7 @@
         "unit": "pixel"
       },
       "stroke": {
-        "value": "rgba(4, 74, 255, 1)",
+        "value": "rgb(4, 74, 255, 1)",
         "type": "color"
       }
     }

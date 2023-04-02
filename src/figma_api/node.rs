@@ -39,6 +39,7 @@ pub struct Node {
     /// Background color of the canvas
     #[serde(skip_serializing_if = "Option::is_none")]
     background_color: Option<Color>,
+    /// An array of fill paints applied to the node
     #[serde(skip_serializing_if = "Option::is_none")]
     fills: Option<Vec<Paint>>,
     #[serde(skip_serializing_if = "Option::is_none")]

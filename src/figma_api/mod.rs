@@ -1,3 +1,4 @@
+mod blend_mode;
 mod color;
 mod component;
 mod easing_type;
@@ -6,7 +7,9 @@ mod node;
 mod paint;
 mod rectangle;
 mod style;
+mod vector;
 pub use self::{
+    blend_mode::BlendMode,
     color::Color,
     component::Component,
     easing_type::EasingType,
@@ -15,12 +18,5 @@ pub use self::{
     paint::Paint,
     rectangle::Rectangle,
     style::{Style, StyleType},
+    vector::Vector,
 };
-
-fn default_true() -> bool {
-    true
-}
-
-fn default_one() -> f64 {
-    1.0
-}

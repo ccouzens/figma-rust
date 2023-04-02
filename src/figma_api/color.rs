@@ -14,9 +14,9 @@ pub struct Color {
 }
 
 impl Color {
-    pub fn to_rgba_string(&self) -> String {
+    pub fn to_rgb_string(&self) -> String {
         format!(
-            "rgba({}, {}, {}, {})",
+            "rgb({}, {}, {}, {})",
             (self.red * 255.0).floor(),
             (self.green * 255.0).floor(),
             (self.blue * 255.0).floor(),
