@@ -53,6 +53,12 @@ pub struct Node {
     absolute_bounding_box: Option<Rectangle>,
     #[serde(skip_serializing_if = "Option::is_none")]
     stroke_align: Option<StrokeAlign>,
+    /// Radius of each corner of the node if a single radius is set for all corners
+    #[serde(skip_serializing_if = "Option::is_none")]
+    corner_radius: Option<f64>,
+    /// Array of length 4 of the radius of each corner of the node, starting in the top left and proceeding clockwise
+    #[serde(skip_serializing_if = "Option::is_none")]
+    rectangle_corner_radii: Option<[f64; 4]>,
 }
 
 impl Node {
@@ -69,11 +75,12 @@ impl Node {
     }
 
     pub fn corner_radius(&self) -> Option<f64> {
-        self.node_type.corner_radius()
+        self.corner_radius
     }
 
     pub fn rectangle_corner_radii(&self) -> Option<[f64; 4]> {
-        self.node_type.rectangle_corner_radii()
+        self.rectangle_corner_radii
+            .or_else(|| self.corner_radius.map(|r| [r, r, r, r]))
     }
 
     pub fn opacity(&self) -> f64 {
@@ -119,10 +126,6 @@ impl Node {
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct NodeTypeFrame {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    corner_radius: Option<f64>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    rectangle_corner_radii: Option<[f64; 4]>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub transition_duration: Option<f64>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -217,37 +220,6 @@ impl<'a> Iterator for NodeDepthFirstStackIterator<'a> {
 }
 
 impl NodeType {
-    fn corner_radius(&self) -> Option<f64> {
-        match self {
-            NodeType::Rectangle { corner_radius, .. } => *corner_radius,
-            _ => self.frame_props().and_then(|fp| fp.corner_radius),
-        }
-    }
-
-    fn rectangle_corner_radii(&self) -> Option<[f64; 4]> {
-        match self {
-            NodeType::Rectangle {
-                rectangle_corner_radii: Some(rectangle_corner_radii),
-                ..
-            } => Some(*rectangle_corner_radii),
-            NodeType::Rectangle {
-                corner_radius: Some(r),
-                ..
-            } => Some([*r, *r, *r, *r]),
-            _ => match self.frame_props() {
-                Some(NodeTypeFrame {
-                    rectangle_corner_radii: Some(rectangle_corner_radii),
-                    ..
-                }) => Some(*rectangle_corner_radii),
-                Some(NodeTypeFrame {
-                    corner_radius: Some(r),
-                    ..
-                }) => Some([*r, *r, *r, *r]),
-                _ => None,
-            },
-        }
-    }
-
     fn frame_props(&self) -> Option<&NodeTypeFrame> {
         match self {
             NodeType::Frame { base, .. }
