@@ -9,6 +9,11 @@ example-output-files = \
 src/design_tokens/example-output.json \
 src/typescript_props/example-output.ts
 
+definition-files = \
+definitions.kt \
+definitions.swift \
+definitions.ts
+
 example-figma-files/design-tokens-for-figma.json :
 	curl -sH "X-Figma-Token: ${FIGMA_TOKEN}" \
     'https://api.figma.com/v1/files/2MQ759R5kJtzQn4qSHuqR7' \
@@ -29,11 +34,20 @@ src/design_tokens/example-output.json : example-figma-files/design-tokens-for-fi
 src/typescript_props/example-output.ts : example-figma-files/gov-uk-design-system.json
 	cargo run --release -- typescript-props < $< > $@
 
+definitions.kt :
+	typeshare . --lang=kotlin --output-file=$@
+
+definitions.swift :
+	typeshare . --lang=swift --output-file=$@
+
+definitions.ts :
+	typeshare . --lang=typescript --output-file=$@
+
 .PHONY : all
-all : $(example-figma-files) $(example-output-files)
+all : $(example-figma-files) $(example-output-files) $(definition-files)
 
 .PHONY : clean
-clean : cleanOutput cleanDownloads
+clean : cleanOutput cleanDownloads cleanDefinitions
 
 .PHONY : cleanDownloads
 cleanDownloads :
@@ -42,6 +56,10 @@ cleanDownloads :
 .PHONY : cleanOutput
 cleanOutput :
 	rm -f $(example-output-files)
+
+.PHONY : cleanDefinitions
+cleanDefinitions :
+	rm -f $(definition-files)
 
 .PHONY : cleanAll
 cleanAll : clean

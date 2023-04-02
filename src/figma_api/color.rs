@@ -2,6 +2,7 @@ use serde::{Deserialize, Serialize};
 
 /// [Figma documentation](https://www.figma.com/developers/api#color-type)
 #[derive(Debug, Deserialize, Serialize)]
+#[typeshare::typeshare]
 pub struct Color {
     #[serde(rename = "r")]
     red: f64,
