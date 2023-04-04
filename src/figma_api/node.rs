@@ -186,12 +186,7 @@ pub enum NodeType {
     Ellipse,
     RegularPolygon,
     #[serde(rename_all = "camelCase")]
-    Rectangle {
-        #[serde(skip_serializing_if = "Option::is_none")]
-        corner_radius: Option<f64>,
-        #[serde(skip_serializing_if = "Option::is_none")]
-        rectangle_corner_radii: Option<[f64; 4]>,
-    },
+    Rectangle,
     Text,
     Slice,
     #[serde(rename_all = "camelCase")]
