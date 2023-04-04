@@ -4,10 +4,14 @@ use std::collections::HashMap;
 
 #[derive(Debug, Deserialize, Serialize, PartialEq, Eq, Hash)]
 #[serde(rename_all = "camelCase")]
+#[typeshare::typeshare]
 pub enum StyleTypeMapKey {
+    Fill,
     Fills,
+    Text,
     Grid,
     Effect,
+    Stroke,
     Strokes,
 }
 
@@ -35,8 +39,7 @@ pub struct Node {
     #[serde(skip_serializing_if = "Option::is_none")]
     visible: Option<bool>,
     /// The type of the node
-    #[serde(flatten)]
-    pub node_type: NodeType,
+    pub r#type: NodeType,
     /// An array of nodes that are direct children of this node
     #[serde(skip_serializing_if = "Option::is_none")]
     children: Option<Vec<Node>>,
@@ -88,6 +91,10 @@ pub struct Node {
     /// The padding between the bottom border of the frame and its children. This property is only applicable for auto-layout frames.
     #[serde(skip_serializing_if = "Option::is_none")]
     padding_bottom: Option<f64>,
+    /// A mapping of a StyleType to style ID of styles present on this node. The style ID can be used to look up more information about the style in the top-level styles field.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    styles: Option<HashMap<StyleTypeMapKey, String>>,
+    /// Text contained within a text box
     #[serde(skip_serializing_if = "Option::is_none")]
     characters: Option<String>,
 }
@@ -142,10 +149,6 @@ impl Node {
         self.padding_bottom.unwrap_or(0.0)
     }
 
-    pub fn frame_props(&self) -> Option<&NodeTypeFrame> {
-        self.node_type.frame_props()
-    }
-
     pub fn children(&self) -> &[Node] {
         self.children.as_deref().unwrap_or_default()
     }
@@ -178,55 +181,27 @@ impl Node {
     }
 }
 
-#[derive(Debug, Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
-pub struct NodeTypeFrame {
-    #[serde(default, skip_serializing_if = "HashMap::is_empty")]
-    pub styles: HashMap<StyleTypeMapKey, String>,
-}
-
+/// Node type indicates what kind of node you are working with: for example, a FRAME node versus a RECTANGLE node. A node can have additional properties associated with it depending on its node type.
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
-#[serde(tag = "type")]
+#[typeshare::typeshare]
 pub enum NodeType {
     Document,
-    #[serde(rename_all = "camelCase")]
     Canvas,
-    #[serde(rename_all = "camelCase")]
-    Frame {
-        #[serde(flatten)]
-        base: NodeTypeFrame,
-    },
-    #[serde(rename_all = "camelCase")]
-    Group {
-        #[serde(flatten)]
-        base: NodeTypeFrame,
-    },
+    Frame,
+    Group,
     Vector,
     BooleanOperation,
     Star,
     Line,
     Ellipse,
     RegularPolygon,
-    #[serde(rename_all = "camelCase")]
     Rectangle,
     Text,
     Slice,
-    #[serde(rename_all = "camelCase")]
-    Component {
-        #[serde(flatten)]
-        base: NodeTypeFrame,
-    },
-    #[serde(rename_all = "camelCase")]
-    ComponentSet {
-        #[serde(flatten)]
-        base: NodeTypeFrame,
-    },
-    #[serde(rename_all = "camelCase")]
-    Instance {
-        #[serde(flatten)]
-        base: NodeTypeFrame,
-    },
+    Component,
+    ComponentSet,
+    Instance,
     Sticky,
     ShapeWithText,
     Connector,
@@ -251,19 +226,6 @@ impl<'a> Iterator for NodeDepthFirstStackIterator<'a> {
                 self.stack.push(current);
                 return Some((current, self.stack.clone()));
             }
-        }
-    }
-}
-
-impl NodeType {
-    fn frame_props(&self) -> Option<&NodeTypeFrame> {
-        match self {
-            NodeType::Frame { base, .. }
-            | NodeType::Group { base, .. }
-            | NodeType::Component { base, .. }
-            | NodeType::ComponentSet { base, .. }
-            | NodeType::Instance { base, .. } => Some(base),
-            _ => None,
         }
     }
 }

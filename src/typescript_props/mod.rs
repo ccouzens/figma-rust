@@ -214,7 +214,7 @@ pub fn main(
 
     for (node, parent_nodes) in file.document.depth_first_stack_iter() {
         if let figma_api::Node {
-            node_type: figma_api::NodeType::ComponentSet { .. },
+            r#type: figma_api::NodeType::ComponentSet,
             ..
         } = node
         {

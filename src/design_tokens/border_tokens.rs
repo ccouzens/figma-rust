@@ -55,12 +55,12 @@ struct BorderToken<'a> {
 
 pub fn as_border_token(node: &Node, _file: &File) -> Option<serde_json::Value> {
     if !matches!(
-        node.node_type,
-        NodeType::Frame { .. }
-            | NodeType::Group { .. }
-            | NodeType::Component { .. }
-            | NodeType::ComponentSet { .. }
-            | NodeType::Instance { .. }
+        node.r#type,
+        NodeType::Frame
+            | NodeType::Group
+            | NodeType::Component
+            | NodeType::ComponentSet
+            | NodeType::Instance
     ) {
         return None;
     }

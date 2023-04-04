@@ -97,6 +97,24 @@ enum class EasingType(val string: String) {
 }
 
 @Serializable
+enum class StyleTypeMapKey(val string: String) {
+	@SerialName("fill")
+	Fill("fill"),
+	@SerialName("fills")
+	Fills("fills"),
+	@SerialName("text")
+	Text("text"),
+	@SerialName("grid")
+	Grid("grid"),
+	@SerialName("effect")
+	Effect("effect"),
+	@SerialName("stroke")
+	Stroke("stroke"),
+	@SerialName("strokes")
+	Strokes("strokes"),
+}
+
+@Serializable
 enum class StrokeAlign(val string: String) {
 	/// stroke drawn inside the shape boundary
 	@SerialName("INSIDE")
@@ -107,6 +125,49 @@ enum class StrokeAlign(val string: String) {
 	/// stroke drawn centered along the shape boundary
 	@SerialName("CENTER")
 	Center("CENTER"),
+}
+
+/// Node type indicates what kind of node you are working with: for example, a FRAME node versus a RECTANGLE node. A node can have additional properties associated with it depending on its node type.
+@Serializable
+enum class NodeType(val string: String) {
+	@SerialName("DOCUMENT")
+	Document("DOCUMENT"),
+	@SerialName("CANVAS")
+	Canvas("CANVAS"),
+	@SerialName("FRAME")
+	Frame("FRAME"),
+	@SerialName("GROUP")
+	Group("GROUP"),
+	@SerialName("VECTOR")
+	Vector("VECTOR"),
+	@SerialName("BOOLEAN_OPERATION")
+	BooleanOperation("BOOLEAN_OPERATION"),
+	@SerialName("STAR")
+	Star("STAR"),
+	@SerialName("LINE")
+	Line("LINE"),
+	@SerialName("ELLIPSE")
+	Ellipse("ELLIPSE"),
+	@SerialName("REGULAR_POLYGON")
+	RegularPolygon("REGULAR_POLYGON"),
+	@SerialName("RECTANGLE")
+	Rectangle("RECTANGLE"),
+	@SerialName("TEXT")
+	Text("TEXT"),
+	@SerialName("SLICE")
+	Slice("SLICE"),
+	@SerialName("COMPONENT")
+	Component("COMPONENT"),
+	@SerialName("COMPONENT_SET")
+	ComponentSet("COMPONENT_SET"),
+	@SerialName("INSTANCE")
+	Instance("INSTANCE"),
+	@SerialName("STICKY")
+	Sticky("STICKY"),
+	@SerialName("SHAPE_WITH_TEXT")
+	ShapeWithText("SHAPE_WITH_TEXT"),
+	@SerialName("CONNECTOR")
+	Connector("CONNECTOR"),
 }
 
 @Serializable

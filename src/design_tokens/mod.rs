@@ -60,7 +60,7 @@ fn token_document_transformer(
         let name = match parent {
             Some(figma_api::Node {
                 name: parent_name,
-                node_type: figma_api::NodeType::ComponentSet { .. },
+                r#type: figma_api::NodeType::ComponentSet,
                 ..
             }) => Cow::Owned(
                 once(parent_name.as_str())

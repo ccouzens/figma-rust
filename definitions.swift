@@ -78,6 +78,16 @@ public enum EasingType: String, Codable {
 	case customSpring = "CUSTOM_SPRING"
 }
 
+public enum StyleTypeMapKey: String, Codable {
+	case fill
+	case fills
+	case text
+	case grid
+	case effect
+	case stroke
+	case strokes
+}
+
 public enum StrokeAlign: String, Codable {
 	/// stroke drawn inside the shape boundary
 	case inside = "INSIDE"
@@ -85,6 +95,29 @@ public enum StrokeAlign: String, Codable {
 	case outside = "OUTSIDE"
 	/// stroke drawn centered along the shape boundary
 	case center = "CENTER"
+}
+
+/// Node type indicates what kind of node you are working with: for example, a FRAME node versus a RECTANGLE node. A node can have additional properties associated with it depending on its node type.
+public enum NodeType: String, Codable {
+	case document = "DOCUMENT"
+	case canvas = "CANVAS"
+	case frame = "FRAME"
+	case group = "GROUP"
+	case vector = "VECTOR"
+	case booleanOperation = "BOOLEAN_OPERATION"
+	case star = "STAR"
+	case line = "LINE"
+	case ellipse = "ELLIPSE"
+	case regularPolygon = "REGULAR_POLYGON"
+	case rectangle = "RECTANGLE"
+	case text = "TEXT"
+	case slice = "SLICE"
+	case component = "COMPONENT"
+	case componentSet = "COMPONENT_SET"
+	case instance = "INSTANCE"
+	case sticky = "STICKY"
+	case shapeWithText = "SHAPE_WITH_TEXT"
+	case connector = "CONNECTOR"
 }
 
 public enum PaintType: String, Codable {

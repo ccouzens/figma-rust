@@ -16,7 +16,7 @@ struct SizeToken<'a> {
 
 pub fn as_size_token(node: &Node, file: &File) -> Option<serde_json::Value> {
     if !matches!(
-        node.node_type,
+        node.r#type,
         figma_api::NodeType::Component { .. }
             | figma_api::NodeType::Rectangle { .. }
             | figma_api::NodeType::Frame { .. }

@@ -68,6 +68,16 @@ export enum EasingType {
 	CustomSpring = "CUSTOM_SPRING",
 }
 
+export enum StyleTypeMapKey {
+	Fill = "fill",
+	Fills = "fills",
+	Text = "text",
+	Grid = "grid",
+	Effect = "effect",
+	Stroke = "stroke",
+	Strokes = "strokes",
+}
+
 export enum StrokeAlign {
 	/** stroke drawn inside the shape boundary */
 	Inside = "INSIDE",
@@ -75,6 +85,29 @@ export enum StrokeAlign {
 	Outside = "OUTSIDE",
 	/** stroke drawn centered along the shape boundary */
 	Center = "CENTER",
+}
+
+/** Node type indicates what kind of node you are working with: for example, a FRAME node versus a RECTANGLE node. A node can have additional properties associated with it depending on its node type. */
+export enum NodeType {
+	Document = "DOCUMENT",
+	Canvas = "CANVAS",
+	Frame = "FRAME",
+	Group = "GROUP",
+	Vector = "VECTOR",
+	BooleanOperation = "BOOLEAN_OPERATION",
+	Star = "STAR",
+	Line = "LINE",
+	Ellipse = "ELLIPSE",
+	RegularPolygon = "REGULAR_POLYGON",
+	Rectangle = "RECTANGLE",
+	Text = "TEXT",
+	Slice = "SLICE",
+	Component = "COMPONENT",
+	ComponentSet = "COMPONENT_SET",
+	Instance = "INSTANCE",
+	Sticky = "STICKY",
+	ShapeWithText = "SHAPE_WITH_TEXT",
+	Connector = "CONNECTOR",
 }
 
 export enum PaintType {
