@@ -10,27 +10,33 @@ use std::io::Write;
 
 mod css_properties;
 
-fn create_css(selector: &str, properties: &[(&str, Option<&str>)]) -> Result<String> {
+type CSSRulePairs<'a> = (&'a str, Option<&'a str>);
+
+fn create_css(selectors: &[(&str, &[CSSRulePairs])]) -> Result<String> {
     use std::fmt::Write;
 
-    let mut style_sheet_text = format!("{selector} {{");
-    for (property, value) in properties {
-        if let Some(value) = value {
-            write!(&mut style_sheet_text, "{property}: {value};")
-                .context("Failed to write property to string")?;
+    let mut style_sheet_text = String::new();
+
+    for &(selector, properties) in selectors {
+        write!(&mut style_sheet_text, "{selector} {{").context("Failed to write selctor")?;
+        for (property, value) in properties {
+            if let Some(value) = value {
+                write!(&mut style_sheet_text, "{property}: {value};")
+                    .context("Failed to write property to string")?;
+            }
         }
+        style_sheet_text.push('}');
     }
-    style_sheet_text.push('}');
     let mut stylesheet = StyleSheet::parse(&style_sheet_text, ParserOptions::default())
-        .map_err(|err| anyhow!("Failed to parse CSS for {selector}\n{err}"))?;
+        .map_err(|err| anyhow!("Failed to parse CSS\n{err}"))?;
 
     stylesheet
         .minify(MinifyOptions::default())
-        .with_context(|| format!("Failed to minify CSS for {selector}"))?;
+        .context("Failed to minify CSS")?;
 
     Ok(stylesheet
         .to_css(PrinterOptions::default())
-        .with_context(|| format!("Failed to print CSS for {selector}"))?
+        .context("Failed to print CSS")?
         .code)
 }
 
@@ -68,9 +74,8 @@ pub fn main(
     let node_offset_top = absolute_bounding_box.y.context("Failed to load y offset")?;
     let node_offset_left = absolute_bounding_box.x.context("Failed to load x offset")?;
 
-    let body_css = format!(
-        "{}\n{}",
-        create_css(
+    let body_css = create_css(&[
+        (
             "body",
             &[
                 ("box-sizing", Some("border-box")),
@@ -107,20 +112,20 @@ pub fn main(
                         .map(|color| color.to_rgb_string())
                         .as_deref(),
                 ),
-                ("border-radius", node.border_radius().as_deref(),),
+                ("border-radius", node.border_radius().as_deref()),
             ],
-        )?,
-        create_css(
+        ),
+        (
             "html",
             &[(
                 "background-color",
                 canvas
                     .background_color()
                     .map(|color| color.to_rgb_string())
-                    .as_deref()
-            )]
-        )?
-    );
+                    .as_deref(),
+            )],
+        ),
+    ])?;
 
     let mut example_render_props = Vec::new();
 
