@@ -43,6 +43,15 @@ export enum BlendMode {
 	Luminosity = "LUMINOSITY",
 }
 
+export enum StrokeAlign {
+	/** stroke drawn inside the shape boundary */
+	Inside = "INSIDE",
+	/** stroke drawn outside the shape boundary */
+	Outside = "OUTSIDE",
+	/** stroke drawn centered along the shape boundary */
+	Center = "CENTER",
+}
+
 export enum PaintType {
 	Solid = "SOLID",
 	GradientLinear = "GRADIENT_LINEAR",

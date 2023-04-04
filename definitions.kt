@@ -60,6 +60,19 @@ enum class BlendMode(val string: String) {
 }
 
 @Serializable
+enum class StrokeAlign(val string: String) {
+	/// stroke drawn inside the shape boundary
+	@SerialName("INSIDE")
+	Inside("INSIDE"),
+	/// stroke drawn outside the shape boundary
+	@SerialName("OUTSIDE")
+	Outside("OUTSIDE"),
+	/// stroke drawn centered along the shape boundary
+	@SerialName("CENTER")
+	Center("CENTER"),
+}
+
+@Serializable
 enum class PaintType(val string: String) {
 	@SerialName("SOLID")
 	Solid("SOLID"),

@@ -55,6 +55,15 @@ public enum BlendMode: String, Codable {
 	case luminosity = "LUMINOSITY"
 }
 
+public enum StrokeAlign: String, Codable {
+	/// stroke drawn inside the shape boundary
+	case inside = "INSIDE"
+	/// stroke drawn outside the shape boundary
+	case outside = "OUTSIDE"
+	/// stroke drawn centered along the shape boundary
+	case center = "CENTER"
+}
+
 public enum PaintType: String, Codable {
 	case solid = "SOLID"
 	case gradientLinear = "GRADIENT_LINEAR"

@@ -13,9 +13,13 @@ pub enum StyleTypeMapKey {
 
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+#[typeshare::typeshare]
 pub enum StrokeAlign {
+    /// stroke drawn inside the shape boundary
     Inside,
+    /// stroke drawn outside the shape boundary
     Outside,
+    /// stroke drawn centered along the shape boundary
     Center,
 }
 
@@ -30,7 +34,7 @@ pub struct Node {
     /// Whether or not the node is visible on the canvas.
     #[serde(skip_serializing_if = "Option::is_none")]
     visible: Option<bool>,
-    /// The type of the node, refer to table below for details.
+    /// The type of the node
     #[serde(flatten)]
     pub node_type: NodeType,
     /// An array of nodes that are direct children of this node
@@ -42,16 +46,13 @@ pub struct Node {
     /// An array of fill paints applied to the node
     #[serde(skip_serializing_if = "Option::is_none")]
     fills: Option<Vec<Paint>>,
+    /// An array of stroke paints applied to the node
     #[serde(skip_serializing_if = "Option::is_none")]
     strokes: Option<Vec<Paint>>,
+    /// The weight of strokes on the node
     #[serde(skip_serializing_if = "Option::is_none")]
     stroke_weight: Option<f64>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    characters: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    opacity: Option<f64>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    absolute_bounding_box: Option<Rectangle>,
+    /// Position of stroke relative to vector outline
     #[serde(skip_serializing_if = "Option::is_none")]
     stroke_align: Option<StrokeAlign>,
     /// Radius of each corner of the node if a single radius is set for all corners
@@ -60,6 +61,15 @@ pub struct Node {
     /// Array of length 4 of the radius of each corner of the node, starting in the top left and proceeding clockwise
     #[serde(skip_serializing_if = "Option::is_none")]
     rectangle_corner_radii: Option<[f64; 4]>,
+    /// The duration of the prototyping transition on this node (in milliseconds)
+    #[serde(skip_serializing_if = "Option::is_none")]
+    transition_duration: Option<f64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    characters: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    opacity: Option<f64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    absolute_bounding_box: Option<Rectangle>,
 }
 
 impl Node {
@@ -82,6 +92,10 @@ impl Node {
     pub fn rectangle_corner_radii(&self) -> Option<[f64; 4]> {
         self.rectangle_corner_radii
             .or_else(|| self.corner_radius.map(|r| [r, r, r, r]))
+    }
+
+    pub fn transition_duration(&self) -> Option<f64> {
+        self.transition_duration
     }
 
     pub fn opacity(&self) -> f64 {
@@ -127,8 +141,6 @@ impl Node {
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct NodeTypeFrame {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub transition_duration: Option<f64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub transition_easing: Option<EasingType>,
     #[serde(skip_serializing_if = "Option::is_none")]
