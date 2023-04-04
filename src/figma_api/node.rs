@@ -64,6 +64,9 @@ pub struct Node {
     /// The duration of the prototyping transition on this node (in milliseconds)
     #[serde(skip_serializing_if = "Option::is_none")]
     transition_duration: Option<f64>,
+    /// The easing curve used in the prototyping transition on this node
+    #[serde(skip_serializing_if = "Option::is_none")]
+    transition_easing: Option<EasingType>,
     #[serde(skip_serializing_if = "Option::is_none")]
     characters: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -96,6 +99,10 @@ impl Node {
 
     pub fn transition_duration(&self) -> Option<f64> {
         self.transition_duration
+    }
+
+    pub fn transition_easing(&self) -> Option<&EasingType> {
+        self.transition_easing.as_ref()
     }
 
     pub fn opacity(&self) -> f64 {
@@ -141,8 +148,6 @@ impl Node {
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct NodeTypeFrame {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub transition_easing: Option<EasingType>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub absolute_render_bounds: Option<Rectangle>,
     #[serde(default)]

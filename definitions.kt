@@ -59,6 +59,43 @@ enum class BlendMode(val string: String) {
 	Luminosity("LUMINOSITY"),
 }
 
+/// Animation easing curves
+/// 
+/// [Figma documentation](https://www.figma.com/developers/api#easingtype-type)
+@Serializable
+enum class EasingType(val string: String) {
+	/// Ease in with an animation curve similar to CSS ease-in
+	@SerialName("EASE_IN")
+	EaseIn("EASE_IN"),
+	/// Ease out with an animation curve similar to CSS ease-out
+	@SerialName("EASE_OUT")
+	EaseOut("EASE_OUT"),
+	/// Ease in and then out with an animation curve similar to CSS ease-in-out
+	@SerialName("EASE_IN_AND_OUT")
+	EaseInAndOut("EASE_IN_AND_OUT"),
+	/// No easing, similar to CSS linear
+	@SerialName("LINEAR")
+	Linear("LINEAR"),
+	@SerialName("EASE_IN_BACK")
+	EaseInBack("EASE_IN_BACK"),
+	@SerialName("EASE_OUT_BACK")
+	EaseOutBack("EASE_OUT_BACK"),
+	@SerialName("EASE_IN_AND_OUT_BACK")
+	EaseInAndOutBack("EASE_IN_AND_OUT_BACK"),
+	@SerialName("CUSTOM_BEZIER")
+	CustomBezier("CUSTOM_BEZIER"),
+	@SerialName("GENTLE")
+	Gentle("GENTLE"),
+	@SerialName("QUICK")
+	Quick("QUICK"),
+	@SerialName("BOUNCY")
+	Bouncy("BOUNCY"),
+	@SerialName("SLOW")
+	Slow("SLOW"),
+	@SerialName("CUSTOM_SPRING")
+	CustomSpring("CUSTOM_SPRING"),
+}
+
 @Serializable
 enum class StrokeAlign(val string: String) {
 	/// stroke drawn inside the shape boundary

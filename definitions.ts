@@ -43,6 +43,31 @@ export enum BlendMode {
 	Luminosity = "LUMINOSITY",
 }
 
+/**
+ * Animation easing curves
+ * 
+ * [Figma documentation](https://www.figma.com/developers/api#easingtype-type)
+ */
+export enum EasingType {
+	/** Ease in with an animation curve similar to CSS ease-in */
+	EaseIn = "EASE_IN",
+	/** Ease out with an animation curve similar to CSS ease-out */
+	EaseOut = "EASE_OUT",
+	/** Ease in and then out with an animation curve similar to CSS ease-in-out */
+	EaseInAndOut = "EASE_IN_AND_OUT",
+	/** No easing, similar to CSS linear */
+	Linear = "LINEAR",
+	EaseInBack = "EASE_IN_BACK",
+	EaseOutBack = "EASE_OUT_BACK",
+	EaseInAndOutBack = "EASE_IN_AND_OUT_BACK",
+	CustomBezier = "CUSTOM_BEZIER",
+	Gentle = "GENTLE",
+	Quick = "QUICK",
+	Bouncy = "BOUNCY",
+	Slow = "SLOW",
+	CustomSpring = "CUSTOM_SPRING",
+}
+
 export enum StrokeAlign {
 	/** stroke drawn inside the shape boundary */
 	Inside = "INSIDE",

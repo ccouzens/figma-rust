@@ -3,9 +3,8 @@ use serde_json::json;
 use crate::figma_api::{self, Node};
 
 pub fn as_motion_token(node: &Node) -> Option<serde_json::Value> {
-    let frame_props = node.frame_props()?;
     let duration = node.transition_duration()?;
-    let easing = frame_props.transition_easing.as_ref()?;
+    let easing = node.transition_easing()?;
     Some(json!({
         "category": "motion",
         "exportKey": "motion",

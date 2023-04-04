@@ -55,6 +55,29 @@ public enum BlendMode: String, Codable {
 	case luminosity = "LUMINOSITY"
 }
 
+/// Animation easing curves
+/// 
+/// [Figma documentation](https://www.figma.com/developers/api#easingtype-type)
+public enum EasingType: String, Codable {
+	/// Ease in with an animation curve similar to CSS ease-in
+	case easeIn = "EASE_IN"
+	/// Ease out with an animation curve similar to CSS ease-out
+	case easeOut = "EASE_OUT"
+	/// Ease in and then out with an animation curve similar to CSS ease-in-out
+	case easeInAndOut = "EASE_IN_AND_OUT"
+	/// No easing, similar to CSS linear
+	case linear = "LINEAR"
+	case easeInBack = "EASE_IN_BACK"
+	case easeOutBack = "EASE_OUT_BACK"
+	case easeInAndOutBack = "EASE_IN_AND_OUT_BACK"
+	case customBezier = "CUSTOM_BEZIER"
+	case gentle = "GENTLE"
+	case quick = "QUICK"
+	case bouncy = "BOUNCY"
+	case slow = "SLOW"
+	case customSpring = "CUSTOM_SPRING"
+}
+
 public enum StrokeAlign: String, Codable {
 	/// stroke drawn inside the shape boundary
 	case inside = "INSIDE"
