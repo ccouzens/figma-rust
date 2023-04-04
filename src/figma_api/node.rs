@@ -67,12 +67,29 @@ pub struct Node {
     /// The easing curve used in the prototyping transition on this node
     #[serde(skip_serializing_if = "Option::is_none")]
     transition_easing: Option<EasingType>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    characters: Option<String>,
+    /// Opacity of the node
     #[serde(skip_serializing_if = "Option::is_none")]
     opacity: Option<f64>,
+    /// Bounding box of the node in absolute space coordinates
     #[serde(skip_serializing_if = "Option::is_none")]
     absolute_bounding_box: Option<Rectangle>,
+    /// The bounds of the rendered node in the file in absolute space coordinates
+    #[serde(skip_serializing_if = "Option::is_none")]
+    absolute_render_bounds: Option<Rectangle>,
+    /// The padding between the left border of the frame and its children. This property is only applicable for auto-layout frames.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    padding_left: Option<f64>,
+    /// The padding between the right border of the frame and its children. This property is only applicable for auto-layout frames.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    padding_right: Option<f64>,
+    /// The padding between the top border of the frame and its children. This property is only applicable for auto-layout frames.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    padding_top: Option<f64>,
+    /// The padding between the bottom border of the frame and its children. This property is only applicable for auto-layout frames.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    padding_bottom: Option<f64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    characters: Option<String>,
 }
 
 impl Node {
@@ -107,6 +124,22 @@ impl Node {
 
     pub fn opacity(&self) -> f64 {
         self.opacity.unwrap_or(1.0)
+    }
+
+    pub fn padding_left(&self) -> f64 {
+        self.padding_left.unwrap_or(0.0)
+    }
+
+    pub fn padding_right(&self) -> f64 {
+        self.padding_right.unwrap_or(0.0)
+    }
+
+    pub fn padding_top(&self) -> f64 {
+        self.padding_top.unwrap_or(0.0)
+    }
+
+    pub fn padding_bottom(&self) -> f64 {
+        self.padding_bottom.unwrap_or(0.0)
     }
 
     pub fn frame_props(&self) -> Option<&NodeTypeFrame> {
@@ -148,16 +181,6 @@ impl Node {
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct NodeTypeFrame {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub absolute_render_bounds: Option<Rectangle>,
-    #[serde(default)]
-    pub padding_left: f64,
-    #[serde(default)]
-    pub padding_right: f64,
-    #[serde(default)]
-    pub padding_top: f64,
-    #[serde(default)]
-    pub padding_bottom: f64,
     #[serde(default, skip_serializing_if = "HashMap::is_empty")]
     pub styles: HashMap<StyleTypeMapKey, String>,
 }

@@ -21,28 +21,26 @@ struct SpacingToken<'a> {
 }
 
 pub fn as_spacing_token(node: &Node, _file: &File) -> Option<serde_json::Value> {
-    let frame_props = node.frame_props()?;
-
     Some(json!(SpacingToken {
         category: "spacing",
         export_key: "spacing",
         top: Direction {
-            value: frame_props.padding_top,
+            value: node.padding_top(),
             r#type: "number",
             unit: "pixel"
         },
         right: Direction {
-            value: frame_props.padding_right,
+            value: node.padding_right(),
             r#type: "number",
             unit: "pixel"
         },
         bottom: Direction {
-            value: frame_props.padding_bottom,
+            value: node.padding_bottom(),
             r#type: "number",
             unit: "pixel"
         },
         left: Direction {
-            value: frame_props.padding_left,
+            value: node.padding_left(),
             r#type: "number",
             unit: "pixel"
         },
