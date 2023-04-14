@@ -30,6 +30,7 @@ pub enum StrokeAlign {
 /// [Figma documentation](https://www.figma.com/developers/api#node-types)
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
+#[typeshare::typeshare]
 pub struct Node {
     /// A string uniquely identifying this node within the document.
     pub id: String,

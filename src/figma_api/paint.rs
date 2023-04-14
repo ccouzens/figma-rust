@@ -17,6 +17,7 @@ pub enum PaintType {
 ///
 /// [Figma documentation](https://www.figma.com/developers/api#paint-type)
 #[derive(Debug, Deserialize, Serialize)]
+#[typeshare::typeshare]
 pub struct Paint {
     pub r#type: PaintType,
     /// Is the paint enabled?
