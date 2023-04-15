@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "prettier": "prettier --write --prose-wrap=always README.md NOTES.md src/**/*.md package.json src/**/*.html"
+    "prettier": "prettier --write --prose-wrap=always **/*.md **/*.json **/*.html"
   },
   "devDependencies": {
     "prettier": "^2.8.0"

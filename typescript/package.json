@@ -1,0 +1,28 @@
+{
+  "name": "figma-rest-api-typescript-definitions",
+  "version": "0.1.0",
+  "description": "TypeScript definitions for the JSON responses from Figma's REST API",
+  "keywords": [
+    "figma",
+    "figma api",
+    "typings"
+  ],
+  "homepage": "https://github.com/ccouzens/figma-rust/tree/main/typescript",
+  "license": "MIT",
+  "contributors": [
+    {
+      "name": "Chris Couzens",
+      "url": "https://github.com/ccouzens",
+      "githubUsername": "ccouzens"
+    }
+  ],
+  "main": "",
+  "types": "index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ccouzens/figma-rust.git",
+    "directory": "typescript"
+  },
+  "scripts": {},
+  "dependencies": {}
+}

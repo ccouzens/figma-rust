@@ -12,7 +12,7 @@ src/typescript_props/example-output.ts
 definition-files = \
 definitions.kt \
 definitions.swift \
-definitions.ts
+typescript/index.d.ts
 
 example-figma-files/design-tokens-for-figma.json :
 	curl -sH "X-Figma-Token: ${FIGMA_TOKEN}" \
@@ -40,7 +40,7 @@ definitions.kt :
 definitions.swift :
 	typeshare . --lang=swift --output-file=$@
 
-definitions.ts :
+typescript/index.d.ts :
 	typeshare . --lang=typescript --output-file=$@
 
 .PHONY : all
