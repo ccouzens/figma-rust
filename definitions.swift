@@ -19,6 +19,19 @@ public struct Color: Codable {
 	}
 }
 
+/// [Figma documentation](https://www.figma.com/developers/api#component-type)
+public struct Component: Codable {
+	public let key: String
+	public let name: String
+	public let description: String
+
+	public init(key: String, name: String, description: String) {
+		self.key = key
+		self.name = name
+		self.description = description
+	}
+}
+
 /// Node type indicates what kind of node you are working with: for example, a FRAME node versus a RECTANGLE node. A node can have additional properties associated with it depending on its node type.
 public enum NodeType: String, Codable {
 	case document = "DOCUMENT"
@@ -232,6 +245,48 @@ public struct Node: Codable {
 		self.paddingBottom = paddingBottom
 		self.styles = styles
 		self.characters = characters
+	}
+}
+
+public enum StyleType: String, Codable {
+	case fill = "FILL"
+	case text = "TEXT"
+	case effect = "EFFECT"
+	case grid = "GRID"
+}
+
+/// [Figma documentation](https://www.figma.com/developers/api#style-type)
+public struct Style: Codable {
+	public let key: String
+	public let name: String
+	public let description: String
+	public let remote: Bool
+	public let styleType: StyleType
+
+	public init(key: String, name: String, description: String, remote: Bool, styleType: StyleType) {
+		self.key = key
+		self.name = name
+		self.description = description
+		self.remote = remote
+		self.styleType = styleType
+	}
+}
+
+public struct File: Codable {
+	public let document: Node
+	public let components: [String: Component]
+	public let styles: [String: Style]
+	public let name: String
+	public let schemaVersion: UInt8
+	public let version: String
+
+	public init(document: Node, components: [String: Component], styles: [String: Style], name: String, schemaVersion: UInt8, version: String) {
+		self.document = document
+		self.components = components
+		self.styles = styles
+		self.name = name
+		self.schemaVersion = schemaVersion
+		self.version = version
 	}
 }
 

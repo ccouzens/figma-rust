@@ -10,6 +10,13 @@ export interface Color {
 	a: number;
 }
 
+/** [Figma documentation](https://www.figma.com/developers/api#component-type) */
+export interface Component {
+	key: string;
+	name: string;
+	description: string;
+}
+
 /** Node type indicates what kind of node you are working with: for example, a FRAME node versus a RECTANGLE node. A node can have additional properties associated with it depending on its node type. */
 export enum NodeType {
 	Document = "DOCUMENT",
@@ -188,6 +195,31 @@ export interface Node {
 	styles?: Record<StyleTypeMapKey, string>;
 	/** Text contained within a text box */
 	characters?: string;
+}
+
+export enum StyleType {
+	Fill = "FILL",
+	Text = "TEXT",
+	Effect = "EFFECT",
+	Grid = "GRID",
+}
+
+/** [Figma documentation](https://www.figma.com/developers/api#style-type) */
+export interface Style {
+	key: string;
+	name: string;
+	description: string;
+	remote: boolean;
+	styleType: StyleType;
+}
+
+export interface File {
+	document: Node;
+	components: Record<string, Component>;
+	styles: Record<string, Style>;
+	name: string;
+	schemaVersion: number;
+	version: string;
 }
 
 /** [Figma documentation](https://www.figma.com/developers/api#vector-type) */

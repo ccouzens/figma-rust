@@ -7,6 +7,14 @@ data class Color (
 	val a: Double
 )
 
+/// [Figma documentation](https://www.figma.com/developers/api#component-type)
+@Serializable
+data class Component (
+	val key: String,
+	val name: String,
+	val description: String
+)
+
 /// Node type indicates what kind of node you are working with: for example, a FRAME node versus a RECTANGLE node. A node can have additional properties associated with it depending on its node type.
 @Serializable
 enum class NodeType(val string: String) {
@@ -255,6 +263,38 @@ data class Node (
 	val styles: HashMap<StyleTypeMapKey, String>? = null,
 	/// Text contained within a text box
 	val characters: String? = null
+)
+
+@Serializable
+enum class StyleType(val string: String) {
+	@SerialName("FILL")
+	Fill("FILL"),
+	@SerialName("TEXT")
+	Text("TEXT"),
+	@SerialName("EFFECT")
+	Effect("EFFECT"),
+	@SerialName("GRID")
+	Grid("GRID"),
+}
+
+/// [Figma documentation](https://www.figma.com/developers/api#style-type)
+@Serializable
+data class Style (
+	val key: String,
+	val name: String,
+	val description: String,
+	val remote: Boolean,
+	val styleType: StyleType
+)
+
+@Serializable
+data class File (
+	val document: Node,
+	val components: HashMap<String, Component>,
+	val styles: HashMap<String, Style>,
+	val name: String,
+	val schemaVersion: UByte,
+	val version: String
 )
 
 /// [Figma documentation](https://www.figma.com/developers/api#vector-type)
