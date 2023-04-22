@@ -103,6 +103,7 @@ pub fn main(
         (
             "body",
             &[
+                ("margin", Some("0")),
                 ("box-sizing", Some("border-box")),
                 ("position", Some("relative")),
                 (
@@ -161,15 +162,24 @@ pub fn main(
         ) {
             example_render_props.push(ExampleRenderProps {
                 inline_css: create_inline_css(&[
+                    ("position", Some("absolute")),
                     (
-                        "position",
+                        "top",
                         Some(&format!(
-                            "absolute; top: {top}px; left: {left}px",
-                            top = component_offset_top - node_offset_top - 1.0,
-                            left = component_offset_left - node_offset_left - 1.0,
+                            "{}px",
+                            component_offset_top - node_offset_top - 1.0,
+                        )),
+                    ),
+                    (
+                        "left",
+                        Some(&format!(
+                            "{}px",
+                            component_offset_left - node_offset_left - 1.0,
                         )),
                     ),
                     ("background", component_node.background().as_deref()),
+                    ("padding", component_node.padding().as_deref()),
+                    ("opacity", CssProperties::opacity(component_node).as_deref()),
                 ])
                 .context("Failed to generate instance CSS")?,
                 class_names: component_node

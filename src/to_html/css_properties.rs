@@ -6,6 +6,8 @@ use crate::figma_api::Node;
 pub trait CssProperties {
     fn border_radius(&self) -> Option<String>;
     fn background(&self) -> Option<String>;
+    fn padding(&self) -> Option<String>;
+    fn opacity(&self) -> Option<String>;
 }
 
 impl CssProperties for Node {
@@ -26,5 +28,19 @@ impl CssProperties for Node {
             .next()
             .or_else(|| self.background_color())
             .map(|color| color.to_rgb_string())
+    }
+
+    fn padding(&self) -> Option<String> {
+        Some(format!(
+            "{}px {}px {}px {}px",
+            self.padding_top(),
+            self.padding_right(),
+            self.padding_bottom(),
+            self.padding_left()
+        ))
+    }
+
+    fn opacity(&self) -> Option<String> {
+        Some(format!("{}", self.opacity()))
     }
 }
