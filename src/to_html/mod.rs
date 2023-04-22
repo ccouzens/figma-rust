@@ -8,11 +8,23 @@ use horrorshow::{helper::doctype, html};
 use lightningcss::stylesheet::{
     MinifyOptions, ParserOptions, PrinterOptions, StyleAttribute, StyleSheet,
 };
-use std::io::Write;
+use std::{io::Write, vec};
 
 mod css_properties;
 
-type CSSRulePairs<'a> = (&'a str, Option<&'a str>);
+type CSSRulePairs = (String, Option<String>);
+
+/**
+ * Make a name safe to use in CSS selectors
+ */
+fn safe_name(original: &str) -> String {
+    itertools::join(
+        original
+            .split(|c: char| !c.is_alphanumeric())
+            .filter(|p| !p.is_empty()),
+        "-",
+    )
+}
 
 fn create_inline_css(properties: &[CSSRulePairs]) -> Result<String> {
     use std::fmt::Write;
@@ -36,12 +48,12 @@ fn create_inline_css(properties: &[CSSRulePairs]) -> Result<String> {
         .code)
 }
 
-fn create_css(selectors: &[(&str, &[CSSRulePairs])]) -> Result<String> {
+fn create_css(selectors: &[(String, Vec<CSSRulePairs>)]) -> Result<String> {
     use std::fmt::Write;
 
     let mut style_sheet_text = String::new();
 
-    for &(selector, properties) in selectors {
+    for (selector, properties) in selectors.iter() {
         write!(&mut style_sheet_text, "{selector} {{").context("Failed to write selctor")?;
         for (property, value) in properties {
             if let Some(value) = value {
@@ -100,87 +112,99 @@ pub fn main(
     let node_offset_left = absolute_bounding_box.x.context("Failed to load x offset")?;
     let node_stroke_weight = node.stroke_weight();
 
-    let body_css = create_css(&[
+    let mut global_css = vec![
         (
-            "body",
-            &[
-                ("margin", Some("0")),
-                ("box-sizing", Some("border-box")),
-                ("position", Some("relative")),
+            "body".into(),
+            vec![
+                ("margin".into(), Some("0".into())),
+                ("box-sizing".into(), Some("border-box".into())),
+                ("position".into(), Some("relative".into())),
                 (
-                    "width",
+                    "width".into(),
                     absolute_bounding_box
                         .width
-                        .map(|width| format!("{width}px"))
-                        .as_deref(),
+                        .map(|width| format!("{width}px")),
                 ),
                 (
-                    "height",
+                    "height".into(),
                     absolute_bounding_box
                         .height
-                        .map(|height| format!("{height}px"))
-                        .as_deref(),
+                        .map(|height| format!("{height}px")),
                 ),
-                ("background", node.background().as_deref()),
+                ("background".into(), node.background()),
                 (
-                    "border-width",
-                    node_stroke_weight.map(|w| format!("{w}px")).as_deref(),
+                    "border-width".into(),
+                    node_stroke_weight.map(|w| format!("{w}px")),
                 ),
-                ("border-style", Some("dashed")),
+                ("border-style".into(), Some("dashed".into())),
                 (
-                    "border-color",
+                    "border-color".into(),
                     node.strokes()
                         .get(0)
                         .and_then(|stroke| stroke.color())
-                        .map(|color| color.to_rgb_string())
-                        .as_deref(),
+                        .map(|color| color.to_rgb_string()),
                 ),
-                ("border-radius", node.border_radius().as_deref()),
+                ("border-radius".into(), node.border_radius()),
             ],
         ),
-        ("html", &[("background", canvas.background().as_deref())]),
-    ])?;
-
-    let mut example_render_props = Vec::new();
+        (
+            "html".into(),
+            vec![("background".into(), canvas.background())],
+        ),
+    ];
 
     for component_node in node.children().iter() {
         if let (Some(component_offset_top), Some(component_offset_left)) = (
             component_node.absolute_bounding_box().and_then(|bb| bb.y),
             component_node.absolute_bounding_box().and_then(|bb| bb.x),
         ) {
-            example_render_props.push(ExampleRenderProps {
-                inline_css: create_inline_css(&[
-                    ("position", Some("absolute")),
-                    (
-                        "top",
-                        Some(&format!(
-                            "{}px",
-                            component_offset_top
-                                - node_offset_top
-                                - node_stroke_weight.unwrap_or(0.0),
-                        )),
-                    ),
-                    (
-                        "left",
-                        Some(&format!(
-                            "{}px",
-                            component_offset_left
-                                - node_offset_left
-                                - node_stroke_weight.unwrap_or(0.0),
-                        )),
-                    ),
-                    ("background", component_node.background().as_deref()),
-                    ("padding", component_node.padding().as_deref()),
-                    ("opacity", CssProperties::opacity(component_node).as_deref()),
-                ])
-                .context("Failed to generate instance CSS")?,
-                node: component_node,
-            });
+            if component_node.r#type == NodeType::Component {
+                global_css.push((
+                    format!("[data-figma-safe-name={}]", safe_name(&component_node.name)),
+                    vec![
+                        ("position".into(), Some("absolute".into())),
+                        (
+                            "top".into(),
+                            Some(format!(
+                                "{}px",
+                                component_offset_top
+                                    - node_offset_top
+                                    - node_stroke_weight.unwrap_or(0.0),
+                            )),
+                        ),
+                        (
+                            "left".into(),
+                            Some(format!(
+                                "{}px",
+                                component_offset_left
+                                    - node_offset_left
+                                    - node_stroke_weight.unwrap_or(0.0),
+                            )),
+                        ),
+                    ],
+                ))
+            }
         }
     }
 
+    let global_css = create_css(&global_css)?;
+
+    let mut example_render_props = Vec::new();
+
+    for component_node in node.children().iter() {
+        example_render_props.push(ExampleRenderProps {
+            inline_css: create_inline_css(&[
+                ("background".into(), component_node.background()),
+                ("padding".into(), component_node.padding()),
+                ("opacity".into(), CssProperties::opacity(component_node)),
+            ])
+            .context("Failed to generate instance CSS")?,
+            node: component_node,
+        });
+    }
+
     let render_props = RenderProps {
-        body_css: &body_css,
+        body_css: &global_css,
         component_title: &node.name,
         examples: &example_render_props,
     };
@@ -194,13 +218,14 @@ pub fn main(
                 head {
                     meta(charset="utf-8");
                     title : format!("{} component", render_props.component_title);
-                    style(type="text/css"): render_props.body_css;
+                    style(type="text/css"): horrorshow::Raw(render_props.body_css);
                 }
                 body {
                     @ for example_render_prop in render_props.examples.iter() {
                         div(
                             style=&example_render_prop.inline_css,
                             data-figma-name=&example_render_prop.node.name,
+                            data-figma-safe-name=safe_name(&example_render_prop.node.name),
                             data-figma-id=&example_render_prop.node.id
                         ): "Button"
                     }
