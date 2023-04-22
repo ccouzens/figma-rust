@@ -15,5 +15,5 @@ constrained by the schema.
 `Deno`
 
 ```typescript
-import * as figmaTypes from "https://raw.githubusercontent.com/ccouzens/figma-rust/typescript-0.1.0/typescript/index.d.ts"
+import * as figmaTypes from "https://raw.githubusercontent.com/ccouzens/figma-rust/typescript-0.1.0/typescript/index.d.ts";
 ```

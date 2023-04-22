@@ -11,7 +11,7 @@ pub struct Color {
     #[serde(rename = "b")]
     blue: f64,
     #[serde(rename = "a")]
-    alpha: f64,
+    pub alpha: f64,
 }
 
 impl Color {

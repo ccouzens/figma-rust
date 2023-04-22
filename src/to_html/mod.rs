@@ -47,6 +47,7 @@ struct RenderProps<'a> {
 }
 
 struct ExampleRenderProps {
+    class_names: Vec<String>,
     inline_css: String,
 }
 
@@ -136,10 +137,26 @@ pub fn main(
         ) {
             example_render_props.push(ExampleRenderProps {
                 inline_css: format!(
-                    "position: absolute; top: {top}px; left: {left}px;",
-                    top = component_offset_top - node_offset_top,
-                    left = component_offset_left - node_offset_left
+                    "position: absolute; top: {top}px; left: {left}px; background: {background}",
+                    top = component_offset_top - node_offset_top - 1.0,
+                    left = component_offset_left - node_offset_left - 1.0,
+                    background = component_node.background().unwrap()
                 ),
+                class_names: component_node
+                    .name
+                    .split(", ")
+                    .chain(std::iter::once(""))
+                    .map(|prop| {
+                        itertools::join(
+                            [&node.name, prop]
+                                .iter()
+                                .flat_map(|p| p.split(|c: char| !c.is_alphanumeric()))
+                                .filter(|s| !s.is_empty()),
+                            "-",
+                        )
+                        .to_ascii_lowercase()
+                    })
+                    .collect(),
             });
         }
     }
@@ -163,7 +180,7 @@ pub fn main(
                 }
                 body {
                     @ for example_render_prop in render_props.examples.iter() {
-                        div(style=&example_render_prop.inline_css): "button"
+                        div(style=&example_render_prop.inline_css, class=itertools::join(&example_render_prop.class_names, " ")): "Button"
                     }
                 }
             }
