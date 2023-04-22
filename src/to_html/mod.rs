@@ -1,4 +1,4 @@
-use crate::figma_api::NodeType;
+use crate::figma_api::{Node, NodeType};
 
 use self::css_properties::CssProperties;
 
@@ -67,11 +67,11 @@ fn create_css(selectors: &[(&str, &[CSSRulePairs])]) -> Result<String> {
 struct RenderProps<'a> {
     body_css: &'a str,
     component_title: &'a str,
-    examples: &'a [ExampleRenderProps],
+    examples: &'a [ExampleRenderProps<'a>],
 }
 
-struct ExampleRenderProps {
-    class_names: Vec<String>,
+struct ExampleRenderProps<'a> {
+    node: &'a Node,
     inline_css: String,
 }
 
@@ -121,14 +121,7 @@ pub fn main(
                         .map(|height| format!("{height}px"))
                         .as_deref(),
                 ),
-                (
-                    "background-color",
-                    node.fills()
-                        .get(0)
-                        .and_then(|fill| fill.color())
-                        .map(|color| color.to_rgb_string())
-                        .as_deref(),
-                ),
+                ("background", node.background().as_deref()),
                 (
                     "border-width",
                     node_stroke_weight.map(|w| format!("{w}px")).as_deref(),
@@ -145,16 +138,7 @@ pub fn main(
                 ("border-radius", node.border_radius().as_deref()),
             ],
         ),
-        (
-            "html",
-            &[(
-                "background-color",
-                canvas
-                    .background_color()
-                    .map(|color| color.to_rgb_string())
-                    .as_deref(),
-            )],
-        ),
+        ("html", &[("background", canvas.background().as_deref())]),
     ])?;
 
     let mut example_render_props = Vec::new();
@@ -190,21 +174,7 @@ pub fn main(
                     ("opacity", CssProperties::opacity(component_node).as_deref()),
                 ])
                 .context("Failed to generate instance CSS")?,
-                class_names: component_node
-                    .name
-                    .split(", ")
-                    .chain(std::iter::once(""))
-                    .map(|prop| {
-                        itertools::join(
-                            [&node.name, prop]
-                                .iter()
-                                .flat_map(|p| p.split(|c: char| !c.is_alphanumeric()))
-                                .filter(|s| !s.is_empty()),
-                            "-",
-                        )
-                        .to_ascii_lowercase()
-                    })
-                    .collect(),
+                node: component_node,
             });
         }
     }
@@ -228,7 +198,11 @@ pub fn main(
                 }
                 body {
                     @ for example_render_prop in render_props.examples.iter() {
-                        div(style=&example_render_prop.inline_css, class=itertools::join(&example_render_prop.class_names, " ")): "Button"
+                        div(
+                            style=&example_render_prop.inline_css,
+                            data-figma-name=&example_render_prop.node.name,
+                            data-figma-id=&example_render_prop.node.id
+                        ): "Button"
                     }
                 }
             }

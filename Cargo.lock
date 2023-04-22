@@ -434,7 +434,6 @@ dependencies = [
  "clap",
  "horrorshow",
  "indexmap",
- "itertools",
  "lightningcss",
  "serde",
  "serde_json",
