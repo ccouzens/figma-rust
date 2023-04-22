@@ -14,18 +14,6 @@ mod css_properties;
 
 type CSSRulePairs = (String, Option<String>);
 
-/**
- * Make a name safe to use in CSS selectors
- */
-fn safe_name(original: &str) -> String {
-    itertools::join(
-        original
-            .split(|c: char| !c.is_alphanumeric())
-            .filter(|p| !p.is_empty()),
-        "-",
-    )
-}
-
 fn create_inline_css(properties: &[CSSRulePairs]) -> Result<String> {
     use std::fmt::Write;
 
@@ -112,7 +100,7 @@ pub fn main(
     let node_offset_left = absolute_bounding_box.x.context("Failed to load x offset")?;
     let node_stroke_weight = node.stroke_weight();
 
-    let mut global_css = vec![
+    let global_css = create_css(&vec![
         (
             "body".into(),
             vec![
@@ -151,54 +139,48 @@ pub fn main(
             "html".into(),
             vec![("background".into(), canvas.background())],
         ),
-    ];
+    ])?;
+
+    let mut example_render_props = Vec::new();
 
     for component_node in node.children().iter() {
+        let mut css = vec![
+            ("background".into(), component_node.background()),
+            ("padding".into(), component_node.padding()),
+            ("opacity".into(), CssProperties::opacity(component_node)),
+        ];
+
         if let (Some(component_offset_top), Some(component_offset_left)) = (
             component_node.absolute_bounding_box().and_then(|bb| bb.y),
             component_node.absolute_bounding_box().and_then(|bb| bb.x),
         ) {
             if component_node.r#type == NodeType::Component {
-                global_css.push((
-                    format!("[data-figma-safe-name={}]", safe_name(&component_node.name)),
-                    vec![
-                        ("position".into(), Some("absolute".into())),
-                        (
-                            "top".into(),
-                            Some(format!(
-                                "{}px",
-                                component_offset_top
-                                    - node_offset_top
-                                    - node_stroke_weight.unwrap_or(0.0),
-                            )),
-                        ),
-                        (
-                            "left".into(),
-                            Some(format!(
-                                "{}px",
-                                component_offset_left
-                                    - node_offset_left
-                                    - node_stroke_weight.unwrap_or(0.0),
-                            )),
-                        ),
-                    ],
-                ))
+                css.extend_from_slice(&[
+                    ("position".into(), Some("absolute".into())),
+                    (
+                        "top".into(),
+                        Some(format!(
+                            "{}px",
+                            component_offset_top
+                                - node_offset_top
+                                - node_stroke_weight.unwrap_or(0.0),
+                        )),
+                    ),
+                    (
+                        "left".into(),
+                        Some(format!(
+                            "{}px",
+                            component_offset_left
+                                - node_offset_left
+                                - node_stroke_weight.unwrap_or(0.0),
+                        )),
+                    ),
+                ]);
             }
         }
-    }
 
-    let global_css = create_css(&global_css)?;
-
-    let mut example_render_props = Vec::new();
-
-    for component_node in node.children().iter() {
         example_render_props.push(ExampleRenderProps {
-            inline_css: create_inline_css(&[
-                ("background".into(), component_node.background()),
-                ("padding".into(), component_node.padding()),
-                ("opacity".into(), CssProperties::opacity(component_node)),
-            ])
-            .context("Failed to generate instance CSS")?,
+            inline_css: create_inline_css(&css).context("Failed to generate instance CSS")?,
             node: component_node,
         });
     }
@@ -225,7 +207,6 @@ pub fn main(
                         div(
                             style=&example_render_prop.inline_css,
                             data-figma-name=&example_render_prop.node.name,
-                            data-figma-safe-name=safe_name(&example_render_prop.node.name),
                             data-figma-id=&example_render_prop.node.id
                         ): "Button"
                     }
