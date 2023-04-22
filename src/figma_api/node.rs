@@ -97,7 +97,7 @@ pub struct Node {
     styles: Option<HashMap<StyleTypeMapKey, String>>,
     /// Text contained within a text box
     #[serde(skip_serializing_if = "Option::is_none")]
-    characters: Option<String>,
+    pub characters: Option<String>,
 }
 
 impl Node {

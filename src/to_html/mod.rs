@@ -112,15 +112,27 @@ fn inline_css(node: &Node, body: Option<&Node>) -> Result<String> {
     create_inline_css(&css).context("Failed to generate instance CSS")
 }
 
+fn node_to_html(node: &Node, body: &Node) -> String {
+    html! {
+        div(
+            style=&inline_css(node, Some(body)).unwrap_or_default(),
+            data-figma-name=&node.name,
+            data-figma-id=&node.id
+        )    {
+            @ for child in node.children().iter() {
+            : horrorshow::Raw(node_to_html(child, body))
+        }
+        : &node.characters.as_deref().unwrap_or_default()
+    }
+
+    }
+    .to_string()
+}
+
 struct RenderProps<'a> {
     body_css: &'a str,
     component_title: &'a str,
-    examples: &'a [ExampleRenderProps<'a>],
-}
-
-struct ExampleRenderProps<'a> {
-    node: &'a Node,
-    inline_css: String,
+    nodes: &'a [Node],
 }
 
 pub fn main(
@@ -187,19 +199,10 @@ pub fn main(
         ),
     ])?;
 
-    let mut example_render_props = Vec::new();
-
-    for component_node in body.children().iter() {
-        example_render_props.push(ExampleRenderProps {
-            inline_css: inline_css(component_node, Some(body))?,
-            node: component_node,
-        });
-    }
-
     let render_props = RenderProps {
         body_css: &global_css,
         component_title: &body.name,
-        examples: &example_render_props,
+        nodes: body.children(),
     };
 
     writeln!(
@@ -214,12 +217,8 @@ pub fn main(
                     style(type="text/css"): horrorshow::Raw(render_props.body_css);
                 }
                 body {
-                    @ for example_render_prop in render_props.examples.iter() {
-                        div(
-                            style=&example_render_prop.inline_css,
-                            data-figma-name=&example_render_prop.node.name,
-                            data-figma-id=&example_render_prop.node.id
-                        ): "Button"
+                    @ for node in render_props.nodes.iter() {
+                        : horrorshow::Raw(node_to_html(node, body))
                     }
                 }
             }
