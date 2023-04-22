@@ -98,6 +98,7 @@ pub fn main(
 
     let node_offset_top = absolute_bounding_box.y.context("Failed to load y offset")?;
     let node_offset_left = absolute_bounding_box.x.context("Failed to load x offset")?;
+    let node_stroke_weight = node.stroke_weight();
 
     let body_css = create_css(&[
         (
@@ -128,7 +129,10 @@ pub fn main(
                         .map(|color| color.to_rgb_string())
                         .as_deref(),
                 ),
-                ("border-width", Some("1px")),
+                (
+                    "border-width",
+                    node_stroke_weight.map(|w| format!("{w}px")).as_deref(),
+                ),
                 ("border-style", Some("dashed")),
                 (
                     "border-color",
@@ -167,14 +171,18 @@ pub fn main(
                         "top",
                         Some(&format!(
                             "{}px",
-                            component_offset_top - node_offset_top - 1.0,
+                            component_offset_top
+                                - node_offset_top
+                                - node_stroke_weight.unwrap_or(0.0),
                         )),
                     ),
                     (
                         "left",
                         Some(&format!(
                             "{}px",
-                            component_offset_left - node_offset_left - 1.0,
+                            component_offset_left
+                                - node_offset_left
+                                - node_stroke_weight.unwrap_or(0.0),
                         )),
                     ),
                     ("background", component_node.background().as_deref()),
