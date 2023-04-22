@@ -5,12 +5,36 @@ use self::css_properties::CssProperties;
 use super::figma_api;
 use anyhow::{anyhow, Context, Result};
 use horrorshow::{helper::doctype, html};
-use lightningcss::stylesheet::{MinifyOptions, ParserOptions, PrinterOptions, StyleSheet};
+use lightningcss::stylesheet::{
+    MinifyOptions, ParserOptions, PrinterOptions, StyleAttribute, StyleSheet,
+};
 use std::io::Write;
 
 mod css_properties;
 
 type CSSRulePairs<'a> = (&'a str, Option<&'a str>);
+
+fn create_inline_css(properties: &[CSSRulePairs]) -> Result<String> {
+    use std::fmt::Write;
+
+    let mut style_sheet_text = String::new();
+    for (property, value) in properties {
+        if let Some(value) = value {
+            write!(&mut style_sheet_text, "{property}: {value};")
+                .context("Failed to write property to string")?;
+        }
+    }
+
+    let mut style_attribute = StyleAttribute::parse(&style_sheet_text, ParserOptions::default())
+        .map_err(|err| anyhow!("Failed to parse CSS\n{err}"))?;
+
+    style_attribute.minify(MinifyOptions::default());
+
+    Ok(style_attribute
+        .to_css(PrinterOptions::default())
+        .context("Failed to print CSS")?
+        .code)
+}
 
 fn create_css(selectors: &[(&str, &[CSSRulePairs])]) -> Result<String> {
     use std::fmt::Write;
@@ -136,12 +160,18 @@ pub fn main(
             component_node.absolute_bounding_box().and_then(|bb| bb.x),
         ) {
             example_render_props.push(ExampleRenderProps {
-                inline_css: format!(
-                    "position: absolute; top: {top}px; left: {left}px; background: {background}",
-                    top = component_offset_top - node_offset_top - 1.0,
-                    left = component_offset_left - node_offset_left - 1.0,
-                    background = component_node.background().unwrap()
-                ),
+                inline_css: create_inline_css(&[
+                    (
+                        "position",
+                        Some(&format!(
+                            "absolute; top: {top}px; left: {left}px",
+                            top = component_offset_top - node_offset_top - 1.0,
+                            left = component_offset_left - node_offset_left - 1.0,
+                        )),
+                    ),
+                    ("background", component_node.background().as_deref()),
+                ])
+                .context("Failed to generate instance CSS")?,
                 class_names: component_node
                     .name
                     .split(", ")
