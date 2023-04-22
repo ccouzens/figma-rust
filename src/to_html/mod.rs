@@ -64,6 +64,54 @@ fn create_css(selectors: &[(String, Vec<CSSRulePairs>)]) -> Result<String> {
         .code)
 }
 
+fn inline_css(node: &Node, body: Option<&Node>) -> Result<String> {
+    let body_absolute_bounding_box = body.and_then(|b| b.absolute_bounding_box());
+
+    let body_stroke_weight = body.and_then(|b| b.stroke_weight());
+
+    let mut css: Vec<(String, Option<String>)> = vec![
+        ("background".into(), node.background()),
+        ("padding".into(), node.padding()),
+        ("opacity".into(), CssProperties::opacity(node)),
+    ];
+
+    if let (
+        Some(component_offset_top),
+        Some(component_offset_left),
+        Some(body_offset_top),
+        Some(body_offset_left),
+    ) = (
+        node.absolute_bounding_box().and_then(|bb| bb.y),
+        node.absolute_bounding_box().and_then(|bb| bb.x),
+        body_absolute_bounding_box.and_then(|b| b.y),
+        body_absolute_bounding_box.and_then(|b| b.x),
+    ) {
+        if node.r#type == NodeType::Component {
+            css.extend_from_slice(&[
+                ("position".into(), Some("absolute".into())),
+                (
+                    "top".into(),
+                    Some(format!(
+                        "{}px",
+                        component_offset_top - body_offset_top - body_stroke_weight.unwrap_or(0.0),
+                    )),
+                ),
+                (
+                    "left".into(),
+                    Some(format!(
+                        "{}px",
+                        component_offset_left
+                            - body_offset_left
+                            - body_stroke_weight.unwrap_or(0.0),
+                    )),
+                ),
+            ]);
+        }
+    }
+
+    create_inline_css(&css).context("Failed to generate instance CSS")
+}
+
 struct RenderProps<'a> {
     body_css: &'a str,
     component_title: &'a str,
@@ -81,7 +129,7 @@ pub fn main(
     _stderr: &mut impl Write,
     node_id: &str,
 ) -> Result<()> {
-    let (node, parents) = file
+    let (body, parents) = file
         .document
         .depth_first_stack_iter()
         .find(|(n, _)| n.id == node_id)
@@ -92,15 +140,13 @@ pub fn main(
         .find(|n| matches!(n.r#type, NodeType::Canvas))
         .context("Failed to find canvas parent")?;
 
-    let absolute_bounding_box = node
+    let absolute_bounding_box = body
         .absolute_bounding_box()
         .context("Failed to load bounding box")?;
 
-    let node_offset_top = absolute_bounding_box.y.context("Failed to load y offset")?;
-    let node_offset_left = absolute_bounding_box.x.context("Failed to load x offset")?;
-    let node_stroke_weight = node.stroke_weight();
+    let body_stroke_weight = body.stroke_weight();
 
-    let global_css = create_css(&vec![
+    let global_css = create_css(&[
         (
             "body".into(),
             vec![
@@ -119,20 +165,20 @@ pub fn main(
                         .height
                         .map(|height| format!("{height}px")),
                 ),
-                ("background".into(), node.background()),
+                ("background".into(), body.background()),
                 (
                     "border-width".into(),
-                    node_stroke_weight.map(|w| format!("{w}px")),
+                    body_stroke_weight.map(|w| format!("{w}px")),
                 ),
                 ("border-style".into(), Some("dashed".into())),
                 (
                     "border-color".into(),
-                    node.strokes()
+                    body.strokes()
                         .get(0)
                         .and_then(|stroke| stroke.color())
                         .map(|color| color.to_rgb_string()),
                 ),
-                ("border-radius".into(), node.border_radius()),
+                ("border-radius".into(), body.border_radius()),
             ],
         ),
         (
@@ -143,51 +189,16 @@ pub fn main(
 
     let mut example_render_props = Vec::new();
 
-    for component_node in node.children().iter() {
-        let mut css = vec![
-            ("background".into(), component_node.background()),
-            ("padding".into(), component_node.padding()),
-            ("opacity".into(), CssProperties::opacity(component_node)),
-        ];
-
-        if let (Some(component_offset_top), Some(component_offset_left)) = (
-            component_node.absolute_bounding_box().and_then(|bb| bb.y),
-            component_node.absolute_bounding_box().and_then(|bb| bb.x),
-        ) {
-            if component_node.r#type == NodeType::Component {
-                css.extend_from_slice(&[
-                    ("position".into(), Some("absolute".into())),
-                    (
-                        "top".into(),
-                        Some(format!(
-                            "{}px",
-                            component_offset_top
-                                - node_offset_top
-                                - node_stroke_weight.unwrap_or(0.0),
-                        )),
-                    ),
-                    (
-                        "left".into(),
-                        Some(format!(
-                            "{}px",
-                            component_offset_left
-                                - node_offset_left
-                                - node_stroke_weight.unwrap_or(0.0),
-                        )),
-                    ),
-                ]);
-            }
-        }
-
+    for component_node in body.children().iter() {
         example_render_props.push(ExampleRenderProps {
-            inline_css: create_inline_css(&css).context("Failed to generate instance CSS")?,
+            inline_css: inline_css(component_node, Some(body))?,
             node: component_node,
         });
     }
 
     let render_props = RenderProps {
         body_css: &global_css,
-        component_title: &node.name,
+        component_title: &body.name,
         examples: &example_render_props,
     };
 
