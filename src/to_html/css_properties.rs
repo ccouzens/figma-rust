@@ -7,8 +7,12 @@ pub trait CssProperties {
     fn border_radius(&self) -> Option<String>;
     fn background(&self) -> Option<String>;
     fn color(&self) -> Option<String>;
-    fn padding(&self) -> Option<String>;
+    fn line_height(&self) -> Option<String>;
+    fn font_family(&self) -> Option<String>;
+    fn font_size(&self) -> Option<String>;
+    fn font_weight(&self) -> Option<String>;
     fn opacity(&self) -> Option<String>;
+    fn padding(&self) -> Option<String>;
 }
 
 fn fills_color(node: &Node) -> Option<String> {
@@ -41,6 +45,31 @@ impl CssProperties for Node {
             return None;
         }
         fills_color(self)
+    }
+
+    fn line_height(&self) -> Option<String> {
+        self.style
+            .as_ref()
+            .map(|s| s.line_height_px)
+            .map(|lh| format!("{lh}px"))
+    }
+
+    fn font_family(&self) -> Option<String> {
+        self.style.as_ref().map(|s| s.font_family.clone())
+    }
+
+    fn font_size(&self) -> Option<String> {
+        self.style
+            .as_ref()
+            .map(|s| s.font_size)
+            .map(|fs| format!("{fs}px"))
+    }
+
+    fn font_weight(&self) -> Option<String> {
+        self.style
+            .as_ref()
+            .map(|s| s.font_weight)
+            .map(|fw| format!("{fw}"))
     }
 
     fn padding(&self) -> Option<String> {

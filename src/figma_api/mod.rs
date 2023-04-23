@@ -7,6 +7,7 @@ mod node;
 mod paint;
 mod rectangle;
 mod style;
+mod type_style;
 mod vector;
 pub use self::{
     blend_mode::BlendMode,
@@ -18,5 +19,6 @@ pub use self::{
     paint::Paint,
     rectangle::Rectangle,
     style::{Style, StyleType},
+    type_style::TypeStyle,
     vector::Vector,
 };

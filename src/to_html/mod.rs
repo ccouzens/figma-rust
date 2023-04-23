@@ -72,6 +72,10 @@ fn inline_css(node: &Node, body: Option<&Node>) -> Result<Option<String>> {
     let mut css: Vec<(String, Option<String>)> = vec![
         ("background".into(), node.background()),
         ("color".into(), node.color()),
+        ("font-family".into(), node.font_family()),
+        ("font-size".into(), node.font_size()),
+        ("font-weight".into(), node.font_weight()),
+        ("line-height".into(), node.line_height()),
         ("padding".into(), node.padding()),
         ("opacity".into(), CssProperties::opacity(node)),
     ];

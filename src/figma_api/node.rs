@@ -1,4 +1,4 @@
-use super::{Color, Component, EasingType, File, Paint, Rectangle};
+use super::{Color, Component, EasingType, File, Paint, Rectangle, TypeStyle};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
@@ -98,6 +98,9 @@ pub struct Node {
     /// Text contained within a text box
     #[serde(skip_serializing_if = "Option::is_none")]
     pub characters: Option<String>,
+    /// Style of text including font family and weight
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub style: Option<TypeStyle>,
 }
 
 impl Node {
