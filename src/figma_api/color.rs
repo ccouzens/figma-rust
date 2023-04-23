@@ -24,4 +24,12 @@ impl Color {
             self.alpha
         )
     }
+
+    pub fn to_option_rgb_string(&self) -> Option<String> {
+        if self.alpha == 0.0 {
+            None
+        } else {
+            Some(self.to_rgb_string())
+        }
+    }
 }

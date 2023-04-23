@@ -1,4 +1,4 @@
-use crate::figma_api::Node;
+use crate::figma_api::{Node, NodeType};
 
 /// Get values for given CSS properties
 ///
@@ -6,8 +6,18 @@ use crate::figma_api::Node;
 pub trait CssProperties {
     fn border_radius(&self) -> Option<String>;
     fn background(&self) -> Option<String>;
+    fn color(&self) -> Option<String>;
     fn padding(&self) -> Option<String>;
     fn opacity(&self) -> Option<String>;
+}
+
+fn fills_color(node: &Node) -> Option<String> {
+    node.fills()
+        .iter()
+        .filter(|paint| paint.visible() && paint.opacity() != 0.0)
+        .flat_map(|paint| paint.color())
+        .flat_map(|c| c.to_option_rgb_string())
+        .next()
 }
 
 impl CssProperties for Node {
@@ -17,30 +27,40 @@ impl CssProperties for Node {
     }
 
     fn background(&self) -> Option<String> {
-        self.fills()
-            .iter()
-            .filter(|paint| {
-                paint.visible()
-                    && paint.opacity() != 0.0
-                    && paint.color().map(|p| p.alpha != 0.0).unwrap_or(false)
-            })
-            .flat_map(|paint| paint.color())
-            .next()
-            .or_else(|| self.background_color())
-            .map(|color| color.to_rgb_string())
+        if self.r#type == NodeType::Text {
+            return None;
+        }
+        fills_color(self).or_else(|| {
+            self.background_color()
+                .and_then(|c| c.to_option_rgb_string())
+        })
+    }
+
+    fn color(&self) -> Option<String> {
+        if self.r#type != NodeType::Text {
+            return None;
+        }
+        fills_color(self)
     }
 
     fn padding(&self) -> Option<String> {
-        Some(format!(
-            "{}px {}px {}px {}px",
-            self.padding_top(),
-            self.padding_right(),
-            self.padding_bottom(),
-            self.padding_left()
-        ))
+        let top = self.padding_top();
+        let right = self.padding_right();
+        let bottom = self.padding_bottom();
+        let left = self.padding_left();
+        if top == 0.0 && right == 0.0 && bottom == 0.0 && left == 0.0 {
+            None
+        } else {
+            Some(format!("{top}px {right}px {bottom}px {left}px"))
+        }
     }
 
     fn opacity(&self) -> Option<String> {
-        Some(format!("{}", self.opacity()))
+        let opacity = self.opacity();
+        if opacity == 1.0 {
+            None
+        } else {
+            Some(format!("{}", opacity))
+        }
     }
 }

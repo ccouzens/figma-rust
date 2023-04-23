@@ -64,13 +64,14 @@ fn create_css(selectors: &[(String, Vec<CSSRulePairs>)]) -> Result<String> {
         .code)
 }
 
-fn inline_css(node: &Node, body: Option<&Node>) -> Result<String> {
+fn inline_css(node: &Node, body: Option<&Node>) -> Result<Option<String>> {
     let body_absolute_bounding_box = body.and_then(|b| b.absolute_bounding_box());
 
     let body_stroke_weight = body.and_then(|b| b.stroke_weight());
 
     let mut css: Vec<(String, Option<String>)> = vec![
         ("background".into(), node.background()),
+        ("color".into(), node.color()),
         ("padding".into(), node.padding()),
         ("opacity".into(), CssProperties::opacity(node)),
     ];
@@ -109,13 +110,18 @@ fn inline_css(node: &Node, body: Option<&Node>) -> Result<String> {
         }
     }
 
-    create_inline_css(&css).context("Failed to generate instance CSS")
+    let css_string = create_inline_css(&css).context("Failed to generate instance CSS")?;
+    if css_string.is_empty() {
+        Ok(None)
+    } else {
+        Ok(Some(css_string))
+    }
 }
 
 fn node_to_html(node: &Node, body: &Node) -> String {
     html! {
         div(
-            style=&inline_css(node, Some(body)).unwrap_or_default(),
+            style?=inline_css(node, Some(body)).unwrap_or_default(),
             data-figma-name=&node.name,
             data-figma-id=&node.id
         )    {
@@ -188,7 +194,7 @@ pub fn main(
                     body.strokes()
                         .get(0)
                         .and_then(|stroke| stroke.color())
-                        .map(|color| color.to_rgb_string()),
+                        .and_then(|color| color.to_option_rgb_string()),
                 ),
                 ("border-radius".into(), body.border_radius()),
             ],
