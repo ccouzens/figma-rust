@@ -8,6 +8,7 @@ pub trait CssProperties {
     fn border_radius(&self) -> Option<String>;
     fn box_shadow(&self) -> Option<String>;
     fn color(&self) -> Option<String>;
+    fn fill(&self) -> Option<String>;
     fn height(&self) -> Option<String>;
     fn line_height(&self) -> Option<String>;
     fn font_family(&self) -> Option<String>;
@@ -81,17 +82,14 @@ impl CssProperties for Node {
 
     fn color(&self) -> Option<String> {
         match self.r#type {
-            NodeType::Text | NodeType::Vector => fills_color(self),
+            NodeType::Text => fills_color(self),
             _ => None,
         }
     }
 
-    fn height(&self) -> Option<String> {
+    fn fill(&self) -> Option<String> {
         match self.r#type {
-            NodeType::Vector => self
-                .absolute_bounding_box()
-                .and_then(|b| b.height)
-                .map(|h| format!("{h}px")),
+            NodeType::Vector => fills_color(self),
             _ => None,
         }
     }
@@ -112,6 +110,16 @@ impl CssProperties for Node {
             .as_ref()
             .map(|s| s.font_weight)
             .map(|fw| format!("{fw}"))
+    }
+
+    fn height(&self) -> Option<String> {
+        match self.r#type {
+            NodeType::Vector => self
+                .absolute_bounding_box()
+                .and_then(|b| b.height)
+                .map(|h| format!("{h}px")),
+            _ => None,
+        }
     }
 
     fn line_height(&self) -> Option<String> {

@@ -72,6 +72,7 @@ fn inline_css(node: &Node, body: Option<&Node>) -> Result<Option<String>> {
         ("border-radius".into(), node.border_radius()),
         ("box-shadow".into(), node.box_shadow()),
         ("color".into(), node.color()),
+        ("fill".into(), node.fill()),
         ("font-family".into(), node.font_family()),
         ("font-size".into(), node.font_size()),
         ("font-weight".into(), node.font_weight()),
@@ -131,7 +132,7 @@ fn node_to_html(node: &Node, body: &Node) -> String {
                     y=".9em",
                     font-size="90"
                 ) {
-                    : "👻"
+                    : "�"
                 }
             }
         }
