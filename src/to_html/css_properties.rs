@@ -1,18 +1,20 @@
-use crate::figma_api::{EffectType, Node, NodeType};
+use crate::figma_api::{EffectType, Node, NodeType, StrokeAlign};
 
 /// Get values for given CSS properties
 ///
 /// The CSS values are not optimized, but can be made so by use of another tool like `lightningcss`.
 pub trait CssProperties {
+    fn background(&self) -> Option<String>;
     fn border_radius(&self) -> Option<String>;
     fn box_shadow(&self) -> Option<String>;
-    fn background(&self) -> Option<String>;
     fn color(&self) -> Option<String>;
     fn line_height(&self) -> Option<String>;
     fn font_family(&self) -> Option<String>;
     fn font_size(&self) -> Option<String>;
     fn font_weight(&self) -> Option<String>;
     fn opacity(&self) -> Option<String>;
+    fn outline(&self) -> Option<String>;
+    fn outline_offset(&self) -> Option<String>;
     fn padding(&self) -> Option<String>;
 }
 
@@ -25,7 +27,26 @@ fn fills_color(node: &Node) -> Option<String> {
         .next()
 }
 
+fn stroke_color(node: &Node) -> Option<String> {
+    node.strokes()
+        .iter()
+        .filter(|p| p.visible())
+        .flat_map(|stroke| stroke.color())
+        .flat_map(|color| color.to_option_rgb_string())
+        .next()
+}
+
 impl CssProperties for Node {
+    fn background(&self) -> Option<String> {
+        if self.r#type == NodeType::Text {
+            return None;
+        }
+        fills_color(self).or_else(|| {
+            self.background_color()
+                .and_then(|c| c.to_option_rgb_string())
+        })
+    }
+
     fn border_radius(&self) -> Option<String> {
         self.rectangle_corner_radii()
             .map(|[nw, ne, se, sw]| format!("{nw}px {ne}px {se}px {sw}px"))
@@ -54,16 +75,6 @@ impl CssProperties for Node {
         } else {
             Some(shadows)
         }
-    }
-
-    fn background(&self) -> Option<String> {
-        if self.r#type == NodeType::Text {
-            return None;
-        }
-        fills_color(self).or_else(|| {
-            self.background_color()
-                .and_then(|c| c.to_option_rgb_string())
-        })
     }
 
     fn color(&self) -> Option<String> {
@@ -116,6 +127,27 @@ impl CssProperties for Node {
             None
         } else {
             Some(format!("{}", opacity))
+        }
+    }
+
+    fn outline(&self) -> Option<String> {
+        let color = stroke_color(self)?;
+        let width = self.stroke_weight()?;
+        if width == 0.0 {
+            None
+        } else {
+            Some(format!("{width}px solid {color}"))
+        }
+    }
+
+    fn outline_offset(&self) -> Option<String> {
+        let stroke_align = self.stroke_align()?;
+        self.outline()?;
+        let width = self.stroke_weight()?;
+        match stroke_align {
+            StrokeAlign::Inside => Some(format!("-{width}px")),
+            StrokeAlign::Outside => None,
+            StrokeAlign::Center => Some(format!("-{}px", width / 2.0)),
         }
     }
 }

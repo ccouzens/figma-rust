@@ -67,8 +67,6 @@ fn create_css(selectors: &[(String, Vec<CSSRulePairs>)]) -> Result<String> {
 fn inline_css(node: &Node, body: Option<&Node>) -> Result<Option<String>> {
     let body_absolute_bounding_box = body.and_then(|b| b.absolute_bounding_box());
 
-    let body_stroke_weight = body.and_then(|b| b.stroke_weight());
-
     let mut css: Vec<(String, Option<String>)> = vec![
         ("background".into(), node.background()),
         ("border-radius".into(), node.border_radius()),
@@ -80,6 +78,8 @@ fn inline_css(node: &Node, body: Option<&Node>) -> Result<Option<String>> {
         ("line-height".into(), node.line_height()),
         ("padding".into(), node.padding()),
         ("opacity".into(), CssProperties::opacity(node)),
+        ("outline".into(), node.outline()),
+        ("outline-offset".into(), node.outline_offset()),
     ];
 
     if let (
@@ -98,19 +98,11 @@ fn inline_css(node: &Node, body: Option<&Node>) -> Result<Option<String>> {
                 ("position".into(), Some("absolute".into())),
                 (
                     "top".into(),
-                    Some(format!(
-                        "{}px",
-                        component_offset_top - body_offset_top - body_stroke_weight.unwrap_or(0.0),
-                    )),
+                    Some(format!("{}px", component_offset_top - body_offset_top,)),
                 ),
                 (
                     "left".into(),
-                    Some(format!(
-                        "{}px",
-                        component_offset_left
-                            - body_offset_left
-                            - body_stroke_weight.unwrap_or(0.0),
-                    )),
+                    Some(format!("{}px", component_offset_left - body_offset_left)),
                 ),
             ]);
         }
@@ -168,8 +160,6 @@ pub fn main(
         .absolute_bounding_box()
         .context("Failed to load bounding box")?;
 
-    let body_stroke_weight = body.stroke_weight();
-
     let global_css = create_css(&[
         (
             "body".into(),
@@ -190,19 +180,10 @@ pub fn main(
                         .map(|height| format!("{height}px")),
                 ),
                 ("background".into(), body.background()),
-                (
-                    "border-width".into(),
-                    body_stroke_weight.map(|w| format!("{w}px")),
-                ),
-                ("border-style".into(), Some("dashed".into())),
-                (
-                    "border-color".into(),
-                    body.strokes()
-                        .get(0)
-                        .and_then(|stroke| stroke.color())
-                        .and_then(|color| color.to_option_rgb_string()),
-                ),
                 ("border-radius".into(), body.border_radius()),
+                ("outline".into(), body.outline()),
+                ("outline-offset".into(), body.outline_offset()),
+                ("outline-style".into(), Some("dashed".into())),
             ],
         ),
         (
