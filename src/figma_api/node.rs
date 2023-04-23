@@ -1,4 +1,4 @@
-use super::{Color, Component, EasingType, File, Paint, Rectangle, TypeStyle};
+use super::{Color, Component, EasingType, Effect, File, Paint, Rectangle, TypeStyle};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
@@ -92,6 +92,9 @@ pub struct Node {
     /// The padding between the bottom border of the frame and its children. This property is only applicable for auto-layout frames.
     #[serde(skip_serializing_if = "Option::is_none")]
     padding_bottom: Option<f64>,
+    /// An array of effects attached to this node
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub effects: Option<Vec<Effect>>,
     /// A mapping of a StyleType to style ID of styles present on this node. The style ID can be used to look up more information about the style in the top-level styles field.
     #[serde(skip_serializing_if = "Option::is_none")]
     styles: Option<HashMap<StyleTypeMapKey, String>>,

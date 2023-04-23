@@ -15,6 +15,42 @@ data class Component (
 	val description: String
 )
 
+@Serializable
+enum class EffectType(val string: String) {
+	@SerialName("INNER_SHADOW")
+	InnerShadow("INNER_SHADOW"),
+	@SerialName("DROP_SHADOW")
+	DropShadow("DROP_SHADOW"),
+	@SerialName("LAYER_BLUR")
+	LayerBlur("LAYER_BLUR"),
+	@SerialName("BACKGROUND_BLUR")
+	BackgroundBlur("BACKGROUND_BLUR"),
+}
+
+/// [Figma documentation](https://www.figma.com/developers/api#vector-type)
+@Serializable
+data class Vector (
+	val x: Double,
+	val y: Double
+)
+
+/// A visual effect such as a shadow or blur
+/// 
+/// [Figma documentation](https://www.figma.com/developers/api#effect-type)
+@Serializable
+data class Effect (
+	/// Type of effect
+	val type: EffectType,
+	/// Is the effect active?
+	val visible: Boolean,
+	/// The color of the shadow
+	val color: Color,
+	/// How far the shadow is projected in the x and y directions
+	val offset: Vector,
+	/// How far the shadow spreads
+	val spread: Double? = null
+)
+
 /// Node type indicates what kind of node you are working with: for example, a FRAME node versus a RECTANGLE node. A node can have additional properties associated with it depending on its node type.
 @Serializable
 enum class NodeType(val string: String) {
@@ -214,6 +250,21 @@ enum class StyleTypeMapKey(val string: String) {
 	Strokes("strokes"),
 }
 
+/// Metadata for character formatting
+/// 
+/// [Figma documentation](https://www.figma.com/developers/api#typestyle-type)
+@Serializable
+data class TypeStyle (
+	/// Font family of text (standard name)
+	val fontFamily: String,
+	/// Numeric font weight
+	val fontWeight: Double,
+	/// Font size in px
+	val fontSize: Double,
+	/// Line height in px
+	val lineHeightPx: Double
+)
+
 /// [Figma documentation](https://www.figma.com/developers/api#node-types)
 @Serializable
 data class Node (
@@ -259,10 +310,14 @@ data class Node (
 	val paddingTop: Double? = null,
 	/// The padding between the bottom border of the frame and its children. This property is only applicable for auto-layout frames.
 	val paddingBottom: Double? = null,
+	/// An array of effects attached to this node
+	val effects: List<Effect>? = null,
 	/// A mapping of a StyleType to style ID of styles present on this node. The style ID can be used to look up more information about the style in the top-level styles field.
 	val styles: HashMap<StyleTypeMapKey, String>? = null,
 	/// Text contained within a text box
-	val characters: String? = null
+	val characters: String? = null,
+	/// Style of text including font family and weight
+	val style: TypeStyle? = null
 )
 
 @Serializable
@@ -295,12 +350,5 @@ data class File (
 	val name: String,
 	val schemaVersion: UByte,
 	val version: String
-)
-
-/// [Figma documentation](https://www.figma.com/developers/api#vector-type)
-@Serializable
-data class Vector (
-	val x: Double,
-	val y: Double
 )
 

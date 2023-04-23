@@ -2,6 +2,7 @@ mod blend_mode;
 mod color;
 mod component;
 mod easing_type;
+mod effect;
 mod file;
 mod node;
 mod paint;
@@ -14,6 +15,7 @@ pub use self::{
     color::Color,
     component::Component,
     easing_type::EasingType,
+    effect::{Effect, EffectType},
     file::File,
     node::{Node, NodeType, StrokeAlign},
     paint::Paint,

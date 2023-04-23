@@ -17,6 +17,37 @@ export interface Component {
 	description: string;
 }
 
+export enum EffectType {
+	InnerShadow = "INNER_SHADOW",
+	DropShadow = "DROP_SHADOW",
+	LayerBlur = "LAYER_BLUR",
+	BackgroundBlur = "BACKGROUND_BLUR",
+}
+
+/** [Figma documentation](https://www.figma.com/developers/api#vector-type) */
+export interface Vector {
+	x: number;
+	y: number;
+}
+
+/**
+ * A visual effect such as a shadow or blur
+ * 
+ * [Figma documentation](https://www.figma.com/developers/api#effect-type)
+ */
+export interface Effect {
+	/** Type of effect */
+	type: EffectType;
+	/** Is the effect active? */
+	visible: boolean;
+	/** The color of the shadow */
+	color: Color;
+	/** How far the shadow is projected in the x and y directions */
+	offset: Vector;
+	/** How far the shadow spreads */
+	spread?: number;
+}
+
 /** Node type indicates what kind of node you are working with: for example, a FRAME node versus a RECTANGLE node. A node can have additional properties associated with it depending on its node type. */
 export enum NodeType {
 	Document = "DOCUMENT",
@@ -147,6 +178,22 @@ export enum StyleTypeMapKey {
 	Strokes = "strokes",
 }
 
+/**
+ * Metadata for character formatting
+ * 
+ * [Figma documentation](https://www.figma.com/developers/api#typestyle-type)
+ */
+export interface TypeStyle {
+	/** Font family of text (standard name) */
+	fontFamily: string;
+	/** Numeric font weight */
+	fontWeight: number;
+	/** Font size in px */
+	fontSize: number;
+	/** Line height in px */
+	lineHeightPx: number;
+}
+
 /** [Figma documentation](https://www.figma.com/developers/api#node-types) */
 export interface Node {
 	/** A string uniquely identifying this node within the document. */
@@ -191,10 +238,14 @@ export interface Node {
 	paddingTop?: number;
 	/** The padding between the bottom border of the frame and its children. This property is only applicable for auto-layout frames. */
 	paddingBottom?: number;
+	/** An array of effects attached to this node */
+	effects?: Effect[];
 	/** A mapping of a StyleType to style ID of styles present on this node. The style ID can be used to look up more information about the style in the top-level styles field. */
 	styles?: Record<StyleTypeMapKey, string>;
 	/** Text contained within a text box */
 	characters?: string;
+	/** Style of text including font family and weight */
+	style?: TypeStyle;
 }
 
 export enum StyleType {
@@ -220,11 +271,5 @@ export interface File {
 	name: string;
 	schemaVersion: number;
 	version: string;
-}
-
-/** [Figma documentation](https://www.figma.com/developers/api#vector-type) */
-export interface Vector {
-	x: number;
-	y: number;
 }
 

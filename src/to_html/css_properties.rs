@@ -1,10 +1,11 @@
-use crate::figma_api::{Node, NodeType};
+use crate::figma_api::{EffectType, Node, NodeType};
 
 /// Get values for given CSS properties
 ///
 /// The CSS values are not optimized, but can be made so by use of another tool like `lightningcss`.
 pub trait CssProperties {
     fn border_radius(&self) -> Option<String>;
+    fn box_shadow(&self) -> Option<String>;
     fn background(&self) -> Option<String>;
     fn color(&self) -> Option<String>;
     fn line_height(&self) -> Option<String>;
@@ -28,6 +29,31 @@ impl CssProperties for Node {
     fn border_radius(&self) -> Option<String> {
         self.rectangle_corner_radii()
             .map(|[nw, ne, se, sw]| format!("{nw}px {ne}px {se}px {sw}px"))
+    }
+
+    fn box_shadow(&self) -> Option<String> {
+        let shadows = itertools::join(
+            self.effects
+                .as_deref()
+                .unwrap_or(&[])
+                .iter()
+                .filter(|e| e.r#type == EffectType::InnerShadow)
+                .filter(|e| e.visible)
+                .map(|e| {
+                    let x_offset = e.offset.x;
+                    let y_offset = e.offset.y;
+                    let spread = e.spread();
+                    let color = e.color.to_rgb_string();
+                    format!("inset {x_offset}px {y_offset}px {spread}px {color}")
+                }),
+            ", ",
+        );
+
+        if shadows.is_empty() {
+            None
+        } else {
+            Some(shadows)
+        }
     }
 
     fn background(&self) -> Option<String> {

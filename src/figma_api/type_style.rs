@@ -9,7 +9,10 @@ use serde::{Deserialize, Serialize};
 pub struct TypeStyle {
     /// Font family of text (standard name)
     pub font_family: String,
+    /// Numeric font weight
     pub font_weight: f64,
+    /// Font size in px
     pub font_size: f64,
+    /// Line height in px
     pub line_height_px: f64,
 }

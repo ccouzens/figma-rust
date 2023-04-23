@@ -32,6 +32,48 @@ public struct Component: Codable {
 	}
 }
 
+public enum EffectType: String, Codable {
+	case innerShadow = "INNER_SHADOW"
+	case dropShadow = "DROP_SHADOW"
+	case layerBlur = "LAYER_BLUR"
+	case backgroundBlur = "BACKGROUND_BLUR"
+}
+
+/// [Figma documentation](https://www.figma.com/developers/api#vector-type)
+public struct Vector: Codable {
+	public let x: Double
+	public let y: Double
+
+	public init(x: Double, y: Double) {
+		self.x = x
+		self.y = y
+	}
+}
+
+/// A visual effect such as a shadow or blur
+/// 
+/// [Figma documentation](https://www.figma.com/developers/api#effect-type)
+public struct Effect: Codable {
+	/// Type of effect
+	public let type: EffectType
+	/// Is the effect active?
+	public let visible: Bool
+	/// The color of the shadow
+	public let color: Color
+	/// How far the shadow is projected in the x and y directions
+	public let offset: Vector
+	/// How far the shadow spreads
+	public let spread: Double?
+
+	public init(type: EffectType, visible: Bool, color: Color, offset: Vector, spread: Double?) {
+		self.type = type
+		self.visible = visible
+		self.color = color
+		self.offset = offset
+		self.spread = spread
+	}
+}
+
 /// Node type indicates what kind of node you are working with: for example, a FRAME node versus a RECTANGLE node. A node can have additional properties associated with it depending on its node type.
 public enum NodeType: String, Codable {
 	case document = "DOCUMENT"
@@ -172,6 +214,27 @@ public enum StyleTypeMapKey: String, Codable {
 	case strokes
 }
 
+/// Metadata for character formatting
+/// 
+/// [Figma documentation](https://www.figma.com/developers/api#typestyle-type)
+public struct TypeStyle: Codable {
+	/// Font family of text (standard name)
+	public let fontFamily: String
+	/// Numeric font weight
+	public let fontWeight: Double
+	/// Font size in px
+	public let fontSize: Double
+	/// Line height in px
+	public let lineHeightPx: Double
+
+	public init(fontFamily: String, fontWeight: Double, fontSize: Double, lineHeightPx: Double) {
+		self.fontFamily = fontFamily
+		self.fontWeight = fontWeight
+		self.fontSize = fontSize
+		self.lineHeightPx = lineHeightPx
+	}
+}
+
 /// [Figma documentation](https://www.figma.com/developers/api#node-types)
 public struct Node: Codable {
 	/// A string uniquely identifying this node within the document.
@@ -216,12 +279,16 @@ public struct Node: Codable {
 	public let paddingTop: Double?
 	/// The padding between the bottom border of the frame and its children. This property is only applicable for auto-layout frames.
 	public let paddingBottom: Double?
+	/// An array of effects attached to this node
+	public let effects: [Effect]?
 	/// A mapping of a StyleType to style ID of styles present on this node. The style ID can be used to look up more information about the style in the top-level styles field.
 	public let styles: [StyleTypeMapKey: String]?
 	/// Text contained within a text box
 	public let characters: String?
+	/// Style of text including font family and weight
+	public let style: TypeStyle?
 
-	public init(id: String, name: String, visible: Bool?, type: NodeType, children: [Node]?, backgroundColor: Color?, fills: [Paint]?, strokes: [Paint]?, strokeWeight: Double?, strokeAlign: StrokeAlign?, cornerRadius: Double?, rectangleCornerRadii: [Double]?, transitionDuration: Double?, transitionEasing: EasingType?, opacity: Double?, absoluteBoundingBox: Rectangle?, absoluteRenderBounds: Rectangle?, paddingLeft: Double?, paddingRight: Double?, paddingTop: Double?, paddingBottom: Double?, styles: [StyleTypeMapKey: String]?, characters: String?) {
+	public init(id: String, name: String, visible: Bool?, type: NodeType, children: [Node]?, backgroundColor: Color?, fills: [Paint]?, strokes: [Paint]?, strokeWeight: Double?, strokeAlign: StrokeAlign?, cornerRadius: Double?, rectangleCornerRadii: [Double]?, transitionDuration: Double?, transitionEasing: EasingType?, opacity: Double?, absoluteBoundingBox: Rectangle?, absoluteRenderBounds: Rectangle?, paddingLeft: Double?, paddingRight: Double?, paddingTop: Double?, paddingBottom: Double?, effects: [Effect]?, styles: [StyleTypeMapKey: String]?, characters: String?, style: TypeStyle?) {
 		self.id = id
 		self.name = name
 		self.visible = visible
@@ -243,8 +310,10 @@ public struct Node: Codable {
 		self.paddingRight = paddingRight
 		self.paddingTop = paddingTop
 		self.paddingBottom = paddingBottom
+		self.effects = effects
 		self.styles = styles
 		self.characters = characters
+		self.style = style
 	}
 }
 
@@ -287,16 +356,5 @@ public struct File: Codable {
 		self.name = name
 		self.schemaVersion = schemaVersion
 		self.version = version
-	}
-}
-
-/// [Figma documentation](https://www.figma.com/developers/api#vector-type)
-public struct Vector: Codable {
-	public let x: Double
-	public let y: Double
-
-	public init(x: Double, y: Double) {
-		self.x = x
-		self.y = y
 	}
 }
