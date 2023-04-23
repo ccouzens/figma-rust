@@ -75,11 +75,13 @@ fn inline_css(node: &Node, body: Option<&Node>) -> Result<Option<String>> {
         ("font-family".into(), node.font_family()),
         ("font-size".into(), node.font_size()),
         ("font-weight".into(), node.font_weight()),
+        ("height".into(), node.height()),
         ("line-height".into(), node.line_height()),
         ("padding".into(), node.padding()),
         ("opacity".into(), CssProperties::opacity(node)),
         ("outline".into(), node.outline()),
         ("outline-offset".into(), node.outline_offset()),
+        ("width".into(), node.width()),
     ];
 
     if let (
@@ -117,20 +119,37 @@ fn inline_css(node: &Node, body: Option<&Node>) -> Result<Option<String>> {
 }
 
 fn node_to_html(node: &Node, body: &Node) -> String {
-    html! {
-        div(
-            style?=inline_css(node, Some(body)).unwrap_or_default(),
-            data-figma-name=&node.name,
-            data-figma-id=&node.id
-        )    {
-            @ for child in node.children().iter().filter(|c| c.visible()) {
-            : horrorshow::Raw(node_to_html(child, body))
+    match node.r#type {
+        NodeType::Vector => html! {
+            svg(
+                style?=inline_css(node, Some(body)).unwrap_or_default(),
+                data-figma-name=&node.name,
+                data-figma-id=&node.id,
+                viewBox="0 0 100 100"
+            ) {
+                text(
+                    y=".9em",
+                    font-size="90"
+                ) {
+                    : "👻"
+                }
+            }
         }
-        : &node.characters.as_deref().unwrap_or_default()
+        .to_string(),
+        _ => html! {
+            div(
+                style?=inline_css(node, Some(body)).unwrap_or_default(),
+                data-figma-name=&node.name,
+                data-figma-id=&node.id
+            ) {
+                @ for child in node.children().iter().filter(|c| c.visible()) {
+                    : horrorshow::Raw(node_to_html(child, body))
+                }
+                : &node.characters.as_deref().unwrap_or_default();
+            }
+        }
+        .to_string(),
     }
-
-    }
-    .to_string()
 }
 
 struct RenderProps<'a> {

@@ -8,6 +8,7 @@ pub trait CssProperties {
     fn border_radius(&self) -> Option<String>;
     fn box_shadow(&self) -> Option<String>;
     fn color(&self) -> Option<String>;
+    fn height(&self) -> Option<String>;
     fn line_height(&self) -> Option<String>;
     fn font_family(&self) -> Option<String>;
     fn font_size(&self) -> Option<String>;
@@ -16,6 +17,7 @@ pub trait CssProperties {
     fn outline(&self) -> Option<String>;
     fn outline_offset(&self) -> Option<String>;
     fn padding(&self) -> Option<String>;
+    fn width(&self) -> Option<String>;
 }
 
 fn fills_color(node: &Node) -> Option<String> {
@@ -38,13 +40,13 @@ fn stroke_color(node: &Node) -> Option<String> {
 
 impl CssProperties for Node {
     fn background(&self) -> Option<String> {
-        if self.r#type == NodeType::Text {
-            return None;
+        match self.r#type {
+            NodeType::Text | NodeType::Vector => None,
+            _ => fills_color(self).or_else(|| {
+                self.background_color()
+                    .and_then(|c| c.to_option_rgb_string())
+            }),
         }
-        fills_color(self).or_else(|| {
-            self.background_color()
-                .and_then(|c| c.to_option_rgb_string())
-        })
     }
 
     fn border_radius(&self) -> Option<String> {
@@ -78,17 +80,20 @@ impl CssProperties for Node {
     }
 
     fn color(&self) -> Option<String> {
-        if self.r#type != NodeType::Text {
-            return None;
+        match self.r#type {
+            NodeType::Text | NodeType::Vector => fills_color(self),
+            _ => None,
         }
-        fills_color(self)
     }
 
-    fn line_height(&self) -> Option<String> {
-        self.style
-            .as_ref()
-            .map(|s| s.line_height_px)
-            .map(|lh| format!("{lh}px"))
+    fn height(&self) -> Option<String> {
+        match self.r#type {
+            NodeType::Vector => self
+                .absolute_bounding_box()
+                .and_then(|b| b.height)
+                .map(|h| format!("{h}px")),
+            _ => None,
+        }
     }
 
     fn font_family(&self) -> Option<String> {
@@ -107,6 +112,11 @@ impl CssProperties for Node {
             .as_ref()
             .map(|s| s.font_weight)
             .map(|fw| format!("{fw}"))
+    }
+
+    fn line_height(&self) -> Option<String> {
+        let lh = self.style.as_ref().map(|s| s.line_height_px).unwrap_or(0.0);
+        Some(format!("{lh}px"))
     }
 
     fn padding(&self) -> Option<String> {
@@ -148,6 +158,16 @@ impl CssProperties for Node {
             StrokeAlign::Inside => Some(format!("-{width}px")),
             StrokeAlign::Outside => None,
             StrokeAlign::Center => Some(format!("-{}px", width / 2.0)),
+        }
+    }
+
+    fn width(&self) -> Option<String> {
+        match self.r#type {
+            NodeType::Vector => self
+                .absolute_bounding_box()
+                .and_then(|b| b.width)
+                .map(|w| format!("{w}px")),
+            _ => None,
         }
     }
 }
