@@ -71,6 +71,7 @@ fn inline_css(node: &Node, body: Option<&Node>) -> Result<Option<String>> {
 
     let mut css: Vec<(String, Option<String>)> = vec![
         ("background".into(), node.background()),
+        ("border-radius".into(), node.border_radius()),
         ("color".into(), node.color()),
         ("font-family".into(), node.font_family()),
         ("font-size".into(), node.font_size()),
