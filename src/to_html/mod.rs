@@ -129,7 +129,7 @@ fn node_to_html(node: &Node, body: &Node) -> String {
             data-figma-name=&node.name,
             data-figma-id=&node.id
         )    {
-            @ for child in node.children().iter() {
+            @ for child in node.children().iter().filter(|c| c.visible()) {
             : horrorshow::Raw(node_to_html(child, body))
         }
         : &node.characters.as_deref().unwrap_or_default()
