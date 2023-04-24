@@ -63,12 +63,14 @@ impl CssProperties for Node {
                 .iter()
                 .filter(|e| e.r#type == EffectType::InnerShadow)
                 .filter(|e| e.visible)
-                .map(|e| {
-                    let x_offset = e.offset.x;
-                    let y_offset = e.offset.y;
+                .filter_map(|e| {
+                    let x_offset = e.offset.as_ref()?.x;
+                    let y_offset = e.offset.as_ref()?.y;
                     let spread = e.spread();
-                    let color = e.color.to_rgb_string();
-                    format!("inset {x_offset}px {y_offset}px {spread}px {color}")
+                    let color = e.color.as_ref().and_then(|c| c.to_option_rgb_string())?;
+                    Some(format!(
+                        "inset {x_offset}px {y_offset}px {spread}px {color}"
+                    ))
                 }),
             ", ",
         );

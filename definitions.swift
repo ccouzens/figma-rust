@@ -59,13 +59,13 @@ public struct Effect: Codable {
 	/// Is the effect active?
 	public let visible: Bool
 	/// The color of the shadow
-	public let color: Color
+	public let color: Color?
 	/// How far the shadow is projected in the x and y directions
-	public let offset: Vector
+	public let offset: Vector?
 	/// How far the shadow spreads
 	public let spread: Double?
 
-	public init(type: EffectType, visible: Bool, color: Color, offset: Vector, spread: Double?) {
+	public init(type: EffectType, visible: Bool, color: Color?, offset: Vector?, spread: Double?) {
 		self.type = type
 		self.visible = visible
 		self.color = color

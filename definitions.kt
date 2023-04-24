@@ -44,9 +44,9 @@ data class Effect (
 	/// Is the effect active?
 	val visible: Boolean,
 	/// The color of the shadow
-	val color: Color,
+	val color: Color? = null,
 	/// How far the shadow is projected in the x and y directions
-	val offset: Vector,
+	val offset: Vector? = null,
 	/// How far the shadow spreads
 	val spread: Double? = null
 )

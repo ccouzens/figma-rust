@@ -24,9 +24,11 @@ pub struct Effect {
     /// Is the effect active?
     pub visible: bool,
     /// The color of the shadow
-    pub color: Color,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub color: Option<Color>,
     /// How far the shadow is projected in the x and y directions
-    pub offset: Vector,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub offset: Option<Vector>,
     /// How far the shadow spreads
     #[serde(skip_serializing_if = "Option::is_none")]
     pub spread: Option<f64>,

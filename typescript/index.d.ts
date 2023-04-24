@@ -41,9 +41,9 @@ export interface Effect {
 	/** Is the effect active? */
 	visible: boolean;
 	/** The color of the shadow */
-	color: Color;
+	color?: Color;
 	/** How far the shadow is projected in the x and y directions */
-	offset: Vector;
+	offset?: Vector;
 	/** How far the shadow spreads */
 	spread?: number;
 }
