@@ -212,6 +212,7 @@ pub enum NodeType {
     Sticky,
     ShapeWithText,
     Connector,
+    Section,
 }
 
 pub struct NodeDepthFirstStackIterator<'a> {

@@ -69,6 +69,7 @@ export enum NodeType {
 	Sticky = "STICKY",
 	ShapeWithText = "SHAPE_WITH_TEXT",
 	Connector = "CONNECTOR",
+	Section = "SECTION",
 }
 
 export enum PaintType {

@@ -95,6 +95,7 @@ public enum NodeType: String, Codable {
 	case sticky = "STICKY"
 	case shapeWithText = "SHAPE_WITH_TEXT"
 	case connector = "CONNECTOR"
+	case section = "SECTION"
 }
 
 public enum PaintType: String, Codable {

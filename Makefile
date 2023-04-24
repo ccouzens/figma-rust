@@ -3,12 +3,13 @@
 example-figma-files = \
 example-figma-files/design-tokens-for-figma.json \
 example-figma-files/gov-uk-design-system.json \
-example-figma-files/gov-uk-design-system-button.json
+example-figma-files/gov-uk-design-system-components/button.json \
+example-figma-files/gov-uk-design-system-components/button.svg
 
 example-output-files = \
 src/design_tokens/example-output.json \
 src/typescript_props/example-output.ts \
-src/to_html/example-output.html
+example-figma-files/gov-uk-design-system-components/button.html
 
 definition-files = \
 definitions.kt \
@@ -23,11 +24,16 @@ example-figma-files/design-tokens-for-figma.json :
 # My unchanged copy of https://www.figma.com/community/file/946837271092540314
 example-figma-files/gov-uk-design-system.json :
 	curl -sH "X-Figma-Token: ${FIGMA_TOKEN}" \
-	'https://api.figma.com/v1/files/x0ptBZeKChJWD4rOaOf4fs' \
+	'https://api.figma.com/v1/files/JFMsvJ0Q5v1daC6pySgvfZ' \
         | jq > $@
 
-example-figma-files/gov-uk-design-system-button.json : example-figma-files/gov-uk-design-system.json
+example-figma-files/gov-uk-design-system-components/button.json : example-figma-files/gov-uk-design-system.json
 	jq '.document.children[] | select(.name == "🗝️  Styles and Components").children[] | select(.name == "Button")' < $< > $@
+
+example-figma-files/gov-uk-design-system-components/button.svg :
+	curl $$(curl -sH "X-Figma-Token: ${FIGMA_TOKEN}" \
+	'https://api.figma.com/v1/images/JFMsvJ0Q5v1daC6pySgvfZ?ids=213:6&format=svg&svg_include_id=true' \
+        | jq '.images["213:6"]' -r) > $@
 
 src/design_tokens/example-output.json : example-figma-files/design-tokens-for-figma.json
 	cargo run --release -- design-tokens < $< > $@
@@ -35,7 +41,7 @@ src/design_tokens/example-output.json : example-figma-files/design-tokens-for-fi
 src/typescript_props/example-output.ts : example-figma-files/gov-uk-design-system.json
 	cargo run --release -- typescript-props < $< > $@
 
-src/to_html/example-output.html : example-figma-files/gov-uk-design-system.json
+example-figma-files/gov-uk-design-system-components/button.html : example-figma-files/gov-uk-design-system.json
 	cargo run --release -- to-html 213:6 < $< | npx prettier@2.8.4 --parser html > $@
 
 definitions.kt :

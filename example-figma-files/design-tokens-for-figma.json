@@ -4622,6 +4622,10 @@
                 "paddingRight": 10.0,
                 "paddingTop": 10.0,
                 "paddingBottom": 10.0,
+                "strokeDashes": [
+                  10.0,
+                  10.0
+                ],
                 "effects": []
               },
               {
@@ -4844,6 +4848,10 @@
                   "b": 0.0,
                   "a": 0.0
                 },
+                "strokeDashes": [
+                  10.0,
+                  10.0
+                ],
                 "effects": []
               },
               {
@@ -5510,6 +5518,10 @@
                   "b": 0.0,
                   "a": 0.0
                 },
+                "strokeDashes": [
+                  10.0,
+                  5.0
+                ],
                 "effects": []
               }
             ],
@@ -6941,6 +6953,10 @@
                 "paddingRight": 10.0,
                 "paddingTop": 10.0,
                 "paddingBottom": 10.0,
+                "strokeDashes": [
+                  5.0,
+                  5.0
+                ],
                 "effects": []
               },
               {
@@ -7079,6 +7095,10 @@
                 "paddingRight": 20.0,
                 "paddingTop": 10.0,
                 "paddingBottom": 30.0,
+                "strokeDashes": [
+                  5.0,
+                  5.0
+                ],
                 "effects": []
               },
               {
@@ -7214,6 +7234,10 @@
                 },
                 "layoutMode": "VERTICAL",
                 "paddingTop": 10.0,
+                "strokeDashes": [
+                  5.0,
+                  5.0
+                ],
                 "effects": []
               },
               {
@@ -8906,7 +8930,8 @@
                   "a": 1.0
                 },
                 "styles": {
-                  "fills": "7361:2"
+                  "fills": "7361:2",
+                  "fill": "7361:2"
                 },
                 "effects": [
                   {
@@ -9810,6 +9835,12 @@
                   "b": 0.0,
                   "a": 0.0
                 },
+                "strokeDashes": [
+                  5.0,
+                  5.0,
+                  3.0,
+                  3.0
+                ],
                 "effects": []
               },
               {
@@ -9859,7 +9890,8 @@
                   "a": 0.0
                 },
                 "styles": {
-                  "strokes": "38:3"
+                  "strokes": "38:3",
+                  "stroke": "38:3"
                 },
                 "effects": []
               },
@@ -10740,6 +10772,10 @@
                   "b": 0.0,
                   "a": 0.0
                 },
+                "strokeDashes": [
+                  10.0,
+                  5.0
+                ],
                 "effects": []
               }
             ],
@@ -11028,7 +11064,8 @@
                   "a": 1.0
                 },
                 "styles": {
-                  "fills": "7361:2"
+                  "fills": "7361:2",
+                  "fill": "7361:2"
                 },
                 "effects": [
                   {
@@ -13224,7 +13261,8 @@
                   "a": 1.0
                 },
                 "styles": {
-                  "fills": "231:81"
+                  "fills": "231:81",
+                  "fill": "231:81"
                 },
                 "effects": []
               },
@@ -13545,7 +13583,8 @@
                   "a": 1.0
                 },
                 "styles": {
-                  "fills": "233:2"
+                  "fills": "233:2",
+                  "fill": "233:2"
                 },
                 "effects": [],
                 "componentId": "45:2",
@@ -13618,7 +13657,8 @@
                   "a": 1.0
                 },
                 "styles": {
-                  "fills": "231:81"
+                  "fills": "231:81",
+                  "fill": "231:81"
                 },
                 "effects": []
               },
@@ -13680,7 +13720,8 @@
                   "a": 1.0
                 },
                 "styles": {
-                  "fills": "233:2"
+                  "fills": "233:2",
+                  "fill": "233:2"
                 },
                 "effects": [],
                 "componentId": "45:2",
@@ -14584,7 +14625,8 @@
                   "a": 1.0
                 },
                 "styles": {
-                  "fills": "38:3"
+                  "fills": "38:3",
+                  "fill": "38:3"
                 },
                 "layoutMode": "VERTICAL",
                 "itemSpacing": 10.0,
@@ -14725,7 +14767,8 @@
                   "a": 1.0
                 },
                 "styles": {
-                  "fills": "38:3"
+                  "fills": "38:3",
+                  "fill": "38:3"
                 },
                 "layoutMode": "VERTICAL",
                 "itemSpacing": 10.0,
@@ -14866,7 +14909,8 @@
                   "a": 1.0
                 },
                 "styles": {
-                  "fills": "38:3"
+                  "fills": "38:3",
+                  "fill": "38:3"
                 },
                 "layoutMode": "VERTICAL",
                 "itemSpacing": 10.0,
@@ -15007,7 +15051,8 @@
                   "a": 1.0
                 },
                 "styles": {
-                  "fills": "38:3"
+                  "fills": "38:3",
+                  "fill": "38:3"
                 },
                 "layoutMode": "VERTICAL",
                 "itemSpacing": 10.0,
@@ -15149,7 +15194,8 @@
                   "a": 1.0
                 },
                 "styles": {
-                  "fills": "38:3"
+                  "fills": "38:3",
+                  "fill": "38:3"
                 },
                 "layoutMode": "VERTICAL",
                 "itemSpacing": 10.0,
@@ -15291,7 +15337,8 @@
                   "a": 1.0
                 },
                 "styles": {
-                  "fills": "38:3"
+                  "fills": "38:3",
+                  "fill": "38:3"
                 },
                 "layoutMode": "VERTICAL",
                 "itemSpacing": 10.0,
@@ -15433,7 +15480,8 @@
                   "a": 1.0
                 },
                 "styles": {
-                  "fills": "233:2"
+                  "fills": "233:2",
+                  "fill": "233:2"
                 },
                 "layoutMode": "VERTICAL",
                 "itemSpacing": 10.0,
@@ -15574,7 +15622,8 @@
                   "a": 1.0
                 },
                 "styles": {
-                  "fills": "233:2"
+                  "fills": "233:2",
+                  "fill": "233:2"
                 },
                 "layoutMode": "VERTICAL",
                 "itemSpacing": 10.0,
@@ -15737,7 +15786,8 @@
               "a": 1.0
             },
             "styles": {
-              "fills": "233:2"
+              "fills": "233:2",
+              "fill": "233:2"
             },
             "effects": []
           }
@@ -16218,7 +16268,7 @@
   },
   "name": "Design Tokens for Figma",
   "lastModified": "2023-03-15T16:02:52Z",
-  "thumbnailUrl": "https://s3-alpha.figma.com/thumbnails/df199dfe-4a44-4f26-a913-eca3c9133a0f?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWCZNNUQCOE%2F20230413%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230413T000000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=3cbef37686f3f53b8703521119cd99d94c4cab6f9b9da41ef9540ccf6aa72e98",
+  "thumbnailUrl": "https://s3-alpha.figma.com/thumbnails/df199dfe-4a44-4f26-a913-eca3c9133a0f?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWCSFI5A2UI%2F20230423%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230423T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=8689a77a44a4413d394b959be7a948c94a420e9326a5dbef0b45afbb299ba91b",
   "version": "3172855371",
   "role": "viewer",
   "editorType": "figma",

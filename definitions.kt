@@ -92,6 +92,8 @@ enum class NodeType(val string: String) {
 	ShapeWithText("SHAPE_WITH_TEXT"),
 	@SerialName("CONNECTOR")
 	Connector("CONNECTOR"),
+	@SerialName("SECTION")
+	Section("SECTION"),
 }
 
 @Serializable
