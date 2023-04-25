@@ -169,6 +169,12 @@ export interface Rectangle {
 	height?: number;
 }
 
+export enum LayoutMode {
+	None = "NONE",
+	Horizontal = "HORIZONTAL",
+	Vertical = "VERTICAL",
+}
+
 export enum StyleTypeMapKey {
 	Fill = "fill",
 	Fills = "fills",
@@ -231,6 +237,10 @@ export interface Node {
 	absoluteBoundingBox?: Rectangle;
 	/** The bounds of the rendered node in the file in absolute space coordinates */
 	absoluteRenderBounds?: Rectangle;
+	/** The distance between children of the frame. Can be negative. This property is only applicable for auto-layout frames. */
+	itemSpacing?: number;
+	/** Whether this layer uses auto-layout to position its children. */
+	layoutMode?: LayoutMode;
 	/** The padding between the left border of the frame and its children. This property is only applicable for auto-layout frames. */
 	paddingLeft?: number;
 	/** The padding between the right border of the frame and its children. This property is only applicable for auto-layout frames. */

@@ -235,6 +235,16 @@ data class Rectangle (
 )
 
 @Serializable
+enum class LayoutMode(val string: String) {
+	@SerialName("NONE")
+	None("NONE"),
+	@SerialName("HORIZONTAL")
+	Horizontal("HORIZONTAL"),
+	@SerialName("VERTICAL")
+	Vertical("VERTICAL"),
+}
+
+@Serializable
 enum class StyleTypeMapKey(val string: String) {
 	@SerialName("fill")
 	Fill("fill"),
@@ -304,6 +314,10 @@ data class Node (
 	val absoluteBoundingBox: Rectangle? = null,
 	/// The bounds of the rendered node in the file in absolute space coordinates
 	val absoluteRenderBounds: Rectangle? = null,
+	/// The distance between children of the frame. Can be negative. This property is only applicable for auto-layout frames.
+	val itemSpacing: Double? = null,
+	/// Whether this layer uses auto-layout to position its children.
+	val layoutMode: LayoutMode? = null,
 	/// The padding between the left border of the frame and its children. This property is only applicable for auto-layout frames.
 	val paddingLeft: Double? = null,
 	/// The padding between the right border of the frame and its children. This property is only applicable for auto-layout frames.

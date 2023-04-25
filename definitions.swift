@@ -205,6 +205,12 @@ public struct Rectangle: Codable {
 	}
 }
 
+public enum LayoutMode: String, Codable {
+	case none = "NONE"
+	case horizontal = "HORIZONTAL"
+	case vertical = "VERTICAL"
+}
+
 public enum StyleTypeMapKey: String, Codable {
 	case fill
 	case fills
@@ -272,6 +278,10 @@ public struct Node: Codable {
 	public let absoluteBoundingBox: Rectangle?
 	/// The bounds of the rendered node in the file in absolute space coordinates
 	public let absoluteRenderBounds: Rectangle?
+	/// The distance between children of the frame. Can be negative. This property is only applicable for auto-layout frames.
+	public let itemSpacing: Double?
+	/// Whether this layer uses auto-layout to position its children.
+	public let layoutMode: LayoutMode?
 	/// The padding between the left border of the frame and its children. This property is only applicable for auto-layout frames.
 	public let paddingLeft: Double?
 	/// The padding between the right border of the frame and its children. This property is only applicable for auto-layout frames.
@@ -289,7 +299,7 @@ public struct Node: Codable {
 	/// Style of text including font family and weight
 	public let style: TypeStyle?
 
-	public init(id: String, name: String, visible: Bool?, type: NodeType, children: [Node]?, backgroundColor: Color?, fills: [Paint]?, strokes: [Paint]?, strokeWeight: Double?, strokeAlign: StrokeAlign?, cornerRadius: Double?, rectangleCornerRadii: [Double]?, transitionDuration: Double?, transitionEasing: EasingType?, opacity: Double?, absoluteBoundingBox: Rectangle?, absoluteRenderBounds: Rectangle?, paddingLeft: Double?, paddingRight: Double?, paddingTop: Double?, paddingBottom: Double?, effects: [Effect]?, styles: [StyleTypeMapKey: String]?, characters: String?, style: TypeStyle?) {
+	public init(id: String, name: String, visible: Bool?, type: NodeType, children: [Node]?, backgroundColor: Color?, fills: [Paint]?, strokes: [Paint]?, strokeWeight: Double?, strokeAlign: StrokeAlign?, cornerRadius: Double?, rectangleCornerRadii: [Double]?, transitionDuration: Double?, transitionEasing: EasingType?, opacity: Double?, absoluteBoundingBox: Rectangle?, absoluteRenderBounds: Rectangle?, itemSpacing: Double?, layoutMode: LayoutMode?, paddingLeft: Double?, paddingRight: Double?, paddingTop: Double?, paddingBottom: Double?, effects: [Effect]?, styles: [StyleTypeMapKey: String]?, characters: String?, style: TypeStyle?) {
 		self.id = id
 		self.name = name
 		self.visible = visible
@@ -307,6 +317,8 @@ public struct Node: Codable {
 		self.opacity = opacity
 		self.absoluteBoundingBox = absoluteBoundingBox
 		self.absoluteRenderBounds = absoluteRenderBounds
+		self.itemSpacing = itemSpacing
+		self.layoutMode = layoutMode
 		self.paddingLeft = paddingLeft
 		self.paddingRight = paddingRight
 		self.paddingTop = paddingTop
