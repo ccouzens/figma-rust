@@ -36,7 +36,7 @@ fn fills_color(node: &Node) -> Option<String> {
 fn stroke_color(node: &Node) -> Option<String> {
     node.strokes()
         .iter()
-        .filter(|p| p.visible())
+        .filter(|p| p.visible() && p.opacity() != 0.0)
         .flat_map(|stroke| stroke.color())
         .flat_map(|color| color.to_option_rgb_string())
         .next()
