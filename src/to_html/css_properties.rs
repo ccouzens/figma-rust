@@ -10,6 +10,7 @@ pub trait CssProperties {
     fn color(&self) -> Option<String>;
     fn display(&self) -> Option<String>;
     fn fill(&self) -> Option<String>;
+    fn flex_direction(&self) -> Option<String>;
     fn font_family(&self) -> Option<String>;
     fn font_size(&self) -> Option<String>;
     fn font_weight(&self) -> Option<String>;
@@ -94,6 +95,14 @@ impl CssProperties for Node {
     fn display(&self) -> Option<String> {
         match self.layout_mode {
             Some(LayoutMode::Horizontal) | Some(LayoutMode::Vertical) => Some("flex".into()),
+            _ => None,
+        }
+    }
+
+    fn flex_direction(&self) -> Option<String> {
+        match self.layout_mode {
+            Some(LayoutMode::Horizontal) => Some("row".into()),
+            Some(LayoutMode::Vertical) => Some("column".into()),
             _ => None,
         }
     }

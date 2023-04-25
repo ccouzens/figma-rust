@@ -74,6 +74,7 @@ fn inline_css(node: &Node, body: Option<&Node>) -> Result<Option<String>> {
         ("color".into(), node.color()),
         ("display".into(), node.display()),
         ("fill".into(), node.fill()),
+        ("flex-direction".into(), node.flex_direction()),
         ("font-family".into(), node.font_family()),
         ("font-size".into(), node.font_size()),
         ("font-weight".into(), node.font_weight()),
