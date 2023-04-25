@@ -1,4 +1,4 @@
-use crate::figma_api::{EffectType, Node, NodeType, StrokeAlign};
+use crate::figma_api::{EffectType, LayoutMode, Node, NodeType, StrokeAlign};
 
 /// Get values for given CSS properties
 ///
@@ -8,15 +8,17 @@ pub trait CssProperties {
     fn border_radius(&self) -> Option<String>;
     fn box_shadow(&self) -> Option<String>;
     fn color(&self) -> Option<String>;
+    fn display(&self) -> Option<String>;
     fn fill(&self) -> Option<String>;
-    fn height(&self) -> Option<String>;
-    fn line_height(&self) -> Option<String>;
     fn font_family(&self) -> Option<String>;
     fn font_size(&self) -> Option<String>;
     fn font_weight(&self) -> Option<String>;
+    fn gap(&self) -> Option<String>;
+    fn height(&self) -> Option<String>;
+    fn line_height(&self) -> Option<String>;
     fn opacity(&self) -> Option<String>;
-    fn outline(&self) -> Option<String>;
     fn outline_offset(&self) -> Option<String>;
+    fn outline(&self) -> Option<String>;
     fn padding(&self) -> Option<String>;
     fn width(&self) -> Option<String>;
 }
@@ -89,6 +91,13 @@ impl CssProperties for Node {
         }
     }
 
+    fn display(&self) -> Option<String> {
+        match self.layout_mode {
+            Some(LayoutMode::Horizontal) | Some(LayoutMode::Vertical) => Some("flex".into()),
+            _ => None,
+        }
+    }
+
     fn fill(&self) -> Option<String> {
         match self.r#type {
             NodeType::Vector => fills_color(self),
@@ -112,6 +121,15 @@ impl CssProperties for Node {
             .as_ref()
             .map(|s| s.font_weight)
             .map(|fw| format!("{fw}"))
+    }
+
+    fn gap(&self) -> Option<String> {
+        let item_spacing = self.item_spacing?;
+        if item_spacing == 0.0 {
+            None
+        } else {
+            Some(format!("{item_spacing}px"))
+        }
     }
 
     fn height(&self) -> Option<String> {

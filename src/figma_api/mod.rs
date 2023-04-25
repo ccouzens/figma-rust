@@ -17,7 +17,7 @@ pub use self::{
     easing_type::EasingType,
     effect::{Effect, EffectType},
     file::File,
-    node::{Node, NodeType, StrokeAlign},
+    node::{LayoutMode, Node, NodeType, StrokeAlign},
     paint::Paint,
     rectangle::Rectangle,
     style::{Style, StyleType},

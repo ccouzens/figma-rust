@@ -27,6 +27,15 @@ pub enum StrokeAlign {
     Center,
 }
 
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+#[typeshare::typeshare]
+pub enum LayoutMode {
+    None,
+    Horizontal,
+    Vertical,
+}
+
 /// [Figma documentation](https://www.figma.com/developers/api#node-types)
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -80,6 +89,12 @@ pub struct Node {
     /// The bounds of the rendered node in the file in absolute space coordinates
     #[serde(skip_serializing_if = "Option::is_none")]
     absolute_render_bounds: Option<Rectangle>,
+    /// The distance between children of the frame. Can be negative. This property is only applicable for auto-layout frames.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub item_spacing: Option<f64>,
+    /// Whether this layer uses auto-layout to position its children.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub layout_mode: Option<LayoutMode>,
     /// The padding between the left border of the frame and its children. This property is only applicable for auto-layout frames.
     #[serde(skip_serializing_if = "Option::is_none")]
     padding_left: Option<f64>,
