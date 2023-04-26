@@ -93,11 +93,15 @@ fn inline_css(node: &Node, body: Option<&Node>) -> Result<Option<String>> {
     if let (
         Some(component_offset_top),
         Some(component_offset_left),
+        Some(component_height),
+        Some(component_width),
         Some(body_offset_top),
         Some(body_offset_left),
     ) = (
         node.absolute_bounding_box().and_then(|bb| bb.y),
         node.absolute_bounding_box().and_then(|bb| bb.x),
+        node.absolute_bounding_box().and_then(|bb| bb.height),
+        node.absolute_bounding_box().and_then(|bb| bb.width),
         body_absolute_bounding_box.and_then(|b| b.y),
         body_absolute_bounding_box.and_then(|b| b.x),
     ) {
@@ -112,6 +116,8 @@ fn inline_css(node: &Node, body: Option<&Node>) -> Result<Option<String>> {
                     "left".into(),
                     Some(format!("{}px", component_offset_left - body_offset_left)),
                 ),
+                ("max-width".into(), Some(format!("{component_width}px"))),
+                ("max-height".into(), Some(format!("{component_height}px"))),
             ]);
         }
     }
