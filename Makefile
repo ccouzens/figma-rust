@@ -86,19 +86,29 @@ src/typescript_props/example-output.ts : example-figma-files/gov-uk-design-syste
 	cargo run --release -- typescript-props < $< > $@
 
 example-figma-files/gov-uk-design-system-components/button.html : example-figma-files/gov-uk-design-system.json
-	cargo run --release -- to-html 213:6 < $< | npx prettier@2.8.4 --parser html > $@
+	cargo run --release -- to-html 213:6 < $< \
+		| sed 's/font-family: GDS Transport Website;/font-family: GDS Transport Website,arial,sans-serif;/g' \
+		| npx prettier@2.8.4 --parser html > $@
 
 example-figma-files/gov-uk-design-system-components/cookie-banner.html : example-figma-files/gov-uk-design-system.json
-	cargo run --release -- to-html 18330:13859 < $< | npx prettier@2.8.4 --parser html > $@
+	cargo run --release -- to-html 18330:13859 < $< \
+		| sed 's/font-family: GDS Transport Website;/font-family: GDS Transport Website,arial,sans-serif;/g' \
+		| npx prettier@2.8.4 --parser html > $@
 
 example-figma-files/gov-uk-design-system-components/footer.html : example-figma-files/gov-uk-design-system.json
-	cargo run --release -- to-html 19792:14489 < $< | npx prettier@2.8.4 --parser html > $@
+	cargo run --release -- to-html 19792:14489 < $< \
+		| sed 's/font-family: GDS Transport Website;/font-family: GDS Transport Website,arial,sans-serif;/g' \
+		| npx prettier@2.8.4 --parser html > $@
 
 example-figma-files/gov-uk-design-system-components/header.html : example-figma-files/gov-uk-design-system.json
-	cargo run --release -- to-html 20226:12488 < $< | npx prettier@2.8.4 --parser html > $@
+	cargo run --release -- to-html 20226:12488 < $< \
+		| sed 's/font-family: GDS Transport Website;/font-family: GDS Transport Website,arial,sans-serif;/g' \
+		| npx prettier@2.8.4 --parser html > $@
 
 example-figma-files/gov-uk-design-system-components/tag.html : example-figma-files/gov-uk-design-system.json
-	cargo run --release -- to-html 147:17 < $< | npx prettier@2.8.4 --parser html > $@
+	cargo run --release -- to-html 147:17 < $< \
+		| sed 's/font-family: GDS Transport Website;/font-family: GDS Transport Website,arial,sans-serif;/g' \
+		| npx prettier@2.8.4 --parser html > $@
 
 definitions.kt :
 	typeshare . --lang=kotlin --output-file=$@
