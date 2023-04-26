@@ -1,0 +1,2278 @@
+{
+  "id": "18330:13859",
+  "name": "Cookie banner",
+  "type": "COMPONENT_SET",
+  "scrollBehavior": "SCROLLS",
+  "componentPropertyDefinitions": {
+    "Service#20073:0": {
+      "type": "TEXT",
+      "defaultValue": "Cookies on [name of service]"
+    }
+  },
+  "blendMode": "PASS_THROUGH",
+  "children": [
+    {
+      "id": "18330:13858",
+      "name": "Responded=False",
+      "type": "COMPONENT",
+      "scrollBehavior": "SCROLLS",
+      "blendMode": "PASS_THROUGH",
+      "children": [
+        {
+          "id": "18330:13824",
+          "name": "Container",
+          "type": "FRAME",
+          "scrollBehavior": "SCROLLS",
+          "blendMode": "PASS_THROUGH",
+          "children": [
+            {
+              "id": "18330:13825",
+              "name": "Content: Heading",
+              "type": "TEXT",
+              "scrollBehavior": "SCROLLS",
+              "componentPropertyReferences": {
+                "characters": "Service#20073:0"
+              },
+              "blendMode": "PASS_THROUGH",
+              "absoluteBoundingBox": {
+                "x": 10131.0,
+                "y": 2951.0,
+                "width": 630.0,
+                "height": 30.0
+              },
+              "absoluteRenderBounds": {
+                "x": 10131.91406250,
+                "y": 2955.21093750,
+                "width": 309.5156250,
+                "height": 22.089843750
+              },
+              "constraints": {
+                "vertical": "TOP",
+                "horizontal": "LEFT"
+              },
+              "layoutAlign": "INHERIT",
+              "layoutGrow": 0.0,
+              "fills": [
+                {
+                  "blendMode": "NORMAL",
+                  "type": "SOLID",
+                  "color": {
+                    "r": 0.043137256056070328,
+                    "g": 0.047058824449777603,
+                    "b": 0.047058824449777603,
+                    "a": 1.0
+                  }
+                }
+              ],
+              "strokes": [],
+              "strokeWeight": 1.0,
+              "strokeAlign": "OUTSIDE",
+              "styles": {
+                "fill": "20:18",
+                "text": "20:36"
+              },
+              "effects": [],
+              "characters": "Cookies on [name of service]",
+              "style": {
+                "fontFamily": "GDS Transport Website",
+                "fontPostScriptName": "GDSTransportWebsite-Bold",
+                "fontWeight": 700,
+                "textAutoResize": "HEIGHT",
+                "fontSize": 24.0,
+                "textAlignHorizontal": "LEFT",
+                "textAlignVertical": "TOP",
+                "letterSpacing": 0.0,
+                "lineHeightPx": 30.0,
+                "lineHeightPercent": 89.698669433593750,
+                "lineHeightPercentFontSize": 125.0,
+                "lineHeightUnit": "PIXELS"
+              },
+              "layoutVersion": 3,
+              "characterStyleOverrides": [],
+              "styleOverrideTable": {},
+              "lineTypes": [
+                "NONE"
+              ],
+              "lineIndentations": [
+                0
+              ]
+            },
+            {
+              "id": "18330:13826",
+              "name": "Body: Container",
+              "type": "FRAME",
+              "scrollBehavior": "SCROLLS",
+              "blendMode": "PASS_THROUGH",
+              "children": [
+                {
+                  "id": "18330:13839",
+                  "name": "Content: Body",
+                  "visible": false,
+                  "type": "TEXT",
+                  "scrollBehavior": "SCROLLS",
+                  "blendMode": "PASS_THROUGH",
+                  "absoluteBoundingBox": {
+                    "x": 10131.0,
+                    "y": 3001.0,
+                    "width": 630.0,
+                    "height": 50.0
+                  },
+                  "absoluteRenderBounds": {
+                    "x": null,
+                    "y": null,
+                    "width": null,
+                    "height": null
+                  },
+                  "constraints": {
+                    "vertical": "TOP",
+                    "horizontal": "LEFT"
+                  },
+                  "layoutAlign": "STRETCH",
+                  "layoutGrow": 0.0,
+                  "fills": [
+                    {
+                      "blendMode": "NORMAL",
+                      "type": "SOLID",
+                      "color": {
+                        "r": 0.043137256056070328,
+                        "g": 0.047058824449777603,
+                        "b": 0.047058824449777603,
+                        "a": 1.0
+                      }
+                    }
+                  ],
+                  "strokes": [],
+                  "strokeWeight": 1.0,
+                  "strokeAlign": "OUTSIDE",
+                  "styles": {
+                    "fill": "20:18",
+                    "text": "22:1"
+                  },
+                  "effects": [],
+                  "characters": "You’ve accepted additional cookies. You can change your cookie settings at any time.",
+                  "style": {
+                    "fontFamily": "GDS Transport Website",
+                    "fontPostScriptName": "GDSTransportWebsite",
+                    "fontWeight": 300,
+                    "textAutoResize": "HEIGHT",
+                    "fontSize": 19.0,
+                    "textAlignHorizontal": "LEFT",
+                    "textAlignVertical": "TOP",
+                    "letterSpacing": 0.0,
+                    "lineHeightPx": 25.0,
+                    "lineHeightPercent": 95.558044433593750,
+                    "lineHeightPercentFontSize": 131.57894897460938,
+                    "lineHeightUnit": "PIXELS"
+                  },
+                  "layoutVersion": 3,
+                  "characterStyleOverrides": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2
+                  ],
+                  "styleOverrideTable": {
+                    "2": {
+                      "fontFamily": "GDS Transport Website",
+                      "fontPostScriptName": "GDSTransportWebsite",
+                      "fontWeight": 300,
+                      "textDecoration": "UNDERLINE",
+                      "fontSize": 19.0,
+                      "letterSpacing": 0.0,
+                      "fills": [
+                        {
+                          "blendMode": "NORMAL",
+                          "type": "SOLID",
+                          "color": {
+                            "r": 0.11372549086809158,
+                            "g": 0.43921568989753723,
+                            "b": 0.72156864404678345,
+                            "a": 1.0
+                          }
+                        }
+                      ],
+                      "lineHeightPx": 25.0,
+                      "lineHeightPercent": 95.558044433593750,
+                      "lineHeightPercentFontSize": 131.57894897460938,
+                      "lineHeightUnit": "PIXELS",
+                      "inheritFillStyleId": "20:20"
+                    }
+                  },
+                  "lineTypes": [
+                    "NONE"
+                  ],
+                  "lineIndentations": [
+                    0
+                  ]
+                },
+                {
+                  "id": "18330:13827",
+                  "name": "Content: Body",
+                  "type": "TEXT",
+                  "scrollBehavior": "SCROLLS",
+                  "blendMode": "PASS_THROUGH",
+                  "absoluteBoundingBox": {
+                    "x": 10131.0,
+                    "y": 3001.0,
+                    "width": 630.0,
+                    "height": 25.0
+                  },
+                  "absoluteRenderBounds": {
+                    "x": 10131.83496093750,
+                    "y": 3005.69628906250,
+                    "width": 463.80175781250,
+                    "height": 13.48925781250
+                  },
+                  "constraints": {
+                    "vertical": "TOP",
+                    "horizontal": "LEFT"
+                  },
+                  "layoutAlign": "STRETCH",
+                  "layoutGrow": 0.0,
+                  "fills": [
+                    {
+                      "blendMode": "NORMAL",
+                      "type": "SOLID",
+                      "color": {
+                        "r": 0.043137256056070328,
+                        "g": 0.047058824449777603,
+                        "b": 0.047058824449777603,
+                        "a": 1.0
+                      }
+                    }
+                  ],
+                  "strokes": [],
+                  "strokeWeight": 1.0,
+                  "strokeAlign": "OUTSIDE",
+                  "styles": {
+                    "fill": "20:18",
+                    "text": "22:1"
+                  },
+                  "effects": [],
+                  "characters": "We use some essential cookies to make this service work.",
+                  "style": {
+                    "fontFamily": "GDS Transport Website",
+                    "fontPostScriptName": "GDSTransportWebsite",
+                    "fontWeight": 300,
+                    "textAutoResize": "HEIGHT",
+                    "fontSize": 19.0,
+                    "textAlignHorizontal": "LEFT",
+                    "textAlignVertical": "TOP",
+                    "letterSpacing": 0.0,
+                    "lineHeightPx": 25.0,
+                    "lineHeightPercent": 95.558044433593750,
+                    "lineHeightPercentFontSize": 131.57894897460938,
+                    "lineHeightUnit": "PIXELS"
+                  },
+                  "layoutVersion": 3,
+                  "characterStyleOverrides": [],
+                  "styleOverrideTable": {},
+                  "lineTypes": [
+                    "NONE"
+                  ],
+                  "lineIndentations": [
+                    0
+                  ]
+                },
+                {
+                  "id": "18330:13828",
+                  "name": "Content: Body",
+                  "type": "TEXT",
+                  "scrollBehavior": "SCROLLS",
+                  "blendMode": "PASS_THROUGH",
+                  "absoluteBoundingBox": {
+                    "x": 10131.0,
+                    "y": 3046.0,
+                    "width": 630.0,
+                    "height": 50.0
+                  },
+                  "absoluteRenderBounds": {
+                    "x": 10131.83496093750,
+                    "y": 3050.5292968750,
+                    "width": 560.07324218750,
+                    "height": 41.355957031250
+                  },
+                  "constraints": {
+                    "vertical": "TOP",
+                    "horizontal": "LEFT"
+                  },
+                  "layoutAlign": "STRETCH",
+                  "layoutGrow": 0.0,
+                  "fills": [
+                    {
+                      "blendMode": "NORMAL",
+                      "type": "SOLID",
+                      "color": {
+                        "r": 0.043137256056070328,
+                        "g": 0.047058824449777603,
+                        "b": 0.047058824449777603,
+                        "a": 1.0
+                      }
+                    }
+                  ],
+                  "strokes": [],
+                  "strokeWeight": 1.0,
+                  "strokeAlign": "OUTSIDE",
+                  "styles": {
+                    "fill": "20:18",
+                    "text": "22:1"
+                  },
+                  "effects": [],
+                  "characters": "We’d like to set additional cookies so we can remember your settings, understand how people use the service and make improvements.",
+                  "style": {
+                    "fontFamily": "GDS Transport Website",
+                    "fontPostScriptName": "GDSTransportWebsite",
+                    "fontWeight": 300,
+                    "textAutoResize": "HEIGHT",
+                    "fontSize": 19.0,
+                    "textAlignHorizontal": "LEFT",
+                    "textAlignVertical": "TOP",
+                    "letterSpacing": 0.0,
+                    "lineHeightPx": 25.0,
+                    "lineHeightPercent": 95.558044433593750,
+                    "lineHeightPercentFontSize": 131.57894897460938,
+                    "lineHeightUnit": "PIXELS"
+                  },
+                  "layoutVersion": 3,
+                  "characterStyleOverrides": [],
+                  "styleOverrideTable": {},
+                  "lineTypes": [
+                    "NONE"
+                  ],
+                  "lineIndentations": [
+                    0
+                  ]
+                }
+              ],
+              "absoluteBoundingBox": {
+                "x": 10131.0,
+                "y": 3001.0,
+                "width": 630.0,
+                "height": 95.0
+              },
+              "absoluteRenderBounds": {
+                "x": 10131.0,
+                "y": 3001.0,
+                "width": 630.0,
+                "height": 95.0
+              },
+              "constraints": {
+                "vertical": "TOP",
+                "horizontal": "LEFT"
+              },
+              "layoutAlign": "INHERIT",
+              "layoutGrow": 0.0,
+              "clipsContent": false,
+              "background": [],
+              "fills": [],
+              "strokes": [],
+              "strokeWeight": 1.0,
+              "strokeAlign": "INSIDE",
+              "backgroundColor": {
+                "r": 0.0,
+                "g": 0.0,
+                "b": 0.0,
+                "a": 0.0
+              },
+              "layoutMode": "VERTICAL",
+              "counterAxisSizingMode": "FIXED",
+              "itemSpacing": 20.0,
+              "effects": []
+            },
+            {
+              "id": "18330:13829",
+              "name": "Button: Container",
+              "type": "FRAME",
+              "scrollBehavior": "SCROLLS",
+              "blendMode": "PASS_THROUGH",
+              "children": [
+                {
+                  "id": "18330:13837",
+                  "name": "Button",
+                  "visible": false,
+                  "type": "INSTANCE",
+                  "scrollBehavior": "SCROLLS",
+                  "blendMode": "PASS_THROUGH",
+                  "children": [
+                    {
+                      "id": "I18330:13837;1:9",
+                      "name": "Content: Text",
+                      "type": "TEXT",
+                      "scrollBehavior": "SCROLLS",
+                      "componentPropertyReferences": {
+                        "characters": "Content#18195:35"
+                      },
+                      "blendMode": "PASS_THROUGH",
+                      "absoluteBoundingBox": {
+                        "x": 10085.0,
+                        "y": 3124.0,
+                        "width": 175.0,
+                        "height": 25.0
+                      },
+                      "absoluteRenderBounds": {
+                        "x": null,
+                        "y": null,
+                        "width": null,
+                        "height": null
+                      },
+                      "constraints": {
+                        "vertical": "TOP",
+                        "horizontal": "LEFT"
+                      },
+                      "layoutAlign": "INHERIT",
+                      "layoutGrow": 0.0,
+                      "fills": [
+                        {
+                          "blendMode": "NORMAL",
+                          "type": "SOLID",
+                          "color": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          }
+                        }
+                      ],
+                      "strokes": [],
+                      "strokeWeight": 1.0,
+                      "strokeAlign": "OUTSIDE",
+                      "styles": {
+                        "fill": "29:40",
+                        "text": "22:1"
+                      },
+                      "effects": [],
+                      "characters": "Hide cookie message",
+                      "style": {
+                        "fontFamily": "GDS Transport Website",
+                        "fontPostScriptName": "GDSTransportWebsite",
+                        "fontWeight": 300,
+                        "textAutoResize": "WIDTH_AND_HEIGHT",
+                        "fontSize": 19.0,
+                        "textAlignHorizontal": "CENTER",
+                        "textAlignVertical": "TOP",
+                        "letterSpacing": 0.0,
+                        "lineHeightPx": 25.0,
+                        "lineHeightPercent": 95.558044433593750,
+                        "lineHeightPercentFontSize": 131.57894897460938,
+                        "lineHeightUnit": "PIXELS"
+                      },
+                      "layoutVersion": 3,
+                      "characterStyleOverrides": [],
+                      "styleOverrideTable": {},
+                      "lineTypes": [
+                        "NONE"
+                      ],
+                      "lineIndentations": [
+                        0
+                      ]
+                    }
+                  ],
+                  "absoluteBoundingBox": {
+                    "x": 10131.0,
+                    "y": 3116.0,
+                    "width": 82.0,
+                    "height": 40.0
+                  },
+                  "absoluteRenderBounds": {
+                    "x": null,
+                    "y": null,
+                    "width": null,
+                    "height": null
+                  },
+                  "constraints": {
+                    "vertical": "TOP",
+                    "horizontal": "LEFT"
+                  },
+                  "layoutAlign": "INHERIT",
+                  "layoutGrow": 0.0,
+                  "clipsContent": true,
+                  "background": [
+                    {
+                      "blendMode": "NORMAL",
+                      "type": "SOLID",
+                      "color": {
+                        "r": 0.0,
+                        "g": 0.43921568989753723,
+                        "b": 0.23529411852359772,
+                        "a": 1.0
+                      }
+                    }
+                  ],
+                  "fills": [
+                    {
+                      "blendMode": "NORMAL",
+                      "type": "SOLID",
+                      "color": {
+                        "r": 0.0,
+                        "g": 0.43921568989753723,
+                        "b": 0.23529411852359772,
+                        "a": 1.0
+                      }
+                    }
+                  ],
+                  "strokes": [],
+                  "strokeWeight": 1.0,
+                  "strokeAlign": "INSIDE",
+                  "backgroundColor": {
+                    "r": 0.0,
+                    "g": 0.43921568989753723,
+                    "b": 0.23529411852359772,
+                    "a": 1.0
+                  },
+                  "styles": {
+                    "fills": "52:38",
+                    "fill": "52:38"
+                  },
+                  "layoutMode": "VERTICAL",
+                  "counterAxisAlignItems": "CENTER",
+                  "primaryAxisAlignItems": "CENTER",
+                  "paddingLeft": 12.0,
+                  "paddingRight": 12.0,
+                  "paddingTop": 8.0,
+                  "paddingBottom": 7.0,
+                  "effects": [
+                    {
+                      "type": "INNER_SHADOW",
+                      "visible": true,
+                      "color": {
+                        "r": 0.0,
+                        "g": 0.17647059261798859,
+                        "b": 0.094117648899555206,
+                        "a": 1.0
+                      },
+                      "blendMode": "NORMAL",
+                      "offset": {
+                        "x": 0.0,
+                        "y": -2.0
+                      },
+                      "radius": 0.0
+                    }
+                  ],
+                  "componentId": "1:19",
+                  "componentProperties": {
+                    "Content#18195:35": {
+                      "value": "Hide cookie message",
+                      "type": "TEXT"
+                    }
+                  },
+                  "overrides": []
+                },
+                {
+                  "id": "18330:13830",
+                  "name": "Button",
+                  "type": "INSTANCE",
+                  "scrollBehavior": "SCROLLS",
+                  "blendMode": "PASS_THROUGH",
+                  "children": [
+                    {
+                      "id": "I18330:13830;1:9",
+                      "name": "Content: Text",
+                      "type": "TEXT",
+                      "scrollBehavior": "SCROLLS",
+                      "componentPropertyReferences": {
+                        "characters": "Content#18195:35"
+                      },
+                      "blendMode": "PASS_THROUGH",
+                      "absoluteBoundingBox": {
+                        "x": 10143.0,
+                        "y": 3124.0,
+                        "width": 212.0,
+                        "height": 25.0
+                      },
+                      "absoluteRenderBounds": {
+                        "x": 10144.0644531250,
+                        "y": 3128.69628906250,
+                        "width": 209.49121093750,
+                        "height": 16.188964843750
+                      },
+                      "constraints": {
+                        "vertical": "TOP",
+                        "horizontal": "LEFT"
+                      },
+                      "layoutAlign": "INHERIT",
+                      "layoutGrow": 0.0,
+                      "fills": [
+                        {
+                          "blendMode": "NORMAL",
+                          "type": "SOLID",
+                          "color": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          }
+                        }
+                      ],
+                      "strokes": [],
+                      "strokeWeight": 1.0,
+                      "strokeAlign": "OUTSIDE",
+                      "styles": {
+                        "fill": "29:40",
+                        "text": "22:1"
+                      },
+                      "effects": [],
+                      "characters": "Accept additional cookies",
+                      "style": {
+                        "fontFamily": "GDS Transport Website",
+                        "fontPostScriptName": "GDSTransportWebsite",
+                        "fontWeight": 300,
+                        "textAutoResize": "WIDTH_AND_HEIGHT",
+                        "fontSize": 19.0,
+                        "textAlignHorizontal": "CENTER",
+                        "textAlignVertical": "TOP",
+                        "letterSpacing": 0.0,
+                        "lineHeightPx": 25.0,
+                        "lineHeightPercent": 95.558044433593750,
+                        "lineHeightPercentFontSize": 131.57894897460938,
+                        "lineHeightUnit": "PIXELS"
+                      },
+                      "layoutVersion": 3,
+                      "characterStyleOverrides": [],
+                      "styleOverrideTable": {},
+                      "lineTypes": [
+                        "NONE"
+                      ],
+                      "lineIndentations": [
+                        0
+                      ]
+                    }
+                  ],
+                  "absoluteBoundingBox": {
+                    "x": 10131.0,
+                    "y": 3116.0,
+                    "width": 236.0,
+                    "height": 40.0
+                  },
+                  "absoluteRenderBounds": {
+                    "x": 10131.0,
+                    "y": 3116.0,
+                    "width": 236.0,
+                    "height": 40.0
+                  },
+                  "constraints": {
+                    "vertical": "TOP",
+                    "horizontal": "LEFT"
+                  },
+                  "layoutAlign": "INHERIT",
+                  "layoutGrow": 0.0,
+                  "clipsContent": true,
+                  "background": [
+                    {
+                      "blendMode": "NORMAL",
+                      "type": "SOLID",
+                      "color": {
+                        "r": 0.0,
+                        "g": 0.43921568989753723,
+                        "b": 0.23529411852359772,
+                        "a": 1.0
+                      }
+                    }
+                  ],
+                  "fills": [
+                    {
+                      "blendMode": "NORMAL",
+                      "type": "SOLID",
+                      "color": {
+                        "r": 0.0,
+                        "g": 0.43921568989753723,
+                        "b": 0.23529411852359772,
+                        "a": 1.0
+                      }
+                    }
+                  ],
+                  "strokes": [],
+                  "strokeWeight": 1.0,
+                  "strokeAlign": "INSIDE",
+                  "backgroundColor": {
+                    "r": 0.0,
+                    "g": 0.43921568989753723,
+                    "b": 0.23529411852359772,
+                    "a": 1.0
+                  },
+                  "styles": {
+                    "fills": "52:38",
+                    "fill": "52:38"
+                  },
+                  "layoutMode": "VERTICAL",
+                  "counterAxisAlignItems": "CENTER",
+                  "primaryAxisAlignItems": "CENTER",
+                  "paddingLeft": 12.0,
+                  "paddingRight": 12.0,
+                  "paddingTop": 8.0,
+                  "paddingBottom": 7.0,
+                  "effects": [
+                    {
+                      "type": "INNER_SHADOW",
+                      "visible": true,
+                      "color": {
+                        "r": 0.0,
+                        "g": 0.17647059261798859,
+                        "b": 0.094117648899555206,
+                        "a": 1.0
+                      },
+                      "blendMode": "NORMAL",
+                      "offset": {
+                        "x": 0.0,
+                        "y": -2.0
+                      },
+                      "radius": 0.0
+                    }
+                  ],
+                  "transitionNodeID": "1:18",
+                  "transitionDuration": 300.0,
+                  "transitionEasing": "EASE_OUT",
+                  "componentId": "1:19",
+                  "componentProperties": {
+                    "Content#18195:35": {
+                      "value": "Accept additional cookies",
+                      "type": "TEXT"
+                    }
+                  },
+                  "overrides": [
+                    {
+                      "id": "18330:13830",
+                      "overriddenFields": [
+                        "transitionEasing",
+                        "transitionDuration",
+                        "transitionNodeID"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "18330:13831",
+                  "name": "Button",
+                  "type": "INSTANCE",
+                  "scrollBehavior": "SCROLLS",
+                  "blendMode": "PASS_THROUGH",
+                  "children": [
+                    {
+                      "id": "I18330:13831;1:9",
+                      "name": "Content: Text",
+                      "type": "TEXT",
+                      "scrollBehavior": "SCROLLS",
+                      "componentPropertyReferences": {
+                        "characters": "Content#18195:35"
+                      },
+                      "blendMode": "PASS_THROUGH",
+                      "absoluteBoundingBox": {
+                        "x": 10394.0,
+                        "y": 3124.0,
+                        "width": 206.0,
+                        "height": 25.0
+                      },
+                      "absoluteRenderBounds": {
+                        "x": 10396.183593750,
+                        "y": 3128.69628906250,
+                        "width": 202.496093750,
+                        "height": 16.42089843750
+                      },
+                      "constraints": {
+                        "vertical": "TOP",
+                        "horizontal": "LEFT"
+                      },
+                      "layoutAlign": "INHERIT",
+                      "layoutGrow": 0.0,
+                      "fills": [
+                        {
+                          "blendMode": "NORMAL",
+                          "type": "SOLID",
+                          "color": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          }
+                        }
+                      ],
+                      "strokes": [],
+                      "strokeWeight": 1.0,
+                      "strokeAlign": "OUTSIDE",
+                      "styles": {
+                        "fill": "29:40",
+                        "text": "22:1"
+                      },
+                      "effects": [],
+                      "characters": "Reject additional cookies",
+                      "style": {
+                        "fontFamily": "GDS Transport Website",
+                        "fontPostScriptName": "GDSTransportWebsite",
+                        "fontWeight": 300,
+                        "textAutoResize": "WIDTH_AND_HEIGHT",
+                        "fontSize": 19.0,
+                        "textAlignHorizontal": "CENTER",
+                        "textAlignVertical": "TOP",
+                        "letterSpacing": 0.0,
+                        "lineHeightPx": 25.0,
+                        "lineHeightPercent": 95.558044433593750,
+                        "lineHeightPercentFontSize": 131.57894897460938,
+                        "lineHeightUnit": "PIXELS"
+                      },
+                      "layoutVersion": 3,
+                      "characterStyleOverrides": [],
+                      "styleOverrideTable": {},
+                      "lineTypes": [
+                        "NONE"
+                      ],
+                      "lineIndentations": [
+                        0
+                      ]
+                    }
+                  ],
+                  "absoluteBoundingBox": {
+                    "x": 10382.0,
+                    "y": 3116.0,
+                    "width": 230.0,
+                    "height": 40.0
+                  },
+                  "absoluteRenderBounds": {
+                    "x": 10382.0,
+                    "y": 3116.0,
+                    "width": 230.0,
+                    "height": 40.0
+                  },
+                  "constraints": {
+                    "vertical": "TOP",
+                    "horizontal": "LEFT"
+                  },
+                  "layoutAlign": "INHERIT",
+                  "layoutGrow": 0.0,
+                  "clipsContent": true,
+                  "background": [
+                    {
+                      "blendMode": "NORMAL",
+                      "type": "SOLID",
+                      "color": {
+                        "r": 0.0,
+                        "g": 0.43921568989753723,
+                        "b": 0.23529411852359772,
+                        "a": 1.0
+                      }
+                    }
+                  ],
+                  "fills": [
+                    {
+                      "blendMode": "NORMAL",
+                      "type": "SOLID",
+                      "color": {
+                        "r": 0.0,
+                        "g": 0.43921568989753723,
+                        "b": 0.23529411852359772,
+                        "a": 1.0
+                      }
+                    }
+                  ],
+                  "strokes": [],
+                  "strokeWeight": 1.0,
+                  "strokeAlign": "INSIDE",
+                  "backgroundColor": {
+                    "r": 0.0,
+                    "g": 0.43921568989753723,
+                    "b": 0.23529411852359772,
+                    "a": 1.0
+                  },
+                  "styles": {
+                    "fills": "52:38",
+                    "fill": "52:38"
+                  },
+                  "layoutMode": "VERTICAL",
+                  "counterAxisAlignItems": "CENTER",
+                  "primaryAxisAlignItems": "CENTER",
+                  "paddingLeft": 12.0,
+                  "paddingRight": 12.0,
+                  "paddingTop": 8.0,
+                  "paddingBottom": 7.0,
+                  "effects": [
+                    {
+                      "type": "INNER_SHADOW",
+                      "visible": true,
+                      "color": {
+                        "r": 0.0,
+                        "g": 0.17647059261798859,
+                        "b": 0.094117648899555206,
+                        "a": 1.0
+                      },
+                      "blendMode": "NORMAL",
+                      "offset": {
+                        "x": 0.0,
+                        "y": -2.0
+                      },
+                      "radius": 0.0
+                    }
+                  ],
+                  "transitionNodeID": "1:18",
+                  "transitionDuration": 300.0,
+                  "transitionEasing": "EASE_OUT",
+                  "componentId": "1:19",
+                  "componentProperties": {
+                    "Content#18195:35": {
+                      "value": "Reject additional cookies",
+                      "type": "TEXT"
+                    }
+                  },
+                  "overrides": [
+                    {
+                      "id": "18330:13831",
+                      "overriddenFields": [
+                        "transitionEasing",
+                        "transitionDuration",
+                        "transitionNodeID"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": "18330:13832",
+                  "name": "Links",
+                  "type": "INSTANCE",
+                  "scrollBehavior": "SCROLLS",
+                  "blendMode": "PASS_THROUGH",
+                  "children": [
+                    {
+                      "id": "I18330:13832;11983:2925",
+                      "name": "Link: Content",
+                      "type": "FRAME",
+                      "scrollBehavior": "SCROLLS",
+                      "blendMode": "PASS_THROUGH",
+                      "children": [
+                        {
+                          "id": "I18330:13832;11983:2926",
+                          "name": "Content",
+                          "type": "TEXT",
+                          "scrollBehavior": "SCROLLS",
+                          "componentPropertyReferences": {
+                            "characters": "Content#18195:56"
+                          },
+                          "blendMode": "PASS_THROUGH",
+                          "absoluteBoundingBox": {
+                            "x": 10627.0,
+                            "y": 3127.0,
+                            "width": 107.0,
+                            "height": 19.0
+                          },
+                          "absoluteRenderBounds": {
+                            "x": 10627.343750,
+                            "y": 3128.69628906250,
+                            "width": 105.3808593750,
+                            "height": 13.48925781250
+                          },
+                          "constraints": {
+                            "vertical": "TOP",
+                            "horizontal": "LEFT"
+                          },
+                          "layoutAlign": "INHERIT",
+                          "layoutGrow": 0.0,
+                          "fills": [
+                            {
+                              "blendMode": "NORMAL",
+                              "type": "SOLID",
+                              "color": {
+                                "r": 0.11372549086809158,
+                                "g": 0.43921568989753723,
+                                "b": 0.72156864404678345,
+                                "a": 1.0
+                              }
+                            }
+                          ],
+                          "strokes": [],
+                          "strokeWeight": 1.0,
+                          "strokeAlign": "OUTSIDE",
+                          "styles": {
+                            "fill": "20:20"
+                          },
+                          "effects": [],
+                          "characters": "View cookies",
+                          "style": {
+                            "fontFamily": "GDS Transport Website",
+                            "fontPostScriptName": "GDSTransportWebsite",
+                            "fontWeight": 300,
+                            "textAutoResize": "WIDTH_AND_HEIGHT",
+                            "fontSize": 19.0,
+                            "textAlignHorizontal": "LEFT",
+                            "textAlignVertical": "TOP",
+                            "letterSpacing": 0.0,
+                            "lineHeightPx": 19.0,
+                            "lineHeightPercent": 72.624114990234375,
+                            "lineHeightPercentFontSize": 100.0,
+                            "lineHeightUnit": "PIXELS"
+                          },
+                          "layoutVersion": 3,
+                          "characterStyleOverrides": [],
+                          "styleOverrideTable": {},
+                          "lineTypes": [
+                            "NONE"
+                          ],
+                          "lineIndentations": [
+                            0
+                          ]
+                        }
+                      ],
+                      "absoluteBoundingBox": {
+                        "x": 10627.0,
+                        "y": 3127.0,
+                        "width": 107.0,
+                        "height": 19.0
+                      },
+                      "absoluteRenderBounds": {
+                        "x": 10627.0,
+                        "y": 3127.0,
+                        "width": 107.0,
+                        "height": 19.0
+                      },
+                      "constraints": {
+                        "vertical": "TOP",
+                        "horizontal": "LEFT"
+                      },
+                      "layoutAlign": "INHERIT",
+                      "layoutGrow": 0.0,
+                      "clipsContent": true,
+                      "background": [
+                        {
+                          "blendMode": "NORMAL",
+                          "type": "SOLID",
+                          "color": {
+                            "r": 0.95294117927551270,
+                            "g": 0.94901961088180542,
+                            "b": 0.94509804248809814,
+                            "a": 1.0
+                          }
+                        }
+                      ],
+                      "fills": [
+                        {
+                          "blendMode": "NORMAL",
+                          "type": "SOLID",
+                          "color": {
+                            "r": 0.95294117927551270,
+                            "g": 0.94901961088180542,
+                            "b": 0.94509804248809814,
+                            "a": 1.0
+                          }
+                        }
+                      ],
+                      "strokes": [],
+                      "strokeWeight": 1.0,
+                      "strokeAlign": "INSIDE",
+                      "backgroundColor": {
+                        "r": 0.95294117927551270,
+                        "g": 0.94901961088180542,
+                        "b": 0.94509804248809814,
+                        "a": 1.0
+                      },
+                      "styles": {
+                        "fills": "404:9",
+                        "fill": "404:9"
+                      },
+                      "layoutMode": "HORIZONTAL",
+                      "counterAxisAlignItems": "CENTER",
+                      "effects": [
+                        {
+                          "type": "INNER_SHADOW",
+                          "visible": true,
+                          "color": {
+                            "r": 0.11372549086809158,
+                            "g": 0.43921568989753723,
+                            "b": 0.72156864404678345,
+                            "a": 1.0
+                          },
+                          "blendMode": "NORMAL",
+                          "offset": {
+                            "x": 0.0,
+                            "y": -1.0
+                          },
+                          "radius": 0.0
+                        }
+                      ]
+                    }
+                  ],
+                  "absoluteBoundingBox": {
+                    "x": 10627.0,
+                    "y": 3123.0,
+                    "width": 107.0,
+                    "height": 25.0
+                  },
+                  "absoluteRenderBounds": {
+                    "x": 10627.0,
+                    "y": 3123.0,
+                    "width": 107.0,
+                    "height": 25.0
+                  },
+                  "constraints": {
+                    "vertical": "TOP",
+                    "horizontal": "LEFT"
+                  },
+                  "layoutAlign": "INHERIT",
+                  "layoutGrow": 0.0,
+                  "clipsContent": false,
+                  "background": [
+                    {
+                      "blendMode": "NORMAL",
+                      "type": "SOLID",
+                      "color": {
+                        "r": 0.95294117927551270,
+                        "g": 0.94901961088180542,
+                        "b": 0.94509804248809814,
+                        "a": 1.0
+                      }
+                    }
+                  ],
+                  "fills": [
+                    {
+                      "blendMode": "NORMAL",
+                      "type": "SOLID",
+                      "color": {
+                        "r": 0.95294117927551270,
+                        "g": 0.94901961088180542,
+                        "b": 0.94509804248809814,
+                        "a": 1.0
+                      }
+                    }
+                  ],
+                  "strokes": [],
+                  "strokeWeight": 1.0,
+                  "strokeAlign": "INSIDE",
+                  "backgroundColor": {
+                    "r": 0.95294117927551270,
+                    "g": 0.94901961088180542,
+                    "b": 0.94509804248809814,
+                    "a": 1.0
+                  },
+                  "styles": {
+                    "fills": "404:9",
+                    "fill": "404:9"
+                  },
+                  "layoutMode": "HORIZONTAL",
+                  "counterAxisAlignItems": "CENTER",
+                  "paddingTop": 4.0,
+                  "paddingBottom": 2.0,
+                  "effects": [],
+                  "transitionNodeID": "11983:2960",
+                  "transitionDuration": 300.0,
+                  "transitionEasing": "EASE_OUT",
+                  "componentId": "11983:2924",
+                  "componentProperties": {
+                    "Content#18195:56": {
+                      "value": "View cookies",
+                      "type": "TEXT"
+                    }
+                  },
+                  "overrides": [
+                    {
+                      "id": "18330:13832",
+                      "overriddenFields": [
+                        "inheritFillStyleId"
+                      ]
+                    },
+                    {
+                      "id": "I18330:13832;11983:2925",
+                      "overriddenFields": [
+                        "inheritFillStyleId"
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "absoluteBoundingBox": {
+                "x": 10131.0,
+                "y": 3116.0,
+                "width": 603.0,
+                "height": 60.0
+              },
+              "absoluteRenderBounds": {
+                "x": 10131.0,
+                "y": 3116.0,
+                "width": 603.0,
+                "height": 60.0
+              },
+              "constraints": {
+                "vertical": "TOP",
+                "horizontal": "LEFT"
+              },
+              "layoutAlign": "INHERIT",
+              "layoutGrow": 0.0,
+              "clipsContent": false,
+              "background": [],
+              "fills": [],
+              "strokes": [],
+              "strokeWeight": 1.0,
+              "strokeAlign": "INSIDE",
+              "backgroundColor": {
+                "r": 0.0,
+                "g": 0.0,
+                "b": 0.0,
+                "a": 0.0
+              },
+              "layoutMode": "HORIZONTAL",
+              "itemSpacing": 15.0,
+              "counterAxisAlignItems": "BASELINE",
+              "paddingBottom": 20.0,
+              "effects": []
+            }
+          ],
+          "absoluteBoundingBox": {
+            "x": 10131.0,
+            "y": 2951.0,
+            "width": 960.0,
+            "height": 225.0
+          },
+          "absoluteRenderBounds": {
+            "x": 10131.0,
+            "y": 2951.0,
+            "width": 960.0,
+            "height": 225.0
+          },
+          "constraints": {
+            "vertical": "TOP",
+            "horizontal": "LEFT"
+          },
+          "layoutAlign": "INHERIT",
+          "layoutGrow": 0.0,
+          "clipsContent": false,
+          "background": [
+            {
+              "blendMode": "NORMAL",
+              "type": "SOLID",
+              "color": {
+                "r": 0.95294117927551270,
+                "g": 0.94901961088180542,
+                "b": 0.94509804248809814,
+                "a": 1.0
+              }
+            }
+          ],
+          "fills": [
+            {
+              "blendMode": "NORMAL",
+              "type": "SOLID",
+              "color": {
+                "r": 0.95294117927551270,
+                "g": 0.94901961088180542,
+                "b": 0.94509804248809814,
+                "a": 1.0
+              }
+            }
+          ],
+          "strokes": [],
+          "strokeWeight": 1.0,
+          "strokeAlign": "INSIDE",
+          "backgroundColor": {
+            "r": 0.95294117927551270,
+            "g": 0.94901961088180542,
+            "b": 0.94509804248809814,
+            "a": 1.0
+          },
+          "styles": {
+            "fills": "404:9",
+            "fill": "404:9"
+          },
+          "layoutMode": "VERTICAL",
+          "counterAxisSizingMode": "FIXED",
+          "itemSpacing": 20.0,
+          "effects": []
+        }
+      ],
+      "absoluteBoundingBox": {
+        "x": 9891.0,
+        "y": 2931.0,
+        "width": 1440.0,
+        "height": 255.0
+      },
+      "absoluteRenderBounds": {
+        "x": 9891.0,
+        "y": 2931.0,
+        "width": 1440.0,
+        "height": 255.0
+      },
+      "constraints": {
+        "vertical": "TOP",
+        "horizontal": "LEFT"
+      },
+      "layoutAlign": "STRETCH",
+      "layoutGrow": 0.0,
+      "clipsContent": false,
+      "background": [
+        {
+          "blendMode": "NORMAL",
+          "type": "SOLID",
+          "color": {
+            "r": 0.95294117927551270,
+            "g": 0.94901961088180542,
+            "b": 0.94509804248809814,
+            "a": 1.0
+          }
+        }
+      ],
+      "fills": [
+        {
+          "blendMode": "NORMAL",
+          "type": "SOLID",
+          "color": {
+            "r": 0.95294117927551270,
+            "g": 0.94901961088180542,
+            "b": 0.94509804248809814,
+            "a": 1.0
+          }
+        }
+      ],
+      "strokes": [],
+      "strokeWeight": 1.0,
+      "strokeAlign": "INSIDE",
+      "backgroundColor": {
+        "r": 0.95294117927551270,
+        "g": 0.94901961088180542,
+        "b": 0.94509804248809814,
+        "a": 1.0
+      },
+      "styles": {
+        "fills": "404:9",
+        "fill": "404:9"
+      },
+      "layoutMode": "VERTICAL",
+      "counterAxisSizingMode": "FIXED",
+      "counterAxisAlignItems": "CENTER",
+      "paddingTop": 20.0,
+      "paddingBottom": 10.0,
+      "effects": []
+    },
+    {
+      "id": "18330:13857",
+      "name": "Responded=True",
+      "type": "COMPONENT",
+      "scrollBehavior": "SCROLLS",
+      "blendMode": "PASS_THROUGH",
+      "children": [
+        {
+          "id": "18330:13841",
+          "name": "Container",
+          "type": "FRAME",
+          "scrollBehavior": "SCROLLS",
+          "blendMode": "PASS_THROUGH",
+          "children": [
+            {
+              "id": "18330:13842",
+              "name": "Content: Heading",
+              "visible": false,
+              "type": "TEXT",
+              "scrollBehavior": "SCROLLS",
+              "blendMode": "PASS_THROUGH",
+              "absoluteBoundingBox": {
+                "x": 10131.0,
+                "y": 3226.0,
+                "width": 630.0,
+                "height": 30.0
+              },
+              "absoluteRenderBounds": {
+                "x": null,
+                "y": null,
+                "width": null,
+                "height": null
+              },
+              "constraints": {
+                "vertical": "TOP",
+                "horizontal": "LEFT"
+              },
+              "layoutAlign": "INHERIT",
+              "layoutGrow": 0.0,
+              "fills": [
+                {
+                  "blendMode": "NORMAL",
+                  "type": "SOLID",
+                  "color": {
+                    "r": 0.043137256056070328,
+                    "g": 0.047058824449777603,
+                    "b": 0.047058824449777603,
+                    "a": 1.0
+                  }
+                }
+              ],
+              "strokes": [],
+              "strokeWeight": 1.0,
+              "strokeAlign": "OUTSIDE",
+              "styles": {
+                "fill": "20:18",
+                "text": "20:36"
+              },
+              "effects": [],
+              "characters": "Cookies on [name of service]",
+              "style": {
+                "fontFamily": "GDS Transport Website",
+                "fontPostScriptName": "GDSTransportWebsite-Bold",
+                "fontWeight": 700,
+                "textAutoResize": "HEIGHT",
+                "fontSize": 24.0,
+                "textAlignHorizontal": "LEFT",
+                "textAlignVertical": "TOP",
+                "letterSpacing": 0.0,
+                "lineHeightPx": 30.0,
+                "lineHeightPercent": 89.698669433593750,
+                "lineHeightPercentFontSize": 125.0,
+                "lineHeightUnit": "PIXELS"
+              },
+              "layoutVersion": 3,
+              "characterStyleOverrides": [],
+              "styleOverrideTable": {},
+              "lineTypes": [
+                "NONE"
+              ],
+              "lineIndentations": [
+                0
+              ]
+            },
+            {
+              "id": "18330:13843",
+              "name": "Body: Container",
+              "type": "FRAME",
+              "scrollBehavior": "SCROLLS",
+              "blendMode": "PASS_THROUGH",
+              "children": [
+                {
+                  "id": "18330:13844",
+                  "name": "Content: Body",
+                  "type": "TEXT",
+                  "scrollBehavior": "SCROLLS",
+                  "blendMode": "PASS_THROUGH",
+                  "absoluteBoundingBox": {
+                    "x": 10131.0,
+                    "y": 3226.0,
+                    "width": 630.0,
+                    "height": 50.0
+                  },
+                  "absoluteRenderBounds": {
+                    "x": 10131.472656250,
+                    "y": 3230.5292968750,
+                    "width": 595.4394531250,
+                    "height": 41.5878906250
+                  },
+                  "constraints": {
+                    "vertical": "TOP",
+                    "horizontal": "LEFT"
+                  },
+                  "layoutAlign": "STRETCH",
+                  "layoutGrow": 0.0,
+                  "fills": [
+                    {
+                      "blendMode": "NORMAL",
+                      "type": "SOLID",
+                      "color": {
+                        "r": 0.043137256056070328,
+                        "g": 0.047058824449777603,
+                        "b": 0.047058824449777603,
+                        "a": 1.0
+                      }
+                    }
+                  ],
+                  "strokes": [],
+                  "strokeWeight": 1.0,
+                  "strokeAlign": "OUTSIDE",
+                  "styles": {
+                    "fill": "20:18",
+                    "text": "22:1"
+                  },
+                  "effects": [],
+                  "characters": "You’ve accepted/rejected additional cookies. You can change your cookie settings at any time.",
+                  "style": {
+                    "fontFamily": "GDS Transport Website",
+                    "fontPostScriptName": "GDSTransportWebsite",
+                    "fontWeight": 300,
+                    "textAutoResize": "HEIGHT",
+                    "fontSize": 19.0,
+                    "textAlignHorizontal": "LEFT",
+                    "textAlignVertical": "TOP",
+                    "letterSpacing": 0.0,
+                    "lineHeightPx": 25.0,
+                    "lineHeightPercent": 95.558044433593750,
+                    "lineHeightPercentFontSize": 131.57894897460938,
+                    "lineHeightUnit": "PIXELS"
+                  },
+                  "layoutVersion": 3,
+                  "characterStyleOverrides": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2,
+                    2
+                  ],
+                  "styleOverrideTable": {
+                    "2": {
+                      "fontFamily": "GDS Transport Website",
+                      "fontPostScriptName": "GDSTransportWebsite",
+                      "fontWeight": 300,
+                      "textDecoration": "UNDERLINE",
+                      "fontSize": 19.0,
+                      "letterSpacing": 0.0,
+                      "fills": [
+                        {
+                          "blendMode": "NORMAL",
+                          "type": "SOLID",
+                          "color": {
+                            "r": 0.11372549086809158,
+                            "g": 0.43921568989753723,
+                            "b": 0.72156864404678345,
+                            "a": 1.0
+                          }
+                        }
+                      ],
+                      "lineHeightPx": 25.0,
+                      "lineHeightPercent": 95.558044433593750,
+                      "lineHeightPercentFontSize": 131.57894897460938,
+                      "lineHeightUnit": "PIXELS",
+                      "inheritFillStyleId": "20:20"
+                    }
+                  },
+                  "lineTypes": [
+                    "NONE"
+                  ],
+                  "lineIndentations": [
+                    0
+                  ]
+                },
+                {
+                  "id": "18330:13845",
+                  "name": "Content: Body",
+                  "visible": false,
+                  "type": "TEXT",
+                  "scrollBehavior": "SCROLLS",
+                  "blendMode": "PASS_THROUGH",
+                  "absoluteBoundingBox": {
+                    "x": 10131.0,
+                    "y": 3296.0,
+                    "width": 630.0,
+                    "height": 25.0
+                  },
+                  "absoluteRenderBounds": {
+                    "x": null,
+                    "y": null,
+                    "width": null,
+                    "height": null
+                  },
+                  "constraints": {
+                    "vertical": "TOP",
+                    "horizontal": "LEFT"
+                  },
+                  "layoutAlign": "STRETCH",
+                  "layoutGrow": 0.0,
+                  "fills": [
+                    {
+                      "blendMode": "NORMAL",
+                      "type": "SOLID",
+                      "color": {
+                        "r": 0.043137256056070328,
+                        "g": 0.047058824449777603,
+                        "b": 0.047058824449777603,
+                        "a": 1.0
+                      }
+                    }
+                  ],
+                  "strokes": [],
+                  "strokeWeight": 1.0,
+                  "strokeAlign": "OUTSIDE",
+                  "styles": {
+                    "fill": "20:18",
+                    "text": "22:1"
+                  },
+                  "effects": [],
+                  "characters": "We use some essential cookies to make this service work.",
+                  "style": {
+                    "fontFamily": "GDS Transport Website",
+                    "fontPostScriptName": "GDSTransportWebsite",
+                    "fontWeight": 300,
+                    "textAutoResize": "HEIGHT",
+                    "fontSize": 19.0,
+                    "textAlignHorizontal": "LEFT",
+                    "textAlignVertical": "TOP",
+                    "letterSpacing": 0.0,
+                    "lineHeightPx": 25.0,
+                    "lineHeightPercent": 95.558044433593750,
+                    "lineHeightPercentFontSize": 131.57894897460938,
+                    "lineHeightUnit": "PIXELS"
+                  },
+                  "layoutVersion": 3,
+                  "characterStyleOverrides": [],
+                  "styleOverrideTable": {},
+                  "lineTypes": [
+                    "NONE"
+                  ],
+                  "lineIndentations": [
+                    0
+                  ]
+                },
+                {
+                  "id": "18330:13846",
+                  "name": "Content: Body",
+                  "visible": false,
+                  "type": "TEXT",
+                  "scrollBehavior": "SCROLLS",
+                  "blendMode": "PASS_THROUGH",
+                  "absoluteBoundingBox": {
+                    "x": 10131.0,
+                    "y": 3296.0,
+                    "width": 630.0,
+                    "height": 50.0
+                  },
+                  "absoluteRenderBounds": {
+                    "x": null,
+                    "y": null,
+                    "width": null,
+                    "height": null
+                  },
+                  "constraints": {
+                    "vertical": "TOP",
+                    "horizontal": "LEFT"
+                  },
+                  "layoutAlign": "STRETCH",
+                  "layoutGrow": 0.0,
+                  "fills": [
+                    {
+                      "blendMode": "NORMAL",
+                      "type": "SOLID",
+                      "color": {
+                        "r": 0.043137256056070328,
+                        "g": 0.047058824449777603,
+                        "b": 0.047058824449777603,
+                        "a": 1.0
+                      }
+                    }
+                  ],
+                  "strokes": [],
+                  "strokeWeight": 1.0,
+                  "strokeAlign": "OUTSIDE",
+                  "styles": {
+                    "fill": "20:18",
+                    "text": "22:1"
+                  },
+                  "effects": [],
+                  "characters": "We’d like to set additional cookies so we can remember your settings, understand how people use the service and make improvements.",
+                  "style": {
+                    "fontFamily": "GDS Transport Website",
+                    "fontPostScriptName": "GDSTransportWebsite",
+                    "fontWeight": 300,
+                    "textAutoResize": "HEIGHT",
+                    "fontSize": 19.0,
+                    "textAlignHorizontal": "LEFT",
+                    "textAlignVertical": "TOP",
+                    "letterSpacing": 0.0,
+                    "lineHeightPx": 25.0,
+                    "lineHeightPercent": 95.558044433593750,
+                    "lineHeightPercentFontSize": 131.57894897460938,
+                    "lineHeightUnit": "PIXELS"
+                  },
+                  "layoutVersion": 3,
+                  "characterStyleOverrides": [],
+                  "styleOverrideTable": {},
+                  "lineTypes": [
+                    "NONE"
+                  ],
+                  "lineIndentations": [
+                    0
+                  ]
+                }
+              ],
+              "absoluteBoundingBox": {
+                "x": 10131.0,
+                "y": 3226.0,
+                "width": 630.0,
+                "height": 50.0
+              },
+              "absoluteRenderBounds": {
+                "x": 10131.0,
+                "y": 3226.0,
+                "width": 630.0,
+                "height": 50.0
+              },
+              "constraints": {
+                "vertical": "TOP",
+                "horizontal": "LEFT"
+              },
+              "layoutAlign": "INHERIT",
+              "layoutGrow": 0.0,
+              "clipsContent": false,
+              "background": [],
+              "fills": [],
+              "strokes": [],
+              "strokeWeight": 1.0,
+              "strokeAlign": "INSIDE",
+              "backgroundColor": {
+                "r": 0.0,
+                "g": 0.0,
+                "b": 0.0,
+                "a": 0.0
+              },
+              "layoutMode": "VERTICAL",
+              "counterAxisSizingMode": "FIXED",
+              "itemSpacing": 20.0,
+              "effects": []
+            },
+            {
+              "id": "18330:13847",
+              "name": "Button: Container",
+              "type": "FRAME",
+              "scrollBehavior": "SCROLLS",
+              "blendMode": "PASS_THROUGH",
+              "children": [
+                {
+                  "id": "18330:13848",
+                  "name": "Button",
+                  "type": "INSTANCE",
+                  "scrollBehavior": "SCROLLS",
+                  "blendMode": "PASS_THROUGH",
+                  "children": [
+                    {
+                      "id": "I18330:13848;1:9",
+                      "name": "Content: Text",
+                      "type": "TEXT",
+                      "scrollBehavior": "SCROLLS",
+                      "componentPropertyReferences": {
+                        "characters": "Content#18195:35"
+                      },
+                      "blendMode": "PASS_THROUGH",
+                      "absoluteBoundingBox": {
+                        "x": 10143.0,
+                        "y": 3304.0,
+                        "width": 175.0,
+                        "height": 25.0
+                      },
+                      "absoluteRenderBounds": {
+                        "x": 10145.269531250,
+                        "y": 3308.69628906250,
+                        "width": 171.5371093750,
+                        "height": 16.42089843750
+                      },
+                      "constraints": {
+                        "vertical": "TOP",
+                        "horizontal": "LEFT"
+                      },
+                      "layoutAlign": "INHERIT",
+                      "layoutGrow": 0.0,
+                      "fills": [
+                        {
+                          "blendMode": "NORMAL",
+                          "type": "SOLID",
+                          "color": {
+                            "r": 1.0,
+                            "g": 1.0,
+                            "b": 1.0,
+                            "a": 1.0
+                          }
+                        }
+                      ],
+                      "strokes": [],
+                      "strokeWeight": 1.0,
+                      "strokeAlign": "OUTSIDE",
+                      "styles": {
+                        "fill": "29:40",
+                        "text": "22:1"
+                      },
+                      "effects": [],
+                      "characters": "Hide cookie message",
+                      "style": {
+                        "fontFamily": "GDS Transport Website",
+                        "fontPostScriptName": "GDSTransportWebsite",
+                        "fontWeight": 300,
+                        "textAutoResize": "WIDTH_AND_HEIGHT",
+                        "fontSize": 19.0,
+                        "textAlignHorizontal": "CENTER",
+                        "textAlignVertical": "TOP",
+                        "letterSpacing": 0.0,
+                        "lineHeightPx": 25.0,
+                        "lineHeightPercent": 95.558044433593750,
+                        "lineHeightPercentFontSize": 131.57894897460938,
+                        "lineHeightUnit": "PIXELS"
+                      },
+                      "layoutVersion": 3,
+                      "characterStyleOverrides": [],
+                      "styleOverrideTable": {},
+                      "lineTypes": [
+                        "NONE"
+                      ],
+                      "lineIndentations": [
+                        0
+                      ]
+                    }
+                  ],
+                  "absoluteBoundingBox": {
+                    "x": 10131.0,
+                    "y": 3296.0,
+                    "width": 199.0,
+                    "height": 40.0
+                  },
+                  "absoluteRenderBounds": {
+                    "x": 10131.0,
+                    "y": 3296.0,
+                    "width": 199.0,
+                    "height": 40.0
+                  },
+                  "constraints": {
+                    "vertical": "TOP",
+                    "horizontal": "LEFT"
+                  },
+                  "layoutAlign": "INHERIT",
+                  "layoutGrow": 0.0,
+                  "clipsContent": true,
+                  "background": [
+                    {
+                      "blendMode": "NORMAL",
+                      "type": "SOLID",
+                      "color": {
+                        "r": 0.0,
+                        "g": 0.43921568989753723,
+                        "b": 0.23529411852359772,
+                        "a": 1.0
+                      }
+                    }
+                  ],
+                  "fills": [
+                    {
+                      "blendMode": "NORMAL",
+                      "type": "SOLID",
+                      "color": {
+                        "r": 0.0,
+                        "g": 0.43921568989753723,
+                        "b": 0.23529411852359772,
+                        "a": 1.0
+                      }
+                    }
+                  ],
+                  "strokes": [],
+                  "strokeWeight": 1.0,
+                  "strokeAlign": "INSIDE",
+                  "backgroundColor": {
+                    "r": 0.0,
+                    "g": 0.43921568989753723,
+                    "b": 0.23529411852359772,
+                    "a": 1.0
+                  },
+                  "styles": {
+                    "fills": "52:38",
+                    "fill": "52:38"
+                  },
+                  "layoutMode": "VERTICAL",
+                  "counterAxisAlignItems": "CENTER",
+                  "primaryAxisAlignItems": "CENTER",
+                  "paddingLeft": 12.0,
+                  "paddingRight": 12.0,
+                  "paddingTop": 8.0,
+                  "paddingBottom": 7.0,
+                  "effects": [
+                    {
+                      "type": "INNER_SHADOW",
+                      "visible": true,
+                      "color": {
+                        "r": 0.0,
+                        "g": 0.17647059261798859,
+                        "b": 0.094117648899555206,
+                        "a": 1.0
+                      },
+                      "blendMode": "NORMAL",
+                      "offset": {
+                        "x": 0.0,
+                        "y": -2.0
+                      },
+                      "radius": 0.0
+                    }
+                  ],
+                  "transitionNodeID": "1:18",
+                  "transitionDuration": 300.0,
+                  "transitionEasing": "EASE_OUT",
+                  "componentId": "1:19",
+                  "componentProperties": {
+                    "Content#18195:35": {
+                      "value": "Hide cookie message",
+                      "type": "TEXT"
+                    }
+                  },
+                  "overrides": [
+                    {
+                      "id": "18330:13848",
+                      "overriddenFields": [
+                        "transitionEasing",
+                        "transitionDuration",
+                        "transitionNodeID"
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "absoluteBoundingBox": {
+                "x": 10131.0,
+                "y": 3296.0,
+                "width": 199.0,
+                "height": 60.0
+              },
+              "absoluteRenderBounds": {
+                "x": 10131.0,
+                "y": 3296.0,
+                "width": 199.0,
+                "height": 60.0
+              },
+              "constraints": {
+                "vertical": "TOP",
+                "horizontal": "LEFT"
+              },
+              "layoutAlign": "INHERIT",
+              "layoutGrow": 0.0,
+              "clipsContent": false,
+              "background": [],
+              "fills": [],
+              "strokes": [],
+              "strokeWeight": 1.0,
+              "strokeAlign": "INSIDE",
+              "backgroundColor": {
+                "r": 0.0,
+                "g": 0.0,
+                "b": 0.0,
+                "a": 0.0
+              },
+              "layoutMode": "HORIZONTAL",
+              "itemSpacing": 15.0,
+              "counterAxisAlignItems": "BASELINE",
+              "paddingBottom": 20.0,
+              "effects": []
+            }
+          ],
+          "absoluteBoundingBox": {
+            "x": 10131.0,
+            "y": 3226.0,
+            "width": 960.0,
+            "height": 130.0
+          },
+          "absoluteRenderBounds": {
+            "x": 10131.0,
+            "y": 3226.0,
+            "width": 960.0,
+            "height": 130.0
+          },
+          "constraints": {
+            "vertical": "TOP",
+            "horizontal": "LEFT"
+          },
+          "layoutAlign": "INHERIT",
+          "layoutGrow": 0.0,
+          "clipsContent": false,
+          "background": [
+            {
+              "blendMode": "NORMAL",
+              "type": "SOLID",
+              "color": {
+                "r": 0.95294117927551270,
+                "g": 0.94901961088180542,
+                "b": 0.94509804248809814,
+                "a": 1.0
+              }
+            }
+          ],
+          "fills": [
+            {
+              "blendMode": "NORMAL",
+              "type": "SOLID",
+              "color": {
+                "r": 0.95294117927551270,
+                "g": 0.94901961088180542,
+                "b": 0.94509804248809814,
+                "a": 1.0
+              }
+            }
+          ],
+          "strokes": [],
+          "strokeWeight": 1.0,
+          "strokeAlign": "INSIDE",
+          "backgroundColor": {
+            "r": 0.95294117927551270,
+            "g": 0.94901961088180542,
+            "b": 0.94509804248809814,
+            "a": 1.0
+          },
+          "styles": {
+            "fills": "404:9",
+            "fill": "404:9"
+          },
+          "layoutMode": "VERTICAL",
+          "counterAxisSizingMode": "FIXED",
+          "itemSpacing": 20.0,
+          "effects": []
+        }
+      ],
+      "absoluteBoundingBox": {
+        "x": 9891.0,
+        "y": 3206.0,
+        "width": 1440.0,
+        "height": 160.0
+      },
+      "absoluteRenderBounds": {
+        "x": 9891.0,
+        "y": 3206.0,
+        "width": 1440.0,
+        "height": 160.0
+      },
+      "constraints": {
+        "vertical": "TOP",
+        "horizontal": "LEFT"
+      },
+      "layoutAlign": "STRETCH",
+      "layoutGrow": 0.0,
+      "clipsContent": false,
+      "background": [
+        {
+          "blendMode": "NORMAL",
+          "type": "SOLID",
+          "color": {
+            "r": 0.95294117927551270,
+            "g": 0.94901961088180542,
+            "b": 0.94509804248809814,
+            "a": 1.0
+          }
+        }
+      ],
+      "fills": [
+        {
+          "blendMode": "NORMAL",
+          "type": "SOLID",
+          "color": {
+            "r": 0.95294117927551270,
+            "g": 0.94901961088180542,
+            "b": 0.94509804248809814,
+            "a": 1.0
+          }
+        }
+      ],
+      "strokes": [],
+      "strokeWeight": 1.0,
+      "strokeAlign": "INSIDE",
+      "backgroundColor": {
+        "r": 0.95294117927551270,
+        "g": 0.94901961088180542,
+        "b": 0.94509804248809814,
+        "a": 1.0
+      },
+      "styles": {
+        "fills": "404:9",
+        "fill": "404:9"
+      },
+      "layoutMode": "VERTICAL",
+      "counterAxisSizingMode": "FIXED",
+      "counterAxisAlignItems": "CENTER",
+      "paddingTop": 20.0,
+      "paddingBottom": 10.0,
+      "effects": []
+    }
+  ],
+  "absoluteBoundingBox": {
+    "x": 9871.0,
+    "y": 2911.0,
+    "width": 1480.0,
+    "height": 475.0
+  },
+  "absoluteRenderBounds": {
+    "x": 9871.0,
+    "y": 2911.0,
+    "width": 1480.0,
+    "height": 475.0
+  },
+  "constraints": {
+    "vertical": "TOP",
+    "horizontal": "LEFT"
+  },
+  "clipsContent": false,
+  "background": [
+    {
+      "blendMode": "NORMAL",
+      "type": "SOLID",
+      "color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      }
+    }
+  ],
+  "fills": [
+    {
+      "blendMode": "NORMAL",
+      "type": "SOLID",
+      "color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      }
+    }
+  ],
+  "strokes": [
+    {
+      "blendMode": "NORMAL",
+      "type": "SOLID",
+      "color": {
+        "r": 0.59215688705444336,
+        "g": 0.27843138575553894,
+        "b": 1.0,
+        "a": 1.0
+      }
+    }
+  ],
+  "cornerRadius": 5.0,
+  "strokeWeight": 1.0,
+  "strokeAlign": "INSIDE",
+  "backgroundColor": {
+    "r": 1.0,
+    "g": 1.0,
+    "b": 1.0,
+    "a": 1.0
+  },
+  "styles": {
+    "fills": "29:40",
+    "fill": "29:40"
+  },
+  "layoutMode": "VERTICAL",
+  "counterAxisSizingMode": "FIXED",
+  "itemSpacing": 20.0,
+  "paddingLeft": 20.0,
+  "paddingRight": 20.0,
+  "paddingTop": 20.0,
+  "paddingBottom": 20.0,
+  "strokeDashes": [
+    10.0,
+    5.0
+  ],
+  "effects": []
+}
