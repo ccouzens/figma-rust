@@ -176,6 +176,13 @@ export enum PrimaryAxisAlignItems {
 	SpaceBetween = "SPACE_BETWEEN",
 }
 
+export enum CounterAxisAlignItems {
+	Min = "MIN",
+	Center = "CENTER",
+	Max = "MAX",
+	Baseline = "BASELINE",
+}
+
 export enum LayoutMode {
 	None = "NONE",
 	Horizontal = "HORIZONTAL",
@@ -246,6 +253,8 @@ export interface Node {
 	absoluteRenderBounds?: Rectangle;
 	/** Determines how the auto-layout frame’s children should be aligned in the primary axis direction. This property is only applicable for auto-layout frames. */
 	primaryAxisAlignItems?: PrimaryAxisAlignItems;
+	/** Determines how the auto-layout frame’s children should be aligned in the counter axis direction. This property is only applicable for auto-layout frames. */
+	counterAxisAlignItems?: CounterAxisAlignItems;
 	/** The distance between children of the frame. Can be negative. This property is only applicable for auto-layout frames. */
 	itemSpacing?: number;
 	/** Whether this layer uses auto-layout to position its children. */

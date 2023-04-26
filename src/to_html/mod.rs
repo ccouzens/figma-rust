@@ -68,6 +68,7 @@ fn inline_css(node: &Node, body: Option<&Node>) -> Result<Option<String>> {
     let body_absolute_bounding_box = body.and_then(|b| b.absolute_bounding_box());
 
     let mut css: Vec<(String, Option<String>)> = vec![
+        ("align-items".into(), node.align_items()),
         ("background".into(), node.background()),
         ("border-radius".into(), node.border_radius()),
         ("box-shadow".into(), node.box_shadow()),

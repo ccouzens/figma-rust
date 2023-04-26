@@ -247,6 +247,18 @@ enum class PrimaryAxisAlignItems(val string: String) {
 }
 
 @Serializable
+enum class CounterAxisAlignItems(val string: String) {
+	@SerialName("MIN")
+	Min("MIN"),
+	@SerialName("CENTER")
+	Center("CENTER"),
+	@SerialName("MAX")
+	Max("MAX"),
+	@SerialName("BASELINE")
+	Baseline("BASELINE"),
+}
+
+@Serializable
 enum class LayoutMode(val string: String) {
 	@SerialName("NONE")
 	None("NONE"),
@@ -328,6 +340,8 @@ data class Node (
 	val absoluteRenderBounds: Rectangle? = null,
 	/// Determines how the auto-layout frame’s children should be aligned in the primary axis direction. This property is only applicable for auto-layout frames.
 	val primaryAxisAlignItems: PrimaryAxisAlignItems? = null,
+	/// Determines how the auto-layout frame’s children should be aligned in the counter axis direction. This property is only applicable for auto-layout frames.
+	val counterAxisAlignItems: CounterAxisAlignItems? = null,
 	/// The distance between children of the frame. Can be negative. This property is only applicable for auto-layout frames.
 	val itemSpacing: Double? = null,
 	/// Whether this layer uses auto-layout to position its children.

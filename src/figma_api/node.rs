@@ -46,6 +46,16 @@ pub enum PrimaryAxisAlignItems {
     SpaceBetween,
 }
 
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+#[typeshare::typeshare]
+pub enum CounterAxisAlignItems {
+    Min,
+    Center,
+    Max,
+    Baseline,
+}
+
 /// [Figma documentation](https://www.figma.com/developers/api#node-types)
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -102,6 +112,9 @@ pub struct Node {
     /// Determines how the auto-layout frame’s children should be aligned in the primary axis direction. This property is only applicable for auto-layout frames.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub primary_axis_align_items: Option<PrimaryAxisAlignItems>,
+    /// Determines how the auto-layout frame’s children should be aligned in the counter axis direction. This property is only applicable for auto-layout frames.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub counter_axis_align_items: Option<CounterAxisAlignItems>,
     /// The distance between children of the frame. Can be negative. This property is only applicable for auto-layout frames.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub item_spacing: Option<f64>,

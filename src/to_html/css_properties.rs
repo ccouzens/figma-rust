@@ -1,11 +1,13 @@
 use crate::figma_api::{
-    EffectType, LayoutMode, Node, NodeType, PrimaryAxisAlignItems, StrokeAlign,
+    CounterAxisAlignItems, EffectType, LayoutMode, Node, NodeType, PrimaryAxisAlignItems,
+    StrokeAlign,
 };
 
 /// Get values for given CSS properties
 ///
 /// The CSS values are not optimized, but can be made so by use of another tool like `lightningcss`.
 pub trait CssProperties {
+    fn align_items(&self) -> Option<String>;
     fn background(&self) -> Option<String>;
     fn border_radius(&self) -> Option<String>;
     fn box_shadow(&self) -> Option<String>;
@@ -46,6 +48,16 @@ fn stroke_color(node: &Node) -> Option<String> {
 }
 
 impl CssProperties for Node {
+    fn align_items(self: &Node) -> Option<String> {
+        match self.counter_axis_align_items {
+            None => None,
+            Some(CounterAxisAlignItems::Min) => Some("flex-start".into()),
+            Some(CounterAxisAlignItems::Center) => Some("center".into()),
+            Some(CounterAxisAlignItems::Max) => Some("flex-end".into()),
+            Some(CounterAxisAlignItems::Baseline) => Some("baseline".into()),
+        }
+    }
+
     fn background(&self) -> Option<String> {
         match self.r#type {
             NodeType::Text | NodeType::Vector => None,

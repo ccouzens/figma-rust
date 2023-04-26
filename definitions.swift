@@ -212,6 +212,13 @@ public enum PrimaryAxisAlignItems: String, Codable {
 	case spaceBetween = "SPACE_BETWEEN"
 }
 
+public enum CounterAxisAlignItems: String, Codable {
+	case min = "MIN"
+	case center = "CENTER"
+	case max = "MAX"
+	case baseline = "BASELINE"
+}
+
 public enum LayoutMode: String, Codable {
 	case none = "NONE"
 	case horizontal = "HORIZONTAL"
@@ -287,6 +294,8 @@ public struct Node: Codable {
 	public let absoluteRenderBounds: Rectangle?
 	/// Determines how the auto-layout frame’s children should be aligned in the primary axis direction. This property is only applicable for auto-layout frames.
 	public let primaryAxisAlignItems: PrimaryAxisAlignItems?
+	/// Determines how the auto-layout frame’s children should be aligned in the counter axis direction. This property is only applicable for auto-layout frames.
+	public let counterAxisAlignItems: CounterAxisAlignItems?
 	/// The distance between children of the frame. Can be negative. This property is only applicable for auto-layout frames.
 	public let itemSpacing: Double?
 	/// Whether this layer uses auto-layout to position its children.
@@ -308,7 +317,7 @@ public struct Node: Codable {
 	/// Style of text including font family and weight
 	public let style: TypeStyle?
 
-	public init(id: String, name: String, visible: Bool?, type: NodeType, children: [Node]?, backgroundColor: Color?, fills: [Paint]?, strokes: [Paint]?, strokeWeight: Double?, strokeAlign: StrokeAlign?, cornerRadius: Double?, rectangleCornerRadii: [Double]?, transitionDuration: Double?, transitionEasing: EasingType?, opacity: Double?, absoluteBoundingBox: Rectangle?, absoluteRenderBounds: Rectangle?, primaryAxisAlignItems: PrimaryAxisAlignItems?, itemSpacing: Double?, layoutMode: LayoutMode?, paddingLeft: Double?, paddingRight: Double?, paddingTop: Double?, paddingBottom: Double?, effects: [Effect]?, styles: [StyleTypeMapKey: String]?, characters: String?, style: TypeStyle?) {
+	public init(id: String, name: String, visible: Bool?, type: NodeType, children: [Node]?, backgroundColor: Color?, fills: [Paint]?, strokes: [Paint]?, strokeWeight: Double?, strokeAlign: StrokeAlign?, cornerRadius: Double?, rectangleCornerRadii: [Double]?, transitionDuration: Double?, transitionEasing: EasingType?, opacity: Double?, absoluteBoundingBox: Rectangle?, absoluteRenderBounds: Rectangle?, primaryAxisAlignItems: PrimaryAxisAlignItems?, counterAxisAlignItems: CounterAxisAlignItems?, itemSpacing: Double?, layoutMode: LayoutMode?, paddingLeft: Double?, paddingRight: Double?, paddingTop: Double?, paddingBottom: Double?, effects: [Effect]?, styles: [StyleTypeMapKey: String]?, characters: String?, style: TypeStyle?) {
 		self.id = id
 		self.name = name
 		self.visible = visible
@@ -327,6 +336,7 @@ public struct Node: Codable {
 		self.absoluteBoundingBox = absoluteBoundingBox
 		self.absoluteRenderBounds = absoluteRenderBounds
 		self.primaryAxisAlignItems = primaryAxisAlignItems
+		self.counterAxisAlignItems = counterAxisAlignItems
 		self.itemSpacing = itemSpacing
 		self.layoutMode = layoutMode
 		self.paddingLeft = paddingLeft
