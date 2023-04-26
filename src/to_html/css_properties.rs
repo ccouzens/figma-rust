@@ -1,4 +1,6 @@
-use crate::figma_api::{EffectType, LayoutMode, Node, NodeType, StrokeAlign};
+use crate::figma_api::{
+    EffectType, LayoutMode, Node, NodeType, PrimaryAxisAlignItems, StrokeAlign,
+};
 
 /// Get values for given CSS properties
 ///
@@ -16,6 +18,7 @@ pub trait CssProperties {
     fn font_weight(&self) -> Option<String>;
     fn gap(&self) -> Option<String>;
     fn height(&self) -> Option<String>;
+    fn justify_content(&self) -> Option<String>;
     fn line_height(&self) -> Option<String>;
     fn opacity(&self) -> Option<String>;
     fn outline_offset(&self) -> Option<String>;
@@ -148,6 +151,16 @@ impl CssProperties for Node {
                 .and_then(|b| b.height)
                 .map(|h| format!("{h}px")),
             _ => None,
+        }
+    }
+
+    fn justify_content(&self) -> Option<String> {
+        match self.primary_axis_align_items {
+            None => None,
+            Some(PrimaryAxisAlignItems::Min) => Some("flex-start".into()),
+            Some(PrimaryAxisAlignItems::Center) => Some("center".into()),
+            Some(PrimaryAxisAlignItems::Max) => Some("flex-end".into()),
+            Some(PrimaryAxisAlignItems::SpaceBetween) => Some("space-between".into()),
         }
     }
 

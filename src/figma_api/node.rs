@@ -36,6 +36,16 @@ pub enum LayoutMode {
     Vertical,
 }
 
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+#[typeshare::typeshare]
+pub enum PrimaryAxisAlignItems {
+    Min,
+    Center,
+    Max,
+    SpaceBetween,
+}
+
 /// [Figma documentation](https://www.figma.com/developers/api#node-types)
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -89,6 +99,9 @@ pub struct Node {
     /// The bounds of the rendered node in the file in absolute space coordinates
     #[serde(skip_serializing_if = "Option::is_none")]
     absolute_render_bounds: Option<Rectangle>,
+    /// Determines how the auto-layout frame’s children should be aligned in the primary axis direction. This property is only applicable for auto-layout frames.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub primary_axis_align_items: Option<PrimaryAxisAlignItems>,
     /// The distance between children of the frame. Can be negative. This property is only applicable for auto-layout frames.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub item_spacing: Option<f64>,

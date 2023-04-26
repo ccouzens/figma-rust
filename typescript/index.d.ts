@@ -169,6 +169,13 @@ export interface Rectangle {
 	height?: number;
 }
 
+export enum PrimaryAxisAlignItems {
+	Min = "MIN",
+	Center = "CENTER",
+	Max = "MAX",
+	SpaceBetween = "SPACE_BETWEEN",
+}
+
 export enum LayoutMode {
 	None = "NONE",
 	Horizontal = "HORIZONTAL",
@@ -237,6 +244,8 @@ export interface Node {
 	absoluteBoundingBox?: Rectangle;
 	/** The bounds of the rendered node in the file in absolute space coordinates */
 	absoluteRenderBounds?: Rectangle;
+	/** Determines how the auto-layout frame’s children should be aligned in the primary axis direction. This property is only applicable for auto-layout frames. */
+	primaryAxisAlignItems?: PrimaryAxisAlignItems;
 	/** The distance between children of the frame. Can be negative. This property is only applicable for auto-layout frames. */
 	itemSpacing?: number;
 	/** Whether this layer uses auto-layout to position its children. */

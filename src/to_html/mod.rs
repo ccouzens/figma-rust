@@ -80,6 +80,7 @@ fn inline_css(node: &Node, body: Option<&Node>) -> Result<Option<String>> {
         ("font-weight".into(), node.font_weight()),
         ("gap".into(), node.gap()),
         ("height".into(), node.height()),
+        ("justify-content".into(), node.justify_content()),
         ("line-height".into(), node.line_height()),
         ("padding".into(), node.padding()),
         ("opacity".into(), CssProperties::opacity(node)),

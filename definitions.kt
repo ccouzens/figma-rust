@@ -235,6 +235,18 @@ data class Rectangle (
 )
 
 @Serializable
+enum class PrimaryAxisAlignItems(val string: String) {
+	@SerialName("MIN")
+	Min("MIN"),
+	@SerialName("CENTER")
+	Center("CENTER"),
+	@SerialName("MAX")
+	Max("MAX"),
+	@SerialName("SPACE_BETWEEN")
+	SpaceBetween("SPACE_BETWEEN"),
+}
+
+@Serializable
 enum class LayoutMode(val string: String) {
 	@SerialName("NONE")
 	None("NONE"),
@@ -314,6 +326,8 @@ data class Node (
 	val absoluteBoundingBox: Rectangle? = null,
 	/// The bounds of the rendered node in the file in absolute space coordinates
 	val absoluteRenderBounds: Rectangle? = null,
+	/// Determines how the auto-layout frame’s children should be aligned in the primary axis direction. This property is only applicable for auto-layout frames.
+	val primaryAxisAlignItems: PrimaryAxisAlignItems? = null,
 	/// The distance between children of the frame. Can be negative. This property is only applicable for auto-layout frames.
 	val itemSpacing: Double? = null,
 	/// Whether this layer uses auto-layout to position its children.
