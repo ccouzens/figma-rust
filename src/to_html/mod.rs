@@ -87,6 +87,7 @@ fn inline_css(node: &Node, body: Option<&Node>) -> Result<Option<String>> {
         ("opacity".into(), CssProperties::opacity(node)),
         ("outline".into(), node.outline()),
         ("outline-offset".into(), node.outline_offset()),
+        ("text-transform".into(), node.text_transform()),
         ("width".into(), node.width()),
     ];
 

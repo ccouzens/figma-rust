@@ -199,6 +199,14 @@ export enum StyleTypeMapKey {
 	Strokes = "strokes",
 }
 
+export enum TextCase {
+	Upper = "UPPER",
+	Lower = "LOWER",
+	Title = "TITLE",
+	SmallCaps = "SMALL_CAPS",
+	SmallCapsForced = "SMALL_CAPS_FORCED",
+}
+
 /**
  * Metadata for character formatting
  * 
@@ -211,6 +219,8 @@ export interface TypeStyle {
 	fontWeight: number;
 	/** Font size in px */
 	fontSize: number;
+	/** Text casing applied to the node, default is the original casing */
+	textCase?: TextCase;
 	/** Line height in px */
 	lineHeightPx: number;
 }

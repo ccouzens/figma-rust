@@ -1,5 +1,16 @@
 use serde::{Deserialize, Serialize};
 
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+#[typeshare::typeshare]
+pub enum TextCase {
+    Upper,
+    Lower,
+    Title,
+    SmallCaps,
+    SmallCapsForced,
+}
+
 /// Metadata for character formatting
 ///
 /// [Figma documentation](https://www.figma.com/developers/api#typestyle-type)
@@ -13,6 +24,8 @@ pub struct TypeStyle {
     pub font_weight: f64,
     /// Font size in px
     pub font_size: f64,
+    /// Text casing applied to the node, default is the original casing
+    pub text_case: Option<TextCase>,
     /// Line height in px
     pub line_height_px: f64,
 }

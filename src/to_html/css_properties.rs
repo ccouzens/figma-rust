@@ -1,6 +1,6 @@
 use crate::figma_api::{
     CounterAxisAlignItems, EffectType, LayoutMode, Node, NodeType, PrimaryAxisAlignItems,
-    StrokeAlign,
+    StrokeAlign, TextCase,
 };
 
 /// Get values for given CSS properties
@@ -26,6 +26,7 @@ pub trait CssProperties {
     fn outline_offset(&self) -> Option<String>;
     fn outline(&self) -> Option<String>;
     fn padding(&self) -> Option<String>;
+    fn text_transform(&self) -> Option<String>;
     fn width(&self) -> Option<String>;
 }
 
@@ -220,6 +221,16 @@ impl CssProperties for Node {
             StrokeAlign::Inside => Some(format!("-{width}px")),
             StrokeAlign::Outside => None,
             StrokeAlign::Center => Some(format!("-{}px", width / 2.0)),
+        }
+    }
+
+    fn text_transform(&self) -> Option<String> {
+        match self.style.as_ref()?.text_case.as_ref()? {
+            TextCase::Upper => Some("uppercase".into()),
+            TextCase::Lower => Some("lowercase".into()),
+            TextCase::Title => Some("capitalize".into()),
+            TextCase::SmallCaps => None,
+            TextCase::SmallCapsForced => None,
         }
     }
 

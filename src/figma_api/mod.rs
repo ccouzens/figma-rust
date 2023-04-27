@@ -21,6 +21,6 @@ pub use self::{
     paint::Paint,
     rectangle::Rectangle,
     style::{Style, StyleType},
-    type_style::TypeStyle,
+    type_style::{TextCase, TypeStyle},
     vector::Vector,
 };

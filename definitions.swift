@@ -235,6 +235,14 @@ public enum StyleTypeMapKey: String, Codable {
 	case strokes
 }
 
+public enum TextCase: String, Codable {
+	case upper = "UPPER"
+	case lower = "LOWER"
+	case title = "TITLE"
+	case smallCaps = "SMALL_CAPS"
+	case smallCapsForced = "SMALL_CAPS_FORCED"
+}
+
 /// Metadata for character formatting
 /// 
 /// [Figma documentation](https://www.figma.com/developers/api#typestyle-type)
@@ -245,13 +253,16 @@ public struct TypeStyle: Codable {
 	public let fontWeight: Double
 	/// Font size in px
 	public let fontSize: Double
+	/// Text casing applied to the node, default is the original casing
+	public let textCase: TextCase?
 	/// Line height in px
 	public let lineHeightPx: Double
 
-	public init(fontFamily: String, fontWeight: Double, fontSize: Double, lineHeightPx: Double) {
+	public init(fontFamily: String, fontWeight: Double, fontSize: Double, textCase: TextCase?, lineHeightPx: Double) {
 		self.fontFamily = fontFamily
 		self.fontWeight = fontWeight
 		self.fontSize = fontSize
+		self.textCase = textCase
 		self.lineHeightPx = lineHeightPx
 	}
 }

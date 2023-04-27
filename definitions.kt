@@ -286,6 +286,20 @@ enum class StyleTypeMapKey(val string: String) {
 	Strokes("strokes"),
 }
 
+@Serializable
+enum class TextCase(val string: String) {
+	@SerialName("UPPER")
+	Upper("UPPER"),
+	@SerialName("LOWER")
+	Lower("LOWER"),
+	@SerialName("TITLE")
+	Title("TITLE"),
+	@SerialName("SMALL_CAPS")
+	SmallCaps("SMALL_CAPS"),
+	@SerialName("SMALL_CAPS_FORCED")
+	SmallCapsForced("SMALL_CAPS_FORCED"),
+}
+
 /// Metadata for character formatting
 /// 
 /// [Figma documentation](https://www.figma.com/developers/api#typestyle-type)
@@ -297,6 +311,8 @@ data class TypeStyle (
 	val fontWeight: Double,
 	/// Font size in px
 	val fontSize: Double,
+	/// Text casing applied to the node, default is the original casing
+	val textCase: TextCase? = null,
 	/// Line height in px
 	val lineHeightPx: Double
 )
