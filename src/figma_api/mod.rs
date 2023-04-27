@@ -8,6 +8,7 @@ mod node;
 mod paint;
 mod rectangle;
 mod style;
+mod styles;
 mod type_style;
 mod vector;
 pub use self::{
@@ -21,6 +22,7 @@ pub use self::{
     paint::Paint,
     rectangle::Rectangle,
     style::{Style, StyleType},
+    styles::Styles,
     type_style::{TextCase, TypeStyle},
     vector::Vector,
 };

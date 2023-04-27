@@ -1,19 +1,5 @@
-use super::{Color, Component, EasingType, Effect, File, Paint, Rectangle, TypeStyle};
+use super::{Color, Component, EasingType, Effect, File, Paint, Rectangle, Styles, TypeStyle};
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
-
-#[derive(Debug, Deserialize, Serialize, PartialEq, Eq, Hash)]
-#[serde(rename_all = "camelCase")]
-#[typeshare::typeshare]
-pub enum StyleTypeMapKey {
-    Fill,
-    Fills,
-    Text,
-    Grid,
-    Effect,
-    Stroke,
-    Strokes,
-}
 
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
@@ -138,7 +124,7 @@ pub struct Node {
     pub effects: Option<Vec<Effect>>,
     /// A mapping of a StyleType to style ID of styles present on this node. The style ID can be used to look up more information about the style in the top-level styles field.
     #[serde(skip_serializing_if = "Option::is_none")]
-    styles: Option<HashMap<StyleTypeMapKey, String>>,
+    styles: Option<Styles>,
     /// Text contained within a text box
     #[serde(skip_serializing_if = "Option::is_none")]
     pub characters: Option<String>,

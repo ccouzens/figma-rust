@@ -225,14 +225,8 @@ public enum LayoutMode: String, Codable {
 	case vertical = "VERTICAL"
 }
 
-public enum StyleTypeMapKey: String, Codable {
-	case fill
-	case fills
-	case text
-	case grid
-	case effect
-	case stroke
-	case strokes
+public struct Styles: Codable {
+	public init() {}
 }
 
 public enum TextCase: String, Codable {
@@ -322,13 +316,13 @@ public struct Node: Codable {
 	/// An array of effects attached to this node
 	public let effects: [Effect]?
 	/// A mapping of a StyleType to style ID of styles present on this node. The style ID can be used to look up more information about the style in the top-level styles field.
-	public let styles: [StyleTypeMapKey: String]?
+	public let styles: Styles?
 	/// Text contained within a text box
 	public let characters: String?
 	/// Style of text including font family and weight
 	public let style: TypeStyle?
 
-	public init(id: String, name: String, visible: Bool?, type: NodeType, children: [Node]?, backgroundColor: Color?, fills: [Paint]?, strokes: [Paint]?, strokeWeight: Double?, strokeAlign: StrokeAlign?, cornerRadius: Double?, rectangleCornerRadii: [Double]?, transitionDuration: Double?, transitionEasing: EasingType?, opacity: Double?, absoluteBoundingBox: Rectangle?, absoluteRenderBounds: Rectangle?, primaryAxisAlignItems: PrimaryAxisAlignItems?, counterAxisAlignItems: CounterAxisAlignItems?, itemSpacing: Double?, layoutMode: LayoutMode?, paddingLeft: Double?, paddingRight: Double?, paddingTop: Double?, paddingBottom: Double?, effects: [Effect]?, styles: [StyleTypeMapKey: String]?, characters: String?, style: TypeStyle?) {
+	public init(id: String, name: String, visible: Bool?, type: NodeType, children: [Node]?, backgroundColor: Color?, fills: [Paint]?, strokes: [Paint]?, strokeWeight: Double?, strokeAlign: StrokeAlign?, cornerRadius: Double?, rectangleCornerRadii: [Double]?, transitionDuration: Double?, transitionEasing: EasingType?, opacity: Double?, absoluteBoundingBox: Rectangle?, absoluteRenderBounds: Rectangle?, primaryAxisAlignItems: PrimaryAxisAlignItems?, counterAxisAlignItems: CounterAxisAlignItems?, itemSpacing: Double?, layoutMode: LayoutMode?, paddingLeft: Double?, paddingRight: Double?, paddingTop: Double?, paddingBottom: Double?, effects: [Effect]?, styles: Styles?, characters: String?, style: TypeStyle?) {
 		self.id = id
 		self.name = name
 		self.visible = visible

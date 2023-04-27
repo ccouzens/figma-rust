@@ -269,22 +269,7 @@ enum class LayoutMode(val string: String) {
 }
 
 @Serializable
-enum class StyleTypeMapKey(val string: String) {
-	@SerialName("fill")
-	Fill("fill"),
-	@SerialName("fills")
-	Fills("fills"),
-	@SerialName("text")
-	Text("text"),
-	@SerialName("grid")
-	Grid("grid"),
-	@SerialName("effect")
-	Effect("effect"),
-	@SerialName("stroke")
-	Stroke("stroke"),
-	@SerialName("strokes")
-	Strokes("strokes"),
-}
+object Styles
 
 @Serializable
 enum class TextCase(val string: String) {
@@ -373,7 +358,7 @@ data class Node (
 	/// An array of effects attached to this node
 	val effects: List<Effect>? = null,
 	/// A mapping of a StyleType to style ID of styles present on this node. The style ID can be used to look up more information about the style in the top-level styles field.
-	val styles: HashMap<StyleTypeMapKey, String>? = null,
+	val styles: Styles? = null,
 	/// Text contained within a text box
 	val characters: String? = null,
 	/// Style of text including font family and weight

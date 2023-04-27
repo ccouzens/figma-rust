@@ -189,14 +189,7 @@ export enum LayoutMode {
 	Vertical = "VERTICAL",
 }
 
-export enum StyleTypeMapKey {
-	Fill = "fill",
-	Fills = "fills",
-	Text = "text",
-	Grid = "grid",
-	Effect = "effect",
-	Stroke = "stroke",
-	Strokes = "strokes",
+export interface Styles {
 }
 
 export enum TextCase {
@@ -280,7 +273,7 @@ export interface Node {
 	/** An array of effects attached to this node */
 	effects?: Effect[];
 	/** A mapping of a StyleType to style ID of styles present on this node. The style ID can be used to look up more information about the style in the top-level styles field. */
-	styles?: Record<StyleTypeMapKey, string>;
+	styles?: Styles;
 	/** Text contained within a text box */
 	characters?: string;
 	/** Style of text including font family and weight */
