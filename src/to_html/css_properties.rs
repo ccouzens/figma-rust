@@ -26,8 +26,16 @@ pub trait CssProperties {
     fn outline_offset(&self) -> Option<String>;
     fn outline(&self) -> Option<String>;
     fn padding(&self) -> Option<String>;
+    fn position(&self, parent: Option<&Node>) -> Option<String>;
     fn text_transform(&self) -> Option<String>;
     fn width(&self) -> Option<String>;
+}
+
+fn is_auto_layout(node: &Node) -> bool {
+    matches!(
+        node.layout_mode,
+        Some(LayoutMode::Horizontal) | Some(LayoutMode::Vertical)
+    )
 }
 
 fn fills_color(node: &Node) -> Option<String> {
@@ -109,9 +117,10 @@ impl CssProperties for Node {
     }
 
     fn display(&self) -> Option<String> {
-        match self.layout_mode {
-            Some(LayoutMode::Horizontal) | Some(LayoutMode::Vertical) => Some("flex".into()),
-            _ => None,
+        if is_auto_layout(self) {
+            Some("flex".into())
+        } else {
+            None
         }
     }
 
@@ -191,6 +200,19 @@ impl CssProperties for Node {
             None
         } else {
             Some(format!("{top}px {right}px {bottom}px {left}px"))
+        }
+    }
+
+    fn position(&self, parent: Option<&Node>) -> Option<String> {
+        if let Some(parent) = parent {
+            if !is_auto_layout(parent) {
+                return Some("absolute".into());
+            }
+        }
+        if !is_auto_layout(self) && self.enabled_children().next().is_some() {
+            Some("relative".into())
+        } else {
+            None
         }
     }
 

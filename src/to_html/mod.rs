@@ -64,8 +64,8 @@ fn create_css(selectors: &[(String, Vec<CSSRulePairs>)]) -> Result<String> {
         .code)
 }
 
-fn inline_css(node: &Node, body: Option<&Node>) -> Result<Option<String>> {
-    let body_absolute_bounding_box = body.and_then(|b| b.absolute_bounding_box());
+fn inline_css(node: &Node, parent: Option<&Node>) -> Result<Option<String>> {
+    let body_absolute_bounding_box = parent.and_then(|b| b.absolute_bounding_box());
 
     let mut css: Vec<(String, Option<String>)> = vec![
         ("align-items".into(), node.align_items()),
@@ -87,6 +87,7 @@ fn inline_css(node: &Node, body: Option<&Node>) -> Result<Option<String>> {
         ("opacity".into(), CssProperties::opacity(node)),
         ("outline".into(), node.outline()),
         ("outline-offset".into(), node.outline_offset()),
+        ("position".into(), node.position(parent)),
         ("text-transform".into(), node.text_transform()),
         ("width".into(), node.width()),
     ];
@@ -108,7 +109,6 @@ fn inline_css(node: &Node, body: Option<&Node>) -> Result<Option<String>> {
     ) {
         if node.r#type == NodeType::Component {
             css.extend_from_slice(&[
-                ("position".into(), Some("absolute".into())),
                 (
                     "top".into(),
                     Some(format!("{}px", component_offset_top - body_offset_top,)),
@@ -131,11 +131,11 @@ fn inline_css(node: &Node, body: Option<&Node>) -> Result<Option<String>> {
     }
 }
 
-fn node_to_html(node: &Node, body: &Node) -> String {
+fn node_to_html(node: &Node, parent: &Node) -> String {
     match node.r#type {
         NodeType::Vector => html! {
             svg(
-                style?=inline_css(node, Some(body)).unwrap_or_default(),
+                style?=inline_css(node, Some(parent)).unwrap_or_default(),
                 data-figma-name=&node.name,
                 data-figma-id=&node.id,
                 viewBox="0 0 100 100"
@@ -151,12 +151,12 @@ fn node_to_html(node: &Node, body: &Node) -> String {
         .to_string(),
         _ => html! {
             div(
-                style?=inline_css(node, Some(body)).unwrap_or_default(),
+                style?=inline_css(node, Some(parent)).unwrap_or_default(),
                 data-figma-name=&node.name,
                 data-figma-id=&node.id
             ) {
-                @ for child in node.children().iter().filter(|c| c.visible()) {
-                    : horrorshow::Raw(node_to_html(child, body))
+                @ for child in node.enabled_children() {
+                    : horrorshow::Raw(node_to_html(child, node))
                 }
                 : &node.characters.as_deref().unwrap_or_default();
             }

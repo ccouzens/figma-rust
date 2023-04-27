@@ -187,6 +187,10 @@ impl Node {
         self.children.as_deref().unwrap_or_default()
     }
 
+    pub fn enabled_children(&self) -> impl Iterator<Item = &Node> {
+        self.children().iter().filter(|c| c.visible())
+    }
+
     pub fn fills(&self) -> &[Paint] {
         self.fills.as_deref().unwrap_or_default()
     }
