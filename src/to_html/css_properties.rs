@@ -21,6 +21,7 @@ pub trait CssProperties {
     fn gap(&self) -> Option<String>;
     fn height(&self) -> Option<String>;
     fn justify_content(&self) -> Option<String>;
+    fn left(&self, parent: Option<&Node>) -> Option<String>;
     fn line_height(&self) -> Option<String>;
     fn opacity(&self) -> Option<String>;
     fn outline_offset(&self) -> Option<String>;
@@ -28,6 +29,7 @@ pub trait CssProperties {
     fn padding(&self) -> Option<String>;
     fn position(&self, parent: Option<&Node>) -> Option<String>;
     fn text_transform(&self) -> Option<String>;
+    fn top(&self, parent: Option<&Node>) -> Option<String>;
     fn width(&self) -> Option<String>;
 }
 
@@ -186,6 +188,16 @@ impl CssProperties for Node {
         }
     }
 
+    fn left(&self, parent: Option<&Node>) -> Option<String> {
+        let parent = parent?;
+        if is_auto_layout(parent) {
+            return None;
+        }
+        let parent_offset_left = parent.absolute_bounding_box()?.x?;
+        let self_offset_left = self.absolute_bounding_box()?.x?;
+        Some(format!("{}px", self_offset_left - parent_offset_left))
+    }
+
     fn line_height(&self) -> Option<String> {
         let lh = self.style.as_ref().map(|s| s.line_height_px).unwrap_or(0.0);
         Some(format!("{lh}px"))
@@ -254,6 +266,16 @@ impl CssProperties for Node {
             TextCase::SmallCaps => None,
             TextCase::SmallCapsForced => None,
         }
+    }
+
+    fn top(&self, parent: Option<&Node>) -> Option<String> {
+        let parent = parent?;
+        if is_auto_layout(parent) {
+            return None;
+        }
+        let parent_offset_top = parent.absolute_bounding_box()?.y?;
+        let self_offset_top = self.absolute_bounding_box()?.y?;
+        Some(format!("{}px", self_offset_top - parent_offset_top))
     }
 
     fn width(&self) -> Option<String> {

@@ -65,8 +65,6 @@ fn create_css(selectors: &[(String, Vec<CSSRulePairs>)]) -> Result<String> {
 }
 
 fn inline_css(node: &Node, parent: Option<&Node>) -> Result<Option<String>> {
-    let body_absolute_bounding_box = parent.and_then(|b| b.absolute_bounding_box());
-
     let mut css: Vec<(String, Option<String>)> = vec![
         ("align-items".into(), node.align_items()),
         ("background".into(), node.background()),
@@ -82,6 +80,7 @@ fn inline_css(node: &Node, parent: Option<&Node>) -> Result<Option<String>> {
         ("gap".into(), node.gap()),
         ("height".into(), node.height()),
         ("justify-content".into(), node.justify_content()),
+        ("left".into(), node.left(parent)),
         ("line-height".into(), node.line_height()),
         ("padding".into(), node.padding()),
         ("opacity".into(), CssProperties::opacity(node)),
@@ -89,34 +88,16 @@ fn inline_css(node: &Node, parent: Option<&Node>) -> Result<Option<String>> {
         ("outline-offset".into(), node.outline_offset()),
         ("position".into(), node.position(parent)),
         ("text-transform".into(), node.text_transform()),
+        ("top".into(), node.top(parent)),
         ("width".into(), node.width()),
     ];
 
-    if let (
-        Some(component_offset_top),
-        Some(component_offset_left),
-        Some(component_height),
-        Some(component_width),
-        Some(body_offset_top),
-        Some(body_offset_left),
-    ) = (
-        node.absolute_bounding_box().and_then(|bb| bb.y),
-        node.absolute_bounding_box().and_then(|bb| bb.x),
+    if let (Some(component_height), Some(component_width)) = (
         node.absolute_bounding_box().and_then(|bb| bb.height),
         node.absolute_bounding_box().and_then(|bb| bb.width),
-        body_absolute_bounding_box.and_then(|b| b.y),
-        body_absolute_bounding_box.and_then(|b| b.x),
     ) {
         if node.r#type == NodeType::Component {
             css.extend_from_slice(&[
-                (
-                    "top".into(),
-                    Some(format!("{}px", component_offset_top - body_offset_top,)),
-                ),
-                (
-                    "left".into(),
-                    Some(format!("{}px", component_offset_left - body_offset_left)),
-                ),
                 ("max-width".into(), Some(format!("{component_width}px"))),
                 ("max-height".into(), Some(format!("{component_height}px"))),
             ]);
