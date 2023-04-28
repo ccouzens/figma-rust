@@ -239,11 +239,16 @@ impl CssProperties for Node {
 
     fn outline(&self) -> Option<String> {
         let color = stroke_color(self)?;
+        let style = if self.stroke_dashes.as_ref().map(|sd| sd.is_empty()) == Some(false) {
+            "dashed"
+        } else {
+            "solid"
+        };
         let width = self.stroke_weight()?;
         if width == 0.0 {
             None
         } else {
-            Some(format!("{width}px solid {color}"))
+            Some(format!("{width}px {style} {color}"))
         }
     }
 

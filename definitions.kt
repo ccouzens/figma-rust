@@ -325,6 +325,8 @@ data class Node (
 	val strokeWeight: Double? = null,
 	/// Position of stroke relative to vector outline
 	val strokeAlign: StrokeAlign? = null,
+	/// An array of floating point numbers describing the pattern of dash length and gap lengths that the vector path follows. For example a value of [1, 2] indicates that the path has a dash of length 1 followed by a gap of length 2, repeated.
+	val strokeDashes: List<Double>? = null,
 	/// Radius of each corner of the node if a single radius is set for all corners
 	val cornerRadius: Double? = null,
 	/// Array of length 4 of the radius of each corner of the node, starting in the top left and proceeding clockwise

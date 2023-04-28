@@ -240,6 +240,8 @@ export interface Node {
 	strokeWeight?: number;
 	/** Position of stroke relative to vector outline */
 	strokeAlign?: StrokeAlign;
+	/** An array of floating point numbers describing the pattern of dash length and gap lengths that the vector path follows. For example a value of [1, 2] indicates that the path has a dash of length 1 followed by a gap of length 2, repeated. */
+	strokeDashes?: number[];
 	/** Radius of each corner of the node if a single radius is set for all corners */
 	cornerRadius?: number;
 	/** Array of length 4 of the radius of each corner of the node, starting in the top left and proceeding clockwise */

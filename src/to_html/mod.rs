@@ -178,7 +178,6 @@ pub fn main(
             "body".into(),
             vec![
                 ("margin".into(), Some("0".into())),
-                ("box-sizing".into(), Some("border-box".into())),
                 ("position".into(), Some("relative".into())),
                 (
                     "width".into(),
@@ -196,7 +195,6 @@ pub fn main(
                 ("border-radius".into(), body.border_radius()),
                 ("outline".into(), body.outline()),
                 ("outline-offset".into(), body.outline_offset()),
-                ("outline-style".into(), Some("dashed".into())),
             ],
         ),
         (

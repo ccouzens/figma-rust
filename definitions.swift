@@ -283,6 +283,8 @@ public struct Node: Codable {
 	public let strokeWeight: Double?
 	/// Position of stroke relative to vector outline
 	public let strokeAlign: StrokeAlign?
+	/// An array of floating point numbers describing the pattern of dash length and gap lengths that the vector path follows. For example a value of [1, 2] indicates that the path has a dash of length 1 followed by a gap of length 2, repeated.
+	public let strokeDashes: [Double]?
 	/// Radius of each corner of the node if a single radius is set for all corners
 	public let cornerRadius: Double?
 	/// Array of length 4 of the radius of each corner of the node, starting in the top left and proceeding clockwise
@@ -322,7 +324,7 @@ public struct Node: Codable {
 	/// Style of text including font family and weight
 	public let style: TypeStyle?
 
-	public init(id: String, name: String, visible: Bool?, type: NodeType, children: [Node]?, backgroundColor: Color?, fills: [Paint]?, strokes: [Paint]?, strokeWeight: Double?, strokeAlign: StrokeAlign?, cornerRadius: Double?, rectangleCornerRadii: [Double]?, transitionDuration: Double?, transitionEasing: EasingType?, opacity: Double?, absoluteBoundingBox: Rectangle?, absoluteRenderBounds: Rectangle?, primaryAxisAlignItems: PrimaryAxisAlignItems?, counterAxisAlignItems: CounterAxisAlignItems?, itemSpacing: Double?, layoutMode: LayoutMode?, paddingLeft: Double?, paddingRight: Double?, paddingTop: Double?, paddingBottom: Double?, effects: [Effect]?, styles: Styles?, characters: String?, style: TypeStyle?) {
+	public init(id: String, name: String, visible: Bool?, type: NodeType, children: [Node]?, backgroundColor: Color?, fills: [Paint]?, strokes: [Paint]?, strokeWeight: Double?, strokeAlign: StrokeAlign?, strokeDashes: [Double]?, cornerRadius: Double?, rectangleCornerRadii: [Double]?, transitionDuration: Double?, transitionEasing: EasingType?, opacity: Double?, absoluteBoundingBox: Rectangle?, absoluteRenderBounds: Rectangle?, primaryAxisAlignItems: PrimaryAxisAlignItems?, counterAxisAlignItems: CounterAxisAlignItems?, itemSpacing: Double?, layoutMode: LayoutMode?, paddingLeft: Double?, paddingRight: Double?, paddingTop: Double?, paddingBottom: Double?, effects: [Effect]?, styles: Styles?, characters: String?, style: TypeStyle?) {
 		self.id = id
 		self.name = name
 		self.visible = visible
@@ -333,6 +335,7 @@ public struct Node: Codable {
 		self.strokes = strokes
 		self.strokeWeight = strokeWeight
 		self.strokeAlign = strokeAlign
+		self.strokeDashes = strokeDashes
 		self.cornerRadius = cornerRadius
 		self.rectangleCornerRadii = rectangleCornerRadii
 		self.transitionDuration = transitionDuration

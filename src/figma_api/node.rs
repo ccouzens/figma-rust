@@ -74,6 +74,9 @@ pub struct Node {
     /// Position of stroke relative to vector outline
     #[serde(skip_serializing_if = "Option::is_none")]
     stroke_align: Option<StrokeAlign>,
+    /// An array of floating point numbers describing the pattern of dash length and gap lengths that the vector path follows. For example a value of [1, 2] indicates that the path has a dash of length 1 followed by a gap of length 2, repeated.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stroke_dashes: Option<Vec<f64>>,
     /// Radius of each corner of the node if a single radius is set for all corners
     #[serde(skip_serializing_if = "Option::is_none")]
     corner_radius: Option<f64>,
