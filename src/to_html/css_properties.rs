@@ -73,7 +73,7 @@ impl CssProperties for Node {
 
     fn background(&self) -> Option<String> {
         match self.r#type {
-            NodeType::Text | NodeType::Vector => None,
+            NodeType::Text | NodeType::Vector | NodeType::BooleanOperation => None,
             _ => fills_color(self).or_else(|| {
                 self.background_color()
                     .and_then(|c| c.to_option_rgb_string())
