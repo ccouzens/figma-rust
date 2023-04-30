@@ -3,6 +3,7 @@
 example-figma-files = \
 example-figma-files/design-tokens-for-figma.json \
 example-figma-files/gov-uk-design-system.json \
+example-figma-files/gov-uk-design-system-components/get-started-page.svg \
 example-figma-files/gov-uk-design-system-components/button.svg \
 example-figma-files/gov-uk-design-system-components/cookie-banner.svg \
 example-figma-files/gov-uk-design-system-components/footer.svg \
@@ -12,6 +13,8 @@ example-figma-files/gov-uk-design-system-components/tag.svg
 example-output-files = \
 src/design_tokens/example-output.json \
 src/typescript_props/example-output.ts \
+example-figma-files/gov-uk-design-system-components/get-started-page.json \
+example-figma-files/gov-uk-design-system-components/get-started-page.html \
 example-figma-files/gov-uk-design-system-components/button.json \
 example-figma-files/gov-uk-design-system-components/button.html \
 example-figma-files/gov-uk-design-system-components/cookie-banner.json \
@@ -39,6 +42,9 @@ example-figma-files/gov-uk-design-system.json :
 	'https://api.figma.com/v1/files/JFMsvJ0Q5v1daC6pySgvfZ' \
         | jq > $@
 
+example-figma-files/gov-uk-design-system-components/get-started-page.json : example-figma-files/gov-uk-design-system.json
+	jq '.document.children[] | select(.name == "👋  Get Started")' < $< > $@
+
 example-figma-files/gov-uk-design-system-components/button.json : example-figma-files/gov-uk-design-system.json
 	jq '.document.children[] | select(.name == "🗝️  Styles and Components").children[] | select(.name == "Button")' < $< > $@
 
@@ -53,6 +59,11 @@ example-figma-files/gov-uk-design-system-components/header.json : example-figma-
 
 example-figma-files/gov-uk-design-system-components/tag.json : example-figma-files/gov-uk-design-system.json
 	jq '.document.children[] | select(.name == "🗝️  Styles and Components").children[] | select(.name == "Tag")' < $< > $@
+
+example-figma-files/gov-uk-design-system-components/get-started-page.svg :
+	curl $$(curl -sH "X-Figma-Token: ${FIGMA_TOKEN}" \
+	'https://api.figma.com/v1/images/JFMsvJ0Q5v1daC6pySgvfZ?ids=756:127&format=svg&svg_include_id=true' \
+        | jq '.images["756:127"]' -r) > $@
 
 example-figma-files/gov-uk-design-system-components/button.svg :
 	curl $$(curl -sH "X-Figma-Token: ${FIGMA_TOKEN}" \
@@ -84,6 +95,11 @@ src/design_tokens/example-output.json : example-figma-files/design-tokens-for-fi
 
 src/typescript_props/example-output.ts : example-figma-files/gov-uk-design-system.json
 	cargo run --release -- typescript-props < $< > $@
+
+example-figma-files/gov-uk-design-system-components/get-started-page.html : example-figma-files/gov-uk-design-system.json
+	cargo run --release -- to-html 756:127 < $< \
+		| sed 's/font-family: GDS Transport Website;/font-family: GDS Transport Website,arial,sans-serif;/g' \
+		| npx prettier@2.8.4 --parser html > $@
 
 example-figma-files/gov-uk-design-system-components/button.html : example-figma-files/gov-uk-design-system.json
 	cargo run --release -- to-html 213:6 < $< \
