@@ -112,11 +112,11 @@ fn inline_css(node: &Node, parent: Option<&Node>) -> Result<Option<String>> {
     }
 }
 
-fn node_to_html(node: &Node, parent: &Node) -> String {
+fn node_to_html(node: &Node, parent: Option<&Node>) -> String {
     match node.r#type {
         NodeType::Vector => html! {
             svg(
-                style?=inline_css(node, Some(parent)).unwrap_or_default(),
+                style?=inline_css(node, parent).unwrap_or_default(),
                 data-figma-name=&node.name,
                 data-figma-id=&node.id,
                 viewBox="0 0 100 100"
@@ -132,12 +132,12 @@ fn node_to_html(node: &Node, parent: &Node) -> String {
         .to_string(),
         _ => html! {
             div(
-                style?=inline_css(node, Some(parent)).unwrap_or_default(),
+                style?=inline_css(node, parent).unwrap_or_default(),
                 data-figma-name=&node.name,
                 data-figma-id=&node.id
             ) {
                 @ for child in node.enabled_children() {
-                    : horrorshow::Raw(node_to_html(child, node))
+                    : horrorshow::Raw(node_to_html(child, Some(node)))
                 }
                 : &node.characters.as_deref().unwrap_or_default();
             }
@@ -149,7 +149,7 @@ fn node_to_html(node: &Node, parent: &Node) -> String {
 struct RenderProps<'a> {
     body_css: &'a str,
     component_title: &'a str,
-    nodes: &'a [Node],
+    node: &'a Node,
 }
 
 pub fn main(
@@ -169,34 +169,8 @@ pub fn main(
         .find(|n| matches!(n.r#type, NodeType::Canvas))
         .context("Failed to find canvas parent")?;
 
-    let absolute_bounding_box = body
-        .absolute_bounding_box()
-        .context("Failed to load bounding box")?;
-
     let global_css = create_css(&[
-        (
-            "body".into(),
-            vec![
-                ("margin".into(), Some("0".into())),
-                ("position".into(), Some("relative".into())),
-                (
-                    "width".into(),
-                    absolute_bounding_box
-                        .width
-                        .map(|width| format!("{width}px")),
-                ),
-                (
-                    "height".into(),
-                    absolute_bounding_box
-                        .height
-                        .map(|height| format!("{height}px")),
-                ),
-                ("background".into(), body.background()),
-                ("border-radius".into(), body.border_radius()),
-                ("outline".into(), body.outline()),
-                ("outline-offset".into(), body.outline_offset()),
-            ],
-        ),
+        ("body".into(), vec![("margin".into(), Some("0".into()))]),
         (
             "html".into(),
             vec![("background".into(), canvas.background())],
@@ -206,7 +180,7 @@ pub fn main(
     let render_props = RenderProps {
         body_css: &global_css,
         component_title: &body.name,
-        nodes: body.children(),
+        node: body,
     };
 
     writeln!(
@@ -221,9 +195,7 @@ pub fn main(
                     style(type="text/css"): horrorshow::Raw(render_props.body_css);
                 }
                 body {
-                    @ for node in render_props.nodes.iter() {
-                        : horrorshow::Raw(node_to_html(node, body))
-                    }
+                    : horrorshow::Raw(node_to_html(render_props.node, None))
                 }
             }
         }
