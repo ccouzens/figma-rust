@@ -221,7 +221,10 @@ impl CssProperties for Node {
         if is_auto_layout(parent) {
             return None;
         }
-        let parent_offset_left = parent.absolute_bounding_box()?.x?;
+        let parent_offset_left = parent
+            .absolute_bounding_box()
+            .and_then(|bb| bb.x)
+            .unwrap_or(0.0);
         let self_offset_left = self.absolute_bounding_box()?.x?;
         Some(format!("{}px", self_offset_left - parent_offset_left))
     }
@@ -313,7 +316,10 @@ impl CssProperties for Node {
         if is_auto_layout(parent) {
             return None;
         }
-        let parent_offset_top = parent.absolute_bounding_box()?.y?;
+        let parent_offset_top = parent
+            .absolute_bounding_box()
+            .and_then(|bb| bb.y)
+            .unwrap_or(0.0);
         let self_offset_top = self.absolute_bounding_box()?.y?;
         Some(format!("{}px", self_offset_top - parent_offset_top))
     }
