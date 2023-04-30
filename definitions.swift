@@ -158,6 +158,25 @@ public struct Paint: Codable {
 	}
 }
 
+/// Individual stroke weights
+public struct StrokeWeights: Codable {
+	/// The top stroke weight
+	public let top: Double
+	/// The right stroke weight
+	public let right: Double
+	/// The bottom stroke weight
+	public let bottom: Double
+	/// The left stroke weight
+	public let left: Double
+
+	public init(top: Double, right: Double, bottom: Double, left: Double) {
+		self.top = top
+		self.right = right
+		self.bottom = bottom
+		self.left = left
+	}
+}
+
 public enum StrokeAlign: String, Codable {
 	/// stroke drawn inside the shape boundary
 	case inside = "INSIDE"
@@ -294,6 +313,8 @@ public struct Node: Codable {
 	public let strokes: [Paint]?
 	/// The weight of strokes on the node
 	public let strokeWeight: Double?
+	/// An object including the top, bottom, left, and right stroke weights. Only returned if individual stroke weights are used.
+	public let individualStrokeWeights: StrokeWeights?
 	/// Position of stroke relative to vector outline
 	public let strokeAlign: StrokeAlign?
 	/// An array of floating point numbers describing the pattern of dash length and gap lengths that the vector path follows. For example a value of [1, 2] indicates that the path has a dash of length 1 followed by a gap of length 2, repeated.
@@ -343,7 +364,7 @@ public struct Node: Codable {
 	/// This property is applicable only for direct children of auto-layout frames, ignored otherwise. Determines whether a layer should stretch along the parent’s primary axis. A 0 corresponds to a fixed size and 1 corresponds to stretch
 	public let layoutGrow: Double?
 
-	public init(id: String, name: String, visible: Bool?, type: NodeType, children: [Node]?, backgroundColor: Color?, fills: [Paint]?, strokes: [Paint]?, strokeWeight: Double?, strokeAlign: StrokeAlign?, strokeDashes: [Double]?, cornerRadius: Double?, rectangleCornerRadii: [Double]?, transitionDuration: Double?, transitionEasing: EasingType?, opacity: Double?, absoluteBoundingBox: Rectangle?, absoluteRenderBounds: Rectangle?, primaryAxisSizingMode: AxisSizingMode?, counterAxisSizingMode: AxisSizingMode?, primaryAxisAlignItems: PrimaryAxisAlignItems?, counterAxisAlignItems: CounterAxisAlignItems?, itemSpacing: Double?, layoutMode: LayoutMode?, paddingLeft: Double?, paddingRight: Double?, paddingTop: Double?, paddingBottom: Double?, effects: [Effect]?, styles: Styles?, characters: String?, style: TypeStyle?, layoutGrow: Double?) {
+	public init(id: String, name: String, visible: Bool?, type: NodeType, children: [Node]?, backgroundColor: Color?, fills: [Paint]?, strokes: [Paint]?, strokeWeight: Double?, individualStrokeWeights: StrokeWeights?, strokeAlign: StrokeAlign?, strokeDashes: [Double]?, cornerRadius: Double?, rectangleCornerRadii: [Double]?, transitionDuration: Double?, transitionEasing: EasingType?, opacity: Double?, absoluteBoundingBox: Rectangle?, absoluteRenderBounds: Rectangle?, primaryAxisSizingMode: AxisSizingMode?, counterAxisSizingMode: AxisSizingMode?, primaryAxisAlignItems: PrimaryAxisAlignItems?, counterAxisAlignItems: CounterAxisAlignItems?, itemSpacing: Double?, layoutMode: LayoutMode?, paddingLeft: Double?, paddingRight: Double?, paddingTop: Double?, paddingBottom: Double?, effects: [Effect]?, styles: Styles?, characters: String?, style: TypeStyle?, layoutGrow: Double?) {
 		self.id = id
 		self.name = name
 		self.visible = visible
@@ -353,6 +374,7 @@ public struct Node: Codable {
 		self.fills = fills
 		self.strokes = strokes
 		self.strokeWeight = strokeWeight
+		self.individualStrokeWeights = individualStrokeWeights
 		self.strokeAlign = strokeAlign
 		self.strokeDashes = strokeDashes
 		self.cornerRadius = cornerRadius

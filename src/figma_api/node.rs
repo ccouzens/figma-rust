@@ -50,6 +50,20 @@ pub enum CounterAxisAlignItems {
     Baseline,
 }
 
+/// Individual stroke weights
+#[derive(Debug, Deserialize, Serialize)]
+#[typeshare::typeshare]
+pub struct StrokeWeights {
+    /// The top stroke weight
+    top: f64,
+    /// The right stroke weight
+    right: f64,
+    /// The bottom stroke weight
+    bottom: f64,
+    /// The left stroke weight
+    left: f64,
+}
+
 /// [Figma documentation](https://www.figma.com/developers/api#node-types)
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -79,6 +93,9 @@ pub struct Node {
     /// The weight of strokes on the node
     #[serde(skip_serializing_if = "Option::is_none")]
     stroke_weight: Option<f64>,
+    /// An object including the top, bottom, left, and right stroke weights. Only returned if individual stroke weights are used.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    individual_stroke_weights: Option<StrokeWeights>,
     /// Position of stroke relative to vector outline
     #[serde(skip_serializing_if = "Option::is_none")]
     stroke_align: Option<StrokeAlign>,

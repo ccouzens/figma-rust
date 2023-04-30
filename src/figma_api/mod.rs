@@ -20,7 +20,7 @@ pub use self::{
     file::File,
     node::{
         AxisSizingMode, CounterAxisAlignItems, LayoutMode, Node, NodeType, PrimaryAxisAlignItems,
-        StrokeAlign,
+        StrokeAlign, StrokeWeights,
     },
     paint::Paint,
     rectangle::Rectangle,

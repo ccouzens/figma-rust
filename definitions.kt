@@ -175,6 +175,19 @@ data class Paint (
 	val gradient_handle_positions: List<Vector>? = null
 )
 
+/// Individual stroke weights
+@Serializable
+data class StrokeWeights (
+	/// The top stroke weight
+	val top: Double,
+	/// The right stroke weight
+	val right: Double,
+	/// The bottom stroke weight
+	val bottom: Double,
+	/// The left stroke weight
+	val left: Double
+)
+
 @Serializable
 enum class StrokeAlign(val string: String) {
 	/// stroke drawn inside the shape boundary
@@ -341,6 +354,8 @@ data class Node (
 	val strokes: List<Paint>? = null,
 	/// The weight of strokes on the node
 	val strokeWeight: Double? = null,
+	/// An object including the top, bottom, left, and right stroke weights. Only returned if individual stroke weights are used.
+	val individualStrokeWeights: StrokeWeights? = null,
 	/// Position of stroke relative to vector outline
 	val strokeAlign: StrokeAlign? = null,
 	/// An array of floating point numbers describing the pattern of dash length and gap lengths that the vector path follows. For example a value of [1, 2] indicates that the path has a dash of length 1 followed by a gap of length 2, repeated.

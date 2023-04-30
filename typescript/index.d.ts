@@ -127,6 +127,18 @@ export interface Paint {
 	gradient_handle_positions?: [Vector, Vector, Vector];
 }
 
+/** Individual stroke weights */
+export interface StrokeWeights {
+	/** The top stroke weight */
+	top: number;
+	/** The right stroke weight */
+	right: number;
+	/** The bottom stroke weight */
+	bottom: number;
+	/** The left stroke weight */
+	left: number;
+}
+
 export enum StrokeAlign {
 	/** stroke drawn inside the shape boundary */
 	Inside = "INSIDE",
@@ -250,6 +262,8 @@ export interface Node {
 	strokes?: Paint[];
 	/** The weight of strokes on the node */
 	strokeWeight?: number;
+	/** An object including the top, bottom, left, and right stroke weights. Only returned if individual stroke weights are used. */
+	individualStrokeWeights?: StrokeWeights;
 	/** Position of stroke relative to vector outline */
 	strokeAlign?: StrokeAlign;
 	/** An array of floating point numbers describing the pattern of dash length and gap lengths that the vector path follows. For example a value of [1, 2] indicates that the path has a dash of length 1 followed by a gap of length 2, repeated. */
