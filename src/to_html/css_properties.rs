@@ -257,11 +257,18 @@ impl CssProperties for Node {
     }
 
     fn opacity(&self) -> Option<String> {
-        let opacity = self.opacity();
-        if opacity == 1.0 {
-            None
+        if self.r#type == NodeType::Vector
+            && !self.fills().is_empty()
+            && self.fills().iter().all(|f| f.opacity() == 0.0)
+        {
+            return Some("0".into());
+        }
+
+        let opacity = self.opacity?;
+        if opacity != 1.0 {
+            Some(format!("{opacity}"))
         } else {
-            Some(format!("{}", opacity))
+            None
         }
     }
 

@@ -72,7 +72,7 @@ pub struct Node {
     background_color: Option<Color>,
     /// An array of fill paints applied to the node
     #[serde(skip_serializing_if = "Option::is_none")]
-    fills: Option<Vec<Paint>>,
+    pub fills: Option<Vec<Paint>>,
     /// An array of stroke paints applied to the node
     #[serde(skip_serializing_if = "Option::is_none")]
     strokes: Option<Vec<Paint>>,
@@ -99,7 +99,7 @@ pub struct Node {
     transition_easing: Option<EasingType>,
     /// Opacity of the node
     #[serde(skip_serializing_if = "Option::is_none")]
-    opacity: Option<f64>,
+    pub opacity: Option<f64>,
     /// Bounding box of the node in absolute space coordinates
     #[serde(skip_serializing_if = "Option::is_none")]
     absolute_bounding_box: Option<Rectangle>,
