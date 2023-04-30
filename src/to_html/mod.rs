@@ -65,7 +65,7 @@ fn create_css(selectors: &[(String, Vec<CSSRulePairs>)]) -> Result<String> {
 }
 
 fn inline_css(node: &Node, parent: Option<&Node>) -> Result<Option<String>> {
-    let mut css: Vec<(String, Option<String>)> = vec![
+    let css: Vec<(String, Option<String>)> = vec![
         ("align-items".into(), node.align_items()),
         ("background".into(), node.background()),
         ("border-radius".into(), node.border_radius()),
@@ -91,18 +91,6 @@ fn inline_css(node: &Node, parent: Option<&Node>) -> Result<Option<String>> {
         ("top".into(), node.top(parent)),
         ("width".into(), node.width()),
     ];
-
-    if let (Some(component_height), Some(component_width)) = (
-        node.absolute_bounding_box().and_then(|bb| bb.height),
-        node.absolute_bounding_box().and_then(|bb| bb.width),
-    ) {
-        if node.r#type == NodeType::Component {
-            css.extend_from_slice(&[
-                ("max-width".into(), Some(format!("{component_width}px"))),
-                ("max-height".into(), Some(format!("{component_height}px"))),
-            ]);
-        }
-    }
 
     let css_string = create_inline_css(&css).context("Failed to generate instance CSS")?;
     if css_string.is_empty() {

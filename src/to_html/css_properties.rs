@@ -169,13 +169,12 @@ impl CssProperties for Node {
     }
 
     fn height(&self) -> Option<String> {
-        match self.r#type {
-            NodeType::Vector => self
-                .absolute_bounding_box()
-                .and_then(|b| b.height)
-                .map(|h| format!("{h}px")),
-            _ => None,
+        if is_auto_layout(self) || self.characters.is_some() {
+            return None;
         }
+        self.absolute_bounding_box()
+            .and_then(|b| b.height)
+            .map(|h| format!("{h}px"))
     }
 
     fn justify_content(&self) -> Option<String> {
@@ -284,12 +283,11 @@ impl CssProperties for Node {
     }
 
     fn width(&self) -> Option<String> {
-        match self.r#type {
-            NodeType::Vector => self
-                .absolute_bounding_box()
-                .and_then(|b| b.width)
-                .map(|w| format!("{w}px")),
-            _ => None,
+        if is_auto_layout(self) || self.characters.is_some() {
+            return None;
         }
+        self.absolute_bounding_box()
+            .and_then(|b| b.width)
+            .map(|w| format!("{w}px"))
     }
 }
