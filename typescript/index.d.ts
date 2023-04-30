@@ -205,6 +205,11 @@ export enum TextCase {
 	SmallCapsForced = "SMALL_CAPS_FORCED",
 }
 
+export enum TextDecoration {
+	Strikethrough = "STRIKETHROUGH",
+	Underline = "UNDERLINE",
+}
+
 /**
  * Metadata for character formatting
  * 
@@ -219,6 +224,8 @@ export interface TypeStyle {
 	fontSize: number;
 	/** Text casing applied to the node, default is the original casing */
 	textCase?: TextCase;
+	/** Text decoration applied to the node, default is none */
+	textDecoration?: TextDecoration;
 	/** Line height in px */
 	lineHeightPx: number;
 }

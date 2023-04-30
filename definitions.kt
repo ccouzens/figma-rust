@@ -293,6 +293,14 @@ enum class TextCase(val string: String) {
 	SmallCapsForced("SMALL_CAPS_FORCED"),
 }
 
+@Serializable
+enum class TextDecoration(val string: String) {
+	@SerialName("STRIKETHROUGH")
+	Strikethrough("STRIKETHROUGH"),
+	@SerialName("UNDERLINE")
+	Underline("UNDERLINE"),
+}
+
 /// Metadata for character formatting
 /// 
 /// [Figma documentation](https://www.figma.com/developers/api#typestyle-type)
@@ -306,6 +314,8 @@ data class TypeStyle (
 	val fontSize: Double,
 	/// Text casing applied to the node, default is the original casing
 	val textCase: TextCase? = null,
+	/// Text decoration applied to the node, default is none
+	val textDecoration: TextDecoration? = null,
 	/// Line height in px
 	val lineHeightPx: Double
 )

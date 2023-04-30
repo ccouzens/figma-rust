@@ -10,6 +10,13 @@ pub enum TextCase {
     SmallCaps,
     SmallCapsForced,
 }
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+#[typeshare::typeshare]
+pub enum TextDecoration {
+    Strikethrough,
+    Underline,
+}
 
 /// Metadata for character formatting
 ///
@@ -26,6 +33,8 @@ pub struct TypeStyle {
     pub font_size: f64,
     /// Text casing applied to the node, default is the original casing
     pub text_case: Option<TextCase>,
+    /// Text decoration applied to the node, default is none
+    pub text_decoration: Option<TextDecoration>,
     /// Line height in px
     pub line_height_px: f64,
 }

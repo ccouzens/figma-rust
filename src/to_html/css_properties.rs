@@ -1,6 +1,6 @@
 use crate::figma_api::{
     AxisSizingMode, CounterAxisAlignItems, EffectType, LayoutMode, Node, NodeType,
-    PrimaryAxisAlignItems, StrokeAlign, TextCase,
+    PrimaryAxisAlignItems, StrokeAlign, TextCase, TextDecoration,
 };
 
 /// Get values for given CSS properties
@@ -30,6 +30,7 @@ pub trait CssProperties {
     fn outline(&self) -> Option<String>;
     fn padding(&self) -> Option<String>;
     fn position(&self, parent: Option<&Node>) -> Option<String>;
+    fn text_decoration_line(&self) -> Option<String>;
     fn text_transform(&self) -> Option<String>;
     fn top(&self, parent: Option<&Node>) -> Option<String>;
     fn width(&self) -> Option<String>;
@@ -298,6 +299,13 @@ impl CssProperties for Node {
             StrokeAlign::Inside => Some(format!("-{width}px")),
             StrokeAlign::Outside => None,
             StrokeAlign::Center => Some(format!("-{}px", width / 2.0)),
+        }
+    }
+
+    fn text_decoration_line(&self) -> Option<String> {
+        match self.style.as_ref()?.text_decoration.as_ref()? {
+            TextDecoration::Strikethrough => Some("line-through".into()),
+            TextDecoration::Underline => Some("underline".into()),
         }
     }
 

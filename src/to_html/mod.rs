@@ -89,6 +89,7 @@ fn inline_css(node: &Node, parent: Option<&Node>) -> Result<Option<String>> {
         ("outline".into(), node.outline()),
         ("outline-offset".into(), node.outline_offset()),
         ("position".into(), node.position(parent)),
+        ("text-decoration-line".into(), node.text_decoration_line()),
         ("text-transform".into(), node.text_transform()),
         ("top".into(), node.top(parent)),
         ("width".into(), node.width()),

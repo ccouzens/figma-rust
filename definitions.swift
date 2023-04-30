@@ -242,6 +242,11 @@ public enum TextCase: String, Codable {
 	case smallCapsForced = "SMALL_CAPS_FORCED"
 }
 
+public enum TextDecoration: String, Codable {
+	case strikethrough = "STRIKETHROUGH"
+	case underline = "UNDERLINE"
+}
+
 /// Metadata for character formatting
 /// 
 /// [Figma documentation](https://www.figma.com/developers/api#typestyle-type)
@@ -254,14 +259,17 @@ public struct TypeStyle: Codable {
 	public let fontSize: Double
 	/// Text casing applied to the node, default is the original casing
 	public let textCase: TextCase?
+	/// Text decoration applied to the node, default is none
+	public let textDecoration: TextDecoration?
 	/// Line height in px
 	public let lineHeightPx: Double
 
-	public init(fontFamily: String, fontWeight: Double, fontSize: Double, textCase: TextCase?, lineHeightPx: Double) {
+	public init(fontFamily: String, fontWeight: Double, fontSize: Double, textCase: TextCase?, textDecoration: TextDecoration?, lineHeightPx: Double) {
 		self.fontFamily = fontFamily
 		self.fontWeight = fontWeight
 		self.fontSize = fontSize
 		self.textCase = textCase
+		self.textDecoration = textDecoration
 		self.lineHeightPx = lineHeightPx
 	}
 }
