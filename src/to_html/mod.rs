@@ -70,10 +70,12 @@ fn inline_css(node: &Node, parent: Option<&Node>) -> Result<Option<String>> {
         ("background".into(), node.background()),
         ("border-radius".into(), node.border_radius()),
         ("box-shadow".into(), node.box_shadow()),
+        ("box-sizing".into(), node.box_sizing()),
         ("color".into(), node.color()),
         ("display".into(), node.display()),
         ("fill".into(), node.fill()),
         ("flex-direction".into(), node.flex_direction()),
+        ("flex-grow".into(), node.flex_grow()),
         ("font-family".into(), node.font_family()),
         ("font-size".into(), node.font_size()),
         ("font-weight".into(), node.font_weight()),
@@ -146,24 +148,13 @@ pub fn main(
     _stderr: &mut impl Write,
     node_id: &str,
 ) -> Result<()> {
-    let (body, parents) = file
+    let (body, _) = file
         .document
         .depth_first_stack_iter()
         .find(|(n, _)| n.id == node_id)
         .with_context(|| format!("Failed to find node with id {}", node_id))?;
 
-    let canvas = parents
-        .iter()
-        .find(|n| matches!(n.r#type, NodeType::Canvas))
-        .context("Failed to find canvas parent")?;
-
-    let global_css = create_css(&[
-        ("body".into(), vec![("margin".into(), Some("0".into()))]),
-        (
-            "html".into(),
-            vec![("background".into(), canvas.background())],
-        ),
-    ])?;
+    let global_css = create_css(&[("body".into(), vec![("margin".into(), Some("0".into()))])])?;
 
     let render_props = RenderProps {
         body_css: &global_css,

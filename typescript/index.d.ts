@@ -169,6 +169,11 @@ export interface Rectangle {
 	height?: number;
 }
 
+export enum AxisSizingMode {
+	Fixed = "FIXED",
+	Auto = "AUTO",
+}
+
 export enum PrimaryAxisAlignItems {
 	Min = "MIN",
 	Center = "CENTER",
@@ -256,6 +261,10 @@ export interface Node {
 	absoluteBoundingBox?: Rectangle;
 	/** The bounds of the rendered node in the file in absolute space coordinates */
 	absoluteRenderBounds?: Rectangle;
+	/** Whether the primary axis has a fixed length (determined by the user) or an automatic length (determined by the layout engine). This property is only applicable for auto-layout frames. */
+	primaryAxisSizingMode?: AxisSizingMode;
+	/** Whether the counter axis has a fixed length (determined by the user) or an automatic length (determined by the layout engine). This property is only applicable for auto-layout frames. */
+	counterAxisSizingMode?: AxisSizingMode;
 	/** Determines how the auto-layout frame’s children should be aligned in the primary axis direction. This property is only applicable for auto-layout frames. */
 	primaryAxisAlignItems?: PrimaryAxisAlignItems;
 	/** Determines how the auto-layout frame’s children should be aligned in the counter axis direction. This property is only applicable for auto-layout frames. */
@@ -280,6 +289,8 @@ export interface Node {
 	characters?: string;
 	/** Style of text including font family and weight */
 	style?: TypeStyle;
+	/** This property is applicable only for direct children of auto-layout frames, ignored otherwise. Determines whether a layer should stretch along the parent’s primary axis. A 0 corresponds to a fixed size and 1 corresponds to stretch */
+	layoutGrow?: number;
 }
 
 export enum StyleType {

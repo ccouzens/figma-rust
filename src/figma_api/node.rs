@@ -25,6 +25,14 @@ pub enum LayoutMode {
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 #[typeshare::typeshare]
+pub enum AxisSizingMode {
+    Fixed,
+    Auto,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+#[typeshare::typeshare]
 pub enum PrimaryAxisAlignItems {
     Min,
     Center,
@@ -98,6 +106,12 @@ pub struct Node {
     /// The bounds of the rendered node in the file in absolute space coordinates
     #[serde(skip_serializing_if = "Option::is_none")]
     absolute_render_bounds: Option<Rectangle>,
+    /// Whether the primary axis has a fixed length (determined by the user) or an automatic length (determined by the layout engine). This property is only applicable for auto-layout frames.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub primary_axis_sizing_mode: Option<AxisSizingMode>,
+    /// Whether the counter axis has a fixed length (determined by the user) or an automatic length (determined by the layout engine). This property is only applicable for auto-layout frames.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub counter_axis_sizing_mode: Option<AxisSizingMode>,
     /// Determines how the auto-layout frame’s children should be aligned in the primary axis direction. This property is only applicable for auto-layout frames.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub primary_axis_align_items: Option<PrimaryAxisAlignItems>,
@@ -134,6 +148,9 @@ pub struct Node {
     /// Style of text including font family and weight
     #[serde(skip_serializing_if = "Option::is_none")]
     pub style: Option<TypeStyle>,
+    /// This property is applicable only for direct children of auto-layout frames, ignored otherwise. Determines whether a layer should stretch along the parent’s primary axis. A 0 corresponds to a fixed size and 1 corresponds to stretch
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub layout_grow: Option<f64>,
 }
 
 impl Node {

@@ -1,6 +1,6 @@
 use crate::figma_api::{
-    CounterAxisAlignItems, EffectType, LayoutMode, Node, NodeType, PrimaryAxisAlignItems,
-    StrokeAlign, TextCase,
+    AxisSizingMode, CounterAxisAlignItems, EffectType, LayoutMode, Node, NodeType,
+    PrimaryAxisAlignItems, StrokeAlign, TextCase,
 };
 
 /// Get values for given CSS properties
@@ -11,10 +11,12 @@ pub trait CssProperties {
     fn background(&self) -> Option<String>;
     fn border_radius(&self) -> Option<String>;
     fn box_shadow(&self) -> Option<String>;
+    fn box_sizing(&self) -> Option<String>;
     fn color(&self) -> Option<String>;
     fn display(&self) -> Option<String>;
     fn fill(&self) -> Option<String>;
     fn flex_direction(&self) -> Option<String>;
+    fn flex_grow(&self) -> Option<String>;
     fn font_family(&self) -> Option<String>;
     fn font_size(&self) -> Option<String>;
     fn font_weight(&self) -> Option<String>;
@@ -111,6 +113,14 @@ impl CssProperties for Node {
         }
     }
 
+    fn box_sizing(&self) -> Option<String> {
+        if self.padding().is_some() && (self.width().is_some() || self.height().is_some()) {
+            Some("border-box".into())
+        } else {
+            None
+        }
+    }
+
     fn color(&self) -> Option<String> {
         match self.r#type {
             NodeType::Text => fills_color(self),
@@ -131,6 +141,15 @@ impl CssProperties for Node {
             Some(LayoutMode::Horizontal) => Some("row".into()),
             Some(LayoutMode::Vertical) => Some("column".into()),
             _ => None,
+        }
+    }
+
+    fn flex_grow(&self) -> Option<String> {
+        let grow = self.layout_grow?;
+        if grow != 0.0 {
+            Some(format!("{grow}"))
+        } else {
+            None
         }
     }
 
@@ -169,7 +188,17 @@ impl CssProperties for Node {
     }
 
     fn height(&self) -> Option<String> {
-        if is_auto_layout(self) || self.characters.is_some() {
+        if matches!(self.layout_mode, Some(LayoutMode::Vertical))
+            && !matches!(self.primary_axis_sizing_mode, Some(AxisSizingMode::Fixed))
+        {
+            return None;
+        }
+        if matches!(self.layout_mode, Some(LayoutMode::Horizontal))
+            && !matches!(self.counter_axis_sizing_mode, Some(AxisSizingMode::Fixed))
+        {
+            return None;
+        }
+        if self.characters.is_some() {
             return None;
         }
         self.absolute_bounding_box()
@@ -283,7 +312,17 @@ impl CssProperties for Node {
     }
 
     fn width(&self) -> Option<String> {
-        if is_auto_layout(self) || self.characters.is_some() {
+        if matches!(self.layout_mode, Some(LayoutMode::Horizontal))
+            && !matches!(self.primary_axis_sizing_mode, Some(AxisSizingMode::Fixed))
+        {
+            return None;
+        }
+        if matches!(self.layout_mode, Some(LayoutMode::Vertical))
+            && !matches!(self.counter_axis_sizing_mode, Some(AxisSizingMode::Fixed))
+        {
+            return None;
+        }
+        if self.characters.is_some() {
             return None;
         }
         self.absolute_bounding_box()

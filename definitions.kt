@@ -235,6 +235,14 @@ data class Rectangle (
 )
 
 @Serializable
+enum class AxisSizingMode(val string: String) {
+	@SerialName("FIXED")
+	Fixed("FIXED"),
+	@SerialName("AUTO")
+	Auto("AUTO"),
+}
+
+@Serializable
 enum class PrimaryAxisAlignItems(val string: String) {
 	@SerialName("MIN")
 	Min("MIN"),
@@ -341,6 +349,10 @@ data class Node (
 	val absoluteBoundingBox: Rectangle? = null,
 	/// The bounds of the rendered node in the file in absolute space coordinates
 	val absoluteRenderBounds: Rectangle? = null,
+	/// Whether the primary axis has a fixed length (determined by the user) or an automatic length (determined by the layout engine). This property is only applicable for auto-layout frames.
+	val primaryAxisSizingMode: AxisSizingMode? = null,
+	/// Whether the counter axis has a fixed length (determined by the user) or an automatic length (determined by the layout engine). This property is only applicable for auto-layout frames.
+	val counterAxisSizingMode: AxisSizingMode? = null,
 	/// Determines how the auto-layout frame’s children should be aligned in the primary axis direction. This property is only applicable for auto-layout frames.
 	val primaryAxisAlignItems: PrimaryAxisAlignItems? = null,
 	/// Determines how the auto-layout frame’s children should be aligned in the counter axis direction. This property is only applicable for auto-layout frames.
@@ -364,7 +376,9 @@ data class Node (
 	/// Text contained within a text box
 	val characters: String? = null,
 	/// Style of text including font family and weight
-	val style: TypeStyle? = null
+	val style: TypeStyle? = null,
+	/// This property is applicable only for direct children of auto-layout frames, ignored otherwise. Determines whether a layer should stretch along the parent’s primary axis. A 0 corresponds to a fixed size and 1 corresponds to stretch
+	val layoutGrow: Double? = null
 )
 
 @Serializable

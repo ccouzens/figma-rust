@@ -18,7 +18,10 @@ pub use self::{
     easing_type::EasingType,
     effect::{Effect, EffectType},
     file::File,
-    node::{CounterAxisAlignItems, LayoutMode, Node, NodeType, PrimaryAxisAlignItems, StrokeAlign},
+    node::{
+        AxisSizingMode, CounterAxisAlignItems, LayoutMode, Node, NodeType, PrimaryAxisAlignItems,
+        StrokeAlign,
+    },
     paint::Paint,
     rectangle::Rectangle,
     style::{Style, StyleType},

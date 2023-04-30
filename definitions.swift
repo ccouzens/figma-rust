@@ -205,6 +205,11 @@ public struct Rectangle: Codable {
 	}
 }
 
+public enum AxisSizingMode: String, Codable {
+	case fixed = "FIXED"
+	case auto = "AUTO"
+}
+
 public enum PrimaryAxisAlignItems: String, Codable {
 	case min = "MIN"
 	case center = "CENTER"
@@ -299,6 +304,10 @@ public struct Node: Codable {
 	public let absoluteBoundingBox: Rectangle?
 	/// The bounds of the rendered node in the file in absolute space coordinates
 	public let absoluteRenderBounds: Rectangle?
+	/// Whether the primary axis has a fixed length (determined by the user) or an automatic length (determined by the layout engine). This property is only applicable for auto-layout frames.
+	public let primaryAxisSizingMode: AxisSizingMode?
+	/// Whether the counter axis has a fixed length (determined by the user) or an automatic length (determined by the layout engine). This property is only applicable for auto-layout frames.
+	public let counterAxisSizingMode: AxisSizingMode?
 	/// Determines how the auto-layout frame’s children should be aligned in the primary axis direction. This property is only applicable for auto-layout frames.
 	public let primaryAxisAlignItems: PrimaryAxisAlignItems?
 	/// Determines how the auto-layout frame’s children should be aligned in the counter axis direction. This property is only applicable for auto-layout frames.
@@ -323,8 +332,10 @@ public struct Node: Codable {
 	public let characters: String?
 	/// Style of text including font family and weight
 	public let style: TypeStyle?
+	/// This property is applicable only for direct children of auto-layout frames, ignored otherwise. Determines whether a layer should stretch along the parent’s primary axis. A 0 corresponds to a fixed size and 1 corresponds to stretch
+	public let layoutGrow: Double?
 
-	public init(id: String, name: String, visible: Bool?, type: NodeType, children: [Node]?, backgroundColor: Color?, fills: [Paint]?, strokes: [Paint]?, strokeWeight: Double?, strokeAlign: StrokeAlign?, strokeDashes: [Double]?, cornerRadius: Double?, rectangleCornerRadii: [Double]?, transitionDuration: Double?, transitionEasing: EasingType?, opacity: Double?, absoluteBoundingBox: Rectangle?, absoluteRenderBounds: Rectangle?, primaryAxisAlignItems: PrimaryAxisAlignItems?, counterAxisAlignItems: CounterAxisAlignItems?, itemSpacing: Double?, layoutMode: LayoutMode?, paddingLeft: Double?, paddingRight: Double?, paddingTop: Double?, paddingBottom: Double?, effects: [Effect]?, styles: Styles?, characters: String?, style: TypeStyle?) {
+	public init(id: String, name: String, visible: Bool?, type: NodeType, children: [Node]?, backgroundColor: Color?, fills: [Paint]?, strokes: [Paint]?, strokeWeight: Double?, strokeAlign: StrokeAlign?, strokeDashes: [Double]?, cornerRadius: Double?, rectangleCornerRadii: [Double]?, transitionDuration: Double?, transitionEasing: EasingType?, opacity: Double?, absoluteBoundingBox: Rectangle?, absoluteRenderBounds: Rectangle?, primaryAxisSizingMode: AxisSizingMode?, counterAxisSizingMode: AxisSizingMode?, primaryAxisAlignItems: PrimaryAxisAlignItems?, counterAxisAlignItems: CounterAxisAlignItems?, itemSpacing: Double?, layoutMode: LayoutMode?, paddingLeft: Double?, paddingRight: Double?, paddingTop: Double?, paddingBottom: Double?, effects: [Effect]?, styles: Styles?, characters: String?, style: TypeStyle?, layoutGrow: Double?) {
 		self.id = id
 		self.name = name
 		self.visible = visible
@@ -343,6 +354,8 @@ public struct Node: Codable {
 		self.opacity = opacity
 		self.absoluteBoundingBox = absoluteBoundingBox
 		self.absoluteRenderBounds = absoluteRenderBounds
+		self.primaryAxisSizingMode = primaryAxisSizingMode
+		self.counterAxisSizingMode = counterAxisSizingMode
 		self.primaryAxisAlignItems = primaryAxisAlignItems
 		self.counterAxisAlignItems = counterAxisAlignItems
 		self.itemSpacing = itemSpacing
@@ -355,6 +368,7 @@ public struct Node: Codable {
 		self.styles = styles
 		self.characters = characters
 		self.style = style
+		self.layoutGrow = layoutGrow
 	}
 }
 
