@@ -105,7 +105,7 @@ fn inline_css(node: &Node, parent: Option<&Node>) -> Result<Option<String>> {
 
 fn node_to_html(node: &Node, parent: Option<&Node>) -> String {
     match node.r#type {
-        NodeType::Vector => html! {
+        NodeType::Vector | NodeType::BooleanOperation => html! {
             svg(
                 style?=inline_css(node, parent).unwrap_or_default(),
                 data-figma-name=&node.name,
