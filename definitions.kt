@@ -290,7 +290,12 @@ enum class LayoutMode(val string: String) {
 }
 
 @Serializable
-object Styles
+data class Styles (
+	val fill: String? = null,
+	val text: String? = null,
+	val stroke: String? = null,
+	val effect: String? = null
+)
 
 @Serializable
 enum class TextCase(val string: String) {

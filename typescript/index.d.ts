@@ -207,6 +207,10 @@ export enum LayoutMode {
 }
 
 export interface Styles {
+	fill?: string;
+	text?: string;
+	stroke?: string;
+	effect?: string;
 }
 
 export enum TextCase {

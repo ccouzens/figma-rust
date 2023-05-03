@@ -250,7 +250,17 @@ public enum LayoutMode: String, Codable {
 }
 
 public struct Styles: Codable {
-	public init() {}
+	public let fill: String?
+	public let text: String?
+	public let stroke: String?
+	public let effect: String?
+
+	public init(fill: String?, text: String?, stroke: String?, effect: String?) {
+		self.fill = fill
+		self.text = text
+		self.stroke = stroke
+		self.effect = effect
+	}
 }
 
 public enum TextCase: String, Codable {
