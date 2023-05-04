@@ -137,12 +137,6 @@ fn node_to_html(node: &Node, parent: Option<&Node>) -> String {
     }
 }
 
-struct RenderProps<'a> {
-    body_css: &'a str,
-    component_title: &'a str,
-    node: &'a Node,
-}
-
 pub fn main(
     file: &figma_api::File,
     stdout: &mut impl Write,
@@ -157,12 +151,6 @@ pub fn main(
 
     let global_css = create_css(&[("body".into(), vec![("margin".into(), Some("0".into()))])])?;
 
-    let render_props = RenderProps {
-        body_css: &global_css,
-        component_title: &body.name,
-        node: body,
-    };
-
     writeln!(
         stdout,
         "{}",
@@ -171,11 +159,11 @@ pub fn main(
             html {
                 head {
                     meta(charset="utf-8");
-                    title : format!("{} component", render_props.component_title);
-                    style(type="text/css"): horrorshow::Raw(render_props.body_css);
+                    title : format!("{} component", &body.name);
+                    style(type="text/css"): horrorshow::Raw(&global_css);
                 }
                 body {
-                    : horrorshow::Raw(node_to_html(render_props.node, None))
+                    : horrorshow::Raw(node_to_html(body, None))
                 }
             }
         }
