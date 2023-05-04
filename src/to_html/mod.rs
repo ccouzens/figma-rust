@@ -5,9 +5,7 @@ use self::css_properties::CssProperties;
 use super::figma_api;
 use anyhow::{anyhow, Context, Result};
 use horrorshow::{helper::doctype, html};
-use lightningcss::stylesheet::{
-    MinifyOptions, ParserOptions, PrinterOptions, StyleAttribute, StyleSheet,
-};
+use lightningcss::stylesheet::{MinifyOptions, ParserOptions, PrinterOptions, StyleAttribute};
 use std::{io::Write, vec};
 
 mod css_properties;
@@ -31,34 +29,6 @@ fn create_inline_css(properties: &[CSSRulePairs]) -> Result<String> {
     style_attribute.minify(MinifyOptions::default());
 
     Ok(style_attribute
-        .to_css(PrinterOptions::default())
-        .context("Failed to print CSS")?
-        .code)
-}
-
-fn create_css(selectors: &[(String, Vec<CSSRulePairs>)]) -> Result<String> {
-    use std::fmt::Write;
-
-    let mut style_sheet_text = String::new();
-
-    for (selector, properties) in selectors.iter() {
-        write!(&mut style_sheet_text, "{selector} {{").context("Failed to write selctor")?;
-        for (property, value) in properties {
-            if let Some(value) = value {
-                write!(&mut style_sheet_text, "{property}: {value};")
-                    .context("Failed to write property to string")?;
-            }
-        }
-        style_sheet_text.push('}');
-    }
-    let mut stylesheet = StyleSheet::parse(&style_sheet_text, ParserOptions::default())
-        .map_err(|err| anyhow!("Failed to parse CSS\n{err}"))?;
-
-    stylesheet
-        .minify(MinifyOptions::default())
-        .context("Failed to minify CSS")?;
-
-    Ok(stylesheet
         .to_css(PrinterOptions::default())
         .context("Failed to print CSS")?
         .code)
@@ -149,8 +119,6 @@ pub fn main(
         .find(|(n, _)| n.id == node_id)
         .with_context(|| format!("Failed to find node with id {}", node_id))?;
 
-    let global_css = create_css(&[("body".into(), vec![("margin".into(), Some("0".into()))])])?;
-
     writeln!(
         stdout,
         "{}",
@@ -160,7 +128,7 @@ pub fn main(
                 head {
                     meta(charset="utf-8");
                     title : format!("{} component", &body.name);
-                    style(type="text/css"): horrorshow::Raw(&global_css);
+                    style(type="text/css"): "body{margin: 0;}";
                 }
                 body {
                     : horrorshow::Raw(node_to_html(body, None))
