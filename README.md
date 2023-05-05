@@ -24,9 +24,21 @@ Lukas Oppermann and
 https://www.figma.com/community/file/946837271092540314 by Joe Horton and
 licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 
+## HTML
+
+Generate HTML from Figma nodes or components.
+
+```bash
+cargo run --release -- to-html 213:6 < example-figma-files/gov-uk-design-system.json > example-figma-files/gov-uk-design-system-components/button.html
+```
+
+[Read more](src/to_html/README.md)
+
 ## Schema Definitions
 
-Schema definitions are exported for various languages using [1Password's typeshare](https://github.com/1Password/typeshare). PRs are welcome to make better use of `typeshare`'s potential.
+Schema definitions are exported for various languages using
+[1Password's typeshare](https://github.com/1Password/typeshare). PRs are welcome
+to make better use of `typeshare`'s potential.
 
 [TypeScript](./typescript/) has an NPM package and support for Deno.
 
