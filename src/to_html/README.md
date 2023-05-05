@@ -30,7 +30,7 @@ Generate HTML files from files fetched through the
   <div
     style="
       color: #fff;
-      font-family: GDS Transport Website, arial, sans-serif;
+      font-family: GDS Transport Website;
       font-size: 19px;
       font-weight: 300;
       line-height: 25px;
