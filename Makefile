@@ -58,7 +58,7 @@ example-figma-files/gov-uk-design-system-components/header.json : example-figma-
 	jq '.document.children[] | select(.name == "🗝️  Styles and Components").children[] | select(.name == "Header")' < $< > $@
 
 example-figma-files/gov-uk-design-system-components/tag.json : example-figma-files/gov-uk-design-system.json
-	jq '.document.children[] | select(.name == "🗝️  Styles and Components").children[] | select(.name == "Tag")' < $< > $@
+	jq '.document.children[] | select(.name == "🗝️  Styles and Components").children[] | select(.id == "147:17")' < $< > $@
 
 example-figma-files/gov-uk-design-system-components/get-started-page.svg :
 	curl $$(curl -sH "X-Figma-Token: ${FIGMA_TOKEN}" \
