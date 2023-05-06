@@ -3,18 +3,20 @@ use crate::figma_api::{
     PrimaryAxisAlignItems, StrokeAlign, TextCase, TextDecoration,
 };
 
+use super::CSSVariablesMap;
+
 /// Get values for given CSS properties
 ///
 /// The CSS values are not optimized, but can be made so by use of another tool like `lightningcss`.
 pub trait CssProperties {
     fn align_items(&self) -> Option<String>;
-    fn background(&self) -> Option<String>;
+    fn background(&self, css_varaibles: &mut CSSVariablesMap) -> Option<String>;
     fn border_radius(&self) -> Option<String>;
     fn box_shadow(&self) -> Option<String>;
     fn box_sizing(&self) -> Option<String>;
-    fn color(&self) -> Option<String>;
+    fn color(&self, css_variables: &mut CSSVariablesMap) -> Option<String>;
     fn display(&self) -> Option<String>;
-    fn fill(&self) -> Option<String>;
+    fn fill(&self, css_variables: &mut CSSVariablesMap) -> Option<String>;
     fn flex_direction(&self) -> Option<String>;
     fn flex_grow(&self) -> Option<String>;
     fn font_family(&self) -> Option<String>;
@@ -43,13 +45,25 @@ fn is_auto_layout(node: &Node) -> bool {
     )
 }
 
-fn fills_color(node: &Node) -> Option<String> {
-    node.fills()
+fn fills_color(node: &Node, css_variables: &mut CSSVariablesMap) -> Option<String> {
+    let color_value = node
+        .fills()
         .iter()
         .filter(|paint| paint.visible() && paint.opacity() != 0.0)
         .flat_map(|paint| paint.color())
         .flat_map(|c| c.to_option_rgb_string())
-        .next()
+        .next()?;
+
+    match node.styles.as_ref().and_then(|s| s.fill.as_deref()) {
+        Some(s_ref) => match css_variables.get_mut(s_ref) {
+            Some(v) => {
+                v.value = Some(color_value);
+                Some(format!("var({})", v.name))
+            }
+            None => Some(color_value),
+        },
+        None => Some(color_value),
+    }
 }
 
 fn stroke_color(node: &Node) -> Option<String> {
@@ -72,10 +86,10 @@ impl CssProperties for Node {
         }
     }
 
-    fn background(&self) -> Option<String> {
+    fn background(&self, css_variables: &mut CSSVariablesMap) -> Option<String> {
         match self.r#type {
             NodeType::Text | NodeType::Vector | NodeType::BooleanOperation => None,
-            _ => fills_color(self).or_else(|| {
+            _ => fills_color(self, css_variables).or_else(|| {
                 self.background_color()
                     .and_then(|c| c.to_option_rgb_string())
             }),
@@ -122,9 +136,9 @@ impl CssProperties for Node {
         }
     }
 
-    fn color(&self) -> Option<String> {
+    fn color(&self, css_variables: &mut CSSVariablesMap) -> Option<String> {
         match self.r#type {
-            NodeType::Text => fills_color(self),
+            NodeType::Text => fills_color(self, css_variables),
             _ => None,
         }
     }
@@ -154,9 +168,9 @@ impl CssProperties for Node {
         }
     }
 
-    fn fill(&self) -> Option<String> {
+    fn fill(&self, css_variables: &mut CSSVariablesMap) -> Option<String> {
         match self.r#type {
-            NodeType::Vector => fills_color(self),
+            NodeType::Vector => fills_color(self, css_variables),
             _ => None,
         }
     }

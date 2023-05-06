@@ -5,6 +5,26 @@
     <title>Tag component</title>
     <style type="text/css">
       body {
+        --Background: #fff;
+        --Other-Blue: #1d70b8;
+        --Tag-Grey-Text: #383f43;
+        --Tag-Grey-Background: #eeefef;
+        --Tag-Green-Text: #005a30;
+        --Tag-Green-Background: #cce2d8;
+        --Tag-Turquoise-Text: #10403c;
+        --Tag-Turquoise-Background: #bfe3e0;
+        --Tag-Blue-Text: #144e81;
+        --Tag-Blue-Background: #d2e2f1;
+        --Tag-Purple-text: #3d2375;
+        --Tag-Purple-Background: #dbd5e9;
+        --Tag-Pink-Text: #80224d;
+        --Tag-Pink-Background: #f7d7e6;
+        --Tag-Red-Text: #942514;
+        --Tag-Red-Background: #f6d7d2;
+        --Tag-Orange-Text: #6e3619;
+        --Tag-Orange-Background: #fcd6c3;
+        --Tag-Yellow-Text: #594d00;
+        --Tag-Yellow-Background: #fff7bf;
         margin: 0;
       }
     </style>
@@ -12,10 +32,10 @@
   <body>
     <div
       style="
+        background: var(--Background);
         height: 206px;
         outline-offset: -1px;
         width: 520px;
-        background: #fff;
         border-radius: 5px;
         outline: 1px dashed #7b61ff;
         line-height: 0;
@@ -26,7 +46,7 @@
     >
       <div
         style="
-          background: #1d70b8;
+          background: var(--Other-Blue);
           flex-direction: row;
           align-items: center;
           padding: 5px 8px 4px;
@@ -41,7 +61,7 @@
       >
         <div
           style="
-            color: #fff;
+            color: var(--Background);
             text-transform: uppercase;
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 16px;
@@ -56,7 +76,7 @@
       </div>
       <div
         style="
-          background: #1d70b8;
+          background: var(--Other-Blue);
           flex-direction: row;
           align-items: center;
           padding: 5px 8px 4px;
@@ -71,7 +91,7 @@
       >
         <div
           style="
-            color: #fff;
+            color: var(--Background);
             text-transform: uppercase;
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 14px;
@@ -86,7 +106,7 @@
       </div>
       <div
         style="
-          background: #eeefef;
+          background: var(--Tag-Grey-Background);
           flex-direction: row;
           align-items: center;
           padding: 5px 8px 4px;
@@ -101,7 +121,7 @@
       >
         <div
           style="
-            color: #383f43;
+            color: var(--Tag-Grey-Text);
             text-transform: uppercase;
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 16px;
@@ -116,7 +136,7 @@
       </div>
       <div
         style="
-          background: #eeefef;
+          background: var(--Tag-Grey-Background);
           flex-direction: row;
           align-items: center;
           padding: 5px 8px 4px;
@@ -131,7 +151,7 @@
       >
         <div
           style="
-            color: #383f43;
+            color: var(--Tag-Grey-Text);
             text-transform: uppercase;
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 14px;
@@ -146,7 +166,7 @@
       </div>
       <div
         style="
-          background: #cce2d8;
+          background: var(--Tag-Green-Background);
           flex-direction: row;
           align-items: center;
           padding: 5px 8px 4px;
@@ -161,7 +181,7 @@
       >
         <div
           style="
-            color: #005a30;
+            color: var(--Tag-Green-Text);
             text-transform: uppercase;
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 16px;
@@ -176,7 +196,7 @@
       </div>
       <div
         style="
-          background: #cce2d8;
+          background: var(--Tag-Green-Background);
           flex-direction: row;
           align-items: center;
           padding: 5px 8px 4px;
@@ -191,7 +211,7 @@
       >
         <div
           style="
-            color: #005a30;
+            color: var(--Tag-Green-Text);
             text-transform: uppercase;
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 14px;
@@ -206,7 +226,7 @@
       </div>
       <div
         style="
-          background: #bfe3e0;
+          background: var(--Tag-Turquoise-Background);
           flex-direction: row;
           align-items: center;
           padding: 5px 8px 4px;
@@ -221,7 +241,7 @@
       >
         <div
           style="
-            color: #10403c;
+            color: var(--Tag-Turquoise-Text);
             text-transform: uppercase;
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 16px;
@@ -236,7 +256,7 @@
       </div>
       <div
         style="
-          background: #bfe3e0;
+          background: var(--Tag-Turquoise-Background);
           flex-direction: row;
           align-items: center;
           padding: 5px 8px 4px;
@@ -251,7 +271,7 @@
       >
         <div
           style="
-            color: #10403c;
+            color: var(--Tag-Turquoise-Text);
             text-transform: uppercase;
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 14px;
@@ -266,7 +286,7 @@
       </div>
       <div
         style="
-          background: #d2e2f1;
+          background: var(--Tag-Blue-Background);
           flex-direction: row;
           align-items: center;
           padding: 5px 8px 4px;
@@ -281,7 +301,7 @@
       >
         <div
           style="
-            color: #144e81;
+            color: var(--Tag-Blue-Text);
             text-transform: uppercase;
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 16px;
@@ -296,7 +316,7 @@
       </div>
       <div
         style="
-          background: #d2e2f1;
+          background: var(--Tag-Blue-Background);
           flex-direction: row;
           align-items: center;
           padding: 5px 8px 4px;
@@ -311,7 +331,7 @@
       >
         <div
           style="
-            color: #144e81;
+            color: var(--Tag-Blue-Text);
             text-transform: uppercase;
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 14px;
@@ -326,7 +346,7 @@
       </div>
       <div
         style="
-          background: #dbd5e9;
+          background: var(--Tag-Purple-Background);
           flex-direction: row;
           align-items: center;
           padding: 5px 8px 4px;
@@ -341,7 +361,7 @@
       >
         <div
           style="
-            color: #3d2375;
+            color: var(--Tag-Purple-text);
             text-transform: uppercase;
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 16px;
@@ -356,7 +376,7 @@
       </div>
       <div
         style="
-          background: #dbd5e9;
+          background: var(--Tag-Purple-Background);
           flex-direction: row;
           align-items: center;
           padding: 5px 8px 4px;
@@ -371,7 +391,7 @@
       >
         <div
           style="
-            color: #3d2375;
+            color: var(--Tag-Purple-text);
             text-transform: uppercase;
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 14px;
@@ -386,7 +406,7 @@
       </div>
       <div
         style="
-          background: #f7d7e6;
+          background: var(--Tag-Pink-Background);
           flex-direction: row;
           align-items: center;
           padding: 5px 8px 4px;
@@ -401,7 +421,7 @@
       >
         <div
           style="
-            color: #80224d;
+            color: var(--Tag-Pink-Text);
             text-transform: uppercase;
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 16px;
@@ -416,7 +436,7 @@
       </div>
       <div
         style="
-          background: #f7d7e6;
+          background: var(--Tag-Pink-Background);
           flex-direction: row;
           align-items: center;
           padding: 5px 8px 4px;
@@ -431,7 +451,7 @@
       >
         <div
           style="
-            color: #80224d;
+            color: var(--Tag-Pink-Text);
             text-transform: uppercase;
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 14px;
@@ -446,7 +466,7 @@
       </div>
       <div
         style="
-          background: #f6d7d2;
+          background: var(--Tag-Red-Background);
           flex-direction: row;
           align-items: center;
           padding: 5px 8px 4px;
@@ -461,7 +481,7 @@
       >
         <div
           style="
-            color: #942514;
+            color: var(--Tag-Red-Text);
             text-transform: uppercase;
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 16px;
@@ -476,7 +496,7 @@
       </div>
       <div
         style="
-          background: #f6d7d2;
+          background: var(--Tag-Red-Background);
           flex-direction: row;
           align-items: center;
           padding: 5px 8px 4px;
@@ -491,7 +511,7 @@
       >
         <div
           style="
-            color: #942514;
+            color: var(--Tag-Red-Text);
             text-transform: uppercase;
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 14px;
@@ -506,7 +526,7 @@
       </div>
       <div
         style="
-          background: #fcd6c3;
+          background: var(--Tag-Orange-Background);
           flex-direction: row;
           align-items: center;
           padding: 5px 8px 4px;
@@ -521,7 +541,7 @@
       >
         <div
           style="
-            color: #6e3619;
+            color: var(--Tag-Orange-Text);
             text-transform: uppercase;
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 16px;
@@ -536,7 +556,7 @@
       </div>
       <div
         style="
-          background: #fcd6c3;
+          background: var(--Tag-Orange-Background);
           flex-direction: row;
           align-items: center;
           padding: 5px 8px 4px;
@@ -551,7 +571,7 @@
       >
         <div
           style="
-            color: #6e3619;
+            color: var(--Tag-Orange-Text);
             text-transform: uppercase;
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 14px;
@@ -566,7 +586,7 @@
       </div>
       <div
         style="
-          background: #fff7bf;
+          background: var(--Tag-Yellow-Background);
           flex-direction: row;
           align-items: center;
           padding: 5px 8px 4px;
@@ -581,7 +601,7 @@
       >
         <div
           style="
-            color: #594d00;
+            color: var(--Tag-Yellow-Text);
             text-transform: uppercase;
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 16px;
@@ -596,7 +616,7 @@
       </div>
       <div
         style="
-          background: #fff7bf;
+          background: var(--Tag-Yellow-Background);
           flex-direction: row;
           align-items: center;
           padding: 5px 8px 4px;
@@ -611,7 +631,7 @@
       >
         <div
           style="
-            color: #594d00;
+            color: var(--Tag-Yellow-Text);
             text-transform: uppercase;
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 14px;

@@ -158,7 +158,7 @@ pub struct Node {
     pub effects: Option<Vec<Effect>>,
     /// A mapping of a StyleType to style ID of styles present on this node. The style ID can be used to look up more information about the style in the top-level styles field.
     #[serde(skip_serializing_if = "Option::is_none")]
-    styles: Option<Styles>,
+    pub styles: Option<Styles>,
     /// Text contained within a text box
     #[serde(skip_serializing_if = "Option::is_none")]
     pub characters: Option<String>,

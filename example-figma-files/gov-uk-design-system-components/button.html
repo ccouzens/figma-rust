@@ -5,6 +5,15 @@
     <title>Button component</title>
     <style type="text/css">
       body {
+        --Text-Primary: #0b0c0c;
+        --Focus-Default: #fd0;
+        --Focus-Text: #0b0c0c;
+        --Error: #d4351c;
+        --Background: #fff;
+        --Other-Green: #00703c;
+        --Other-Light-Grey: #f3f2f1;
+        --Other-Dark-Green: #005a30;
+        --Other-Dark-Red: #aa2a16;
         margin: 0;
       }
     </style>
@@ -12,10 +21,10 @@
   <body>
     <div
       style="
+        background: var(--Background);
         height: 704px;
         outline-offset: -1px;
         width: 489px;
-        background: #fff;
         border-radius: 5px;
         outline: 1px dashed #7b61ff;
         line-height: 0;
@@ -26,7 +35,7 @@
     >
       <div
         style="
-          background: #00703c;
+          background: var(--Other-Green);
           flex-direction: column;
           justify-content: center;
           align-items: center;
@@ -43,7 +52,7 @@
       >
         <div
           style="
-            color: #fff;
+            color: var(--Background);
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 19px;
             font-weight: 300;
@@ -57,7 +66,7 @@
       </div>
       <div
         style="
-          background: #f3f2f1;
+          background: var(--Other-Light-Grey);
           flex-direction: row;
           justify-content: center;
           align-items: center;
@@ -74,7 +83,7 @@
       >
         <div
           style="
-            color: #0b0c0c;
+            color: var(--Text-Primary);
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 19px;
             font-weight: 300;
@@ -88,7 +97,7 @@
       </div>
       <div
         style="
-          background: #d4351c;
+          background: var(--Error);
           flex-direction: row;
           justify-content: center;
           align-items: center;
@@ -105,7 +114,7 @@
       >
         <div
           style="
-            color: #fff;
+            color: var(--Background);
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 19px;
             font-weight: 300;
@@ -119,7 +128,7 @@
       </div>
       <div
         style="
-          background: #00703c;
+          background: var(--Other-Green);
           flex-direction: row;
           justify-content: center;
           align-items: center;
@@ -137,7 +146,7 @@
       >
         <div
           style="
-            color: #fff;
+            color: var(--Background);
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 24px;
             font-weight: 700;
@@ -155,7 +164,7 @@
         >
           <svg
             style="
-              fill: #fff;
+              fill: var(--Background);
               height: 20px;
               width: 15.998px;
               line-height: 0;
@@ -173,7 +182,7 @@
       </div>
       <div
         style="
-          background: #005a30;
+          background: var(--Other-Dark-Green);
           flex-direction: column;
           justify-content: center;
           align-items: center;
@@ -190,7 +199,7 @@
       >
         <div
           style="
-            color: #fff;
+            color: var(--Background);
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 19px;
             font-weight: 300;
@@ -204,7 +213,7 @@
       </div>
       <div
         style="
-          background: #aa2a16;
+          background: var(--Other-Dark-Red);
           flex-direction: row;
           justify-content: center;
           align-items: center;
@@ -221,7 +230,7 @@
       >
         <div
           style="
-            color: #fff;
+            color: var(--Background);
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 19px;
             font-weight: 300;
@@ -252,7 +261,7 @@
       >
         <div
           style="
-            color: #0b0c0c;
+            color: var(--Text-Primary);
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 19px;
             font-weight: 300;
@@ -266,7 +275,7 @@
       </div>
       <div
         style="
-          background: #005a30;
+          background: var(--Other-Dark-Green);
           flex-direction: row;
           justify-content: center;
           align-items: center;
@@ -284,7 +293,7 @@
       >
         <div
           style="
-            color: #fff;
+            color: var(--Background);
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 24px;
             font-weight: 700;
@@ -302,7 +311,7 @@
         >
           <svg
             style="
-              fill: #fff;
+              fill: var(--Background);
               height: 20px;
               width: 15.998px;
               line-height: 0;
@@ -320,8 +329,8 @@
       </div>
       <div
         style="
+          background: var(--Other-Dark-Red);
           outline-offset: -3px;
-          background: #aa2a16;
           outline: 3px solid #fd0;
           flex-direction: row;
           justify-content: center;
@@ -338,7 +347,7 @@
       >
         <div
           style="
-            color: #fff;
+            color: var(--Background);
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 19px;
             font-weight: 300;
@@ -352,8 +361,8 @@
       </div>
       <div
         style="
+          background: var(--Other-Dark-Green);
           outline-offset: -3px;
-          background: #005a30;
           outline: 3px solid #fd0;
           flex-direction: column;
           justify-content: center;
@@ -370,7 +379,7 @@
       >
         <div
           style="
-            color: #fff;
+            color: var(--Background);
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 19px;
             font-weight: 300;
@@ -402,7 +411,7 @@
       >
         <div
           style="
-            color: #0b0c0c;
+            color: var(--Text-Primary);
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 19px;
             font-weight: 300;
@@ -416,8 +425,8 @@
       </div>
       <div
         style="
+          background: var(--Other-Dark-Green);
           outline-offset: -3px;
-          background: #005a30;
           outline: 3px solid #fd0;
           flex-direction: row;
           justify-content: center;
@@ -435,7 +444,7 @@
       >
         <div
           style="
-            color: #fff;
+            color: var(--Background);
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 24px;
             font-weight: 700;
@@ -453,7 +462,7 @@
         >
           <svg
             style="
-              fill: #fff;
+              fill: var(--Background);
               height: 20px;
               width: 15.998px;
               line-height: 0;
@@ -471,7 +480,7 @@
       </div>
       <div
         style="
-          background: #fd0;
+          background: var(--Focus-Default);
           flex-direction: row;
           justify-content: center;
           align-items: center;
@@ -488,7 +497,7 @@
       >
         <div
           style="
-            color: #0b0c0c;
+            color: var(--Focus-Text);
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 19px;
             font-weight: 300;
@@ -502,7 +511,7 @@
       </div>
       <div
         style="
-          background: #fd0;
+          background: var(--Focus-Default);
           flex-direction: column;
           justify-content: center;
           align-items: center;
@@ -519,7 +528,7 @@
       >
         <div
           style="
-            color: #0b0c0c;
+            color: var(--Focus-Text);
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 19px;
             font-weight: 300;
@@ -533,7 +542,7 @@
       </div>
       <div
         style="
-          background: #fd0;
+          background: var(--Focus-Default);
           flex-direction: row;
           justify-content: center;
           align-items: center;
@@ -550,7 +559,7 @@
       >
         <div
           style="
-            color: #0b0c0c;
+            color: var(--Focus-Text);
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 19px;
             font-weight: 300;
@@ -564,7 +573,7 @@
       </div>
       <div
         style="
-          background: #fd0;
+          background: var(--Focus-Default);
           flex-direction: row;
           justify-content: center;
           align-items: center;
@@ -582,7 +591,7 @@
       >
         <div
           style="
-            color: #0b0c0c;
+            color: var(--Focus-Text);
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 24px;
             font-weight: 700;
@@ -600,7 +609,7 @@
         >
           <svg
             style="
-              fill: #0b0c0c;
+              fill: var(--Text-Primary);
               height: 20px;
               width: 15.998px;
               line-height: 0;
@@ -618,8 +627,8 @@
       </div>
       <div
         style="
+          background: var(--Other-Green);
           opacity: 0.5;
-          background: #00703c;
           flex-direction: column;
           justify-content: center;
           align-items: center;
@@ -636,7 +645,7 @@
       >
         <div
           style="
-            color: #fff;
+            color: var(--Background);
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 19px;
             font-weight: 300;
@@ -650,8 +659,8 @@
       </div>
       <div
         style="
+          background: var(--Error);
           opacity: 0.5;
-          background: #d4351c;
           flex-direction: row;
           justify-content: center;
           align-items: center;
@@ -668,7 +677,7 @@
       >
         <div
           style="
-            color: #fff;
+            color: var(--Background);
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 19px;
             font-weight: 300;
@@ -682,8 +691,8 @@
       </div>
       <div
         style="
+          background: var(--Other-Light-Grey);
           opacity: 0.5;
-          background: #f3f2f1;
           flex-direction: row;
           justify-content: center;
           align-items: center;
@@ -700,7 +709,7 @@
       >
         <div
           style="
-            color: #0b0c0c;
+            color: var(--Text-Primary);
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 19px;
             font-weight: 300;
@@ -714,8 +723,8 @@
       </div>
       <div
         style="
+          background: var(--Other-Green);
           opacity: 0.5;
-          background: #00703c;
           flex-direction: row;
           justify-content: center;
           align-items: center;
@@ -733,7 +742,7 @@
       >
         <div
           style="
-            color: #fff;
+            color: var(--Background);
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 24px;
             font-weight: 700;
@@ -751,7 +760,7 @@
         >
           <svg
             style="
-              fill: #fff;
+              fill: var(--Background);
               height: 20px;
               width: 15.998px;
               line-height: 0;
@@ -769,9 +778,9 @@
       </div>
       <div
         style="
+          background: var(--Other-Green);
           box-sizing: border-box;
           height: 40px;
-          background: #00703c;
           flex-direction: column;
           justify-content: center;
           align-items: center;
@@ -788,7 +797,7 @@
       >
         <div
           style="
-            color: #fff;
+            color: var(--Background);
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 16px;
             font-weight: 300;
@@ -802,9 +811,9 @@
       </div>
       <div
         style="
+          background: var(--Other-Light-Grey);
           box-sizing: border-box;
           height: 40px;
-          background: #f3f2f1;
           flex-direction: row;
           justify-content: center;
           align-items: center;
@@ -821,7 +830,7 @@
       >
         <div
           style="
-            color: #0b0c0c;
+            color: var(--Text-Primary);
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 16px;
             font-weight: 300;
@@ -835,9 +844,9 @@
       </div>
       <div
         style="
+          background: var(--Error);
           box-sizing: border-box;
           height: 40px;
-          background: #d4351c;
           flex-direction: row;
           justify-content: center;
           align-items: center;
@@ -854,7 +863,7 @@
       >
         <div
           style="
-            color: #fff;
+            color: var(--Background);
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 16px;
             font-weight: 300;
@@ -868,9 +877,9 @@
       </div>
       <div
         style="
+          background: var(--Other-Green);
           box-sizing: border-box;
           height: 40px;
-          background: #00703c;
           flex-direction: row;
           justify-content: center;
           align-items: center;
@@ -888,7 +897,7 @@
       >
         <div
           style="
-            color: #fff;
+            color: var(--Background);
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 18px;
             font-weight: 700;
@@ -911,7 +920,7 @@
         >
           <svg
             style="
-              fill: #fff;
+              fill: var(--Background);
               height: 19px;
               width: 17.4978px;
               line-height: 0;
@@ -929,9 +938,9 @@
       </div>
       <div
         style="
+          background: var(--Other-Dark-Green);
           box-sizing: border-box;
           height: 40px;
-          background: #005a30;
           flex-direction: column;
           justify-content: center;
           align-items: center;
@@ -948,7 +957,7 @@
       >
         <div
           style="
-            color: #fff;
+            color: var(--Background);
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 16px;
             font-weight: 300;
@@ -981,7 +990,7 @@
       >
         <div
           style="
-            color: #0b0c0c;
+            color: var(--Text-Primary);
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 16px;
             font-weight: 300;
@@ -995,9 +1004,9 @@
       </div>
       <div
         style="
+          background: var(--Other-Dark-Red);
           box-sizing: border-box;
           height: 40px;
-          background: #aa2a16;
           flex-direction: row;
           justify-content: center;
           align-items: center;
@@ -1014,7 +1023,7 @@
       >
         <div
           style="
-            color: #fff;
+            color: var(--Background);
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 16px;
             font-weight: 300;
@@ -1028,9 +1037,9 @@
       </div>
       <div
         style="
+          background: var(--Other-Dark-Green);
           box-sizing: border-box;
           height: 40px;
-          background: #005a30;
           flex-direction: row;
           justify-content: center;
           align-items: center;
@@ -1048,7 +1057,7 @@
       >
         <div
           style="
-            color: #fff;
+            color: var(--Background);
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 18px;
             font-weight: 700;
@@ -1071,7 +1080,7 @@
         >
           <svg
             style="
-              fill: #fff;
+              fill: var(--Background);
               height: 19px;
               width: 17.5px;
               line-height: 0;
@@ -1089,10 +1098,10 @@
       </div>
       <div
         style="
+          background: var(--Other-Dark-Green);
           box-sizing: border-box;
           height: 40px;
           outline-offset: -3px;
-          background: #005a30;
           outline: 3px solid #fd0;
           flex-direction: column;
           justify-content: center;
@@ -1109,7 +1118,7 @@
       >
         <div
           style="
-            color: #fff;
+            color: var(--Background);
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 16px;
             font-weight: 300;
@@ -1143,7 +1152,7 @@
       >
         <div
           style="
-            color: #0b0c0c;
+            color: var(--Text-Primary);
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 16px;
             font-weight: 300;
@@ -1157,10 +1166,10 @@
       </div>
       <div
         style="
+          background: var(--Other-Dark-Red);
           box-sizing: border-box;
           height: 40px;
           outline-offset: -3px;
-          background: #aa2a16;
           outline: 3px solid #fd0;
           flex-direction: row;
           justify-content: center;
@@ -1177,7 +1186,7 @@
       >
         <div
           style="
-            color: #fff;
+            color: var(--Background);
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 16px;
             font-weight: 300;
@@ -1191,10 +1200,10 @@
       </div>
       <div
         style="
+          background: var(--Other-Dark-Green);
           box-sizing: border-box;
           height: 40px;
           outline-offset: -3px;
-          background: #005a30;
           outline: 3px solid #fd0;
           flex-direction: row;
           justify-content: center;
@@ -1212,7 +1221,7 @@
       >
         <div
           style="
-            color: #fff;
+            color: var(--Background);
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 18px;
             font-weight: 700;
@@ -1235,7 +1244,7 @@
         >
           <svg
             style="
-              fill: #fff;
+              fill: var(--Background);
               height: 19px;
               width: 17.5px;
               line-height: 0;
@@ -1253,9 +1262,9 @@
       </div>
       <div
         style="
+          background: var(--Focus-Default);
           box-sizing: border-box;
           height: 40px;
-          background: #fd0;
           flex-direction: column;
           justify-content: center;
           align-items: center;
@@ -1272,7 +1281,7 @@
       >
         <div
           style="
-            color: #0b0c0c;
+            color: var(--Focus-Text);
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 16px;
             font-weight: 300;
@@ -1286,9 +1295,9 @@
       </div>
       <div
         style="
+          background: var(--Focus-Default);
           box-sizing: border-box;
           height: 40px;
-          background: #fd0;
           flex-direction: row;
           justify-content: center;
           align-items: center;
@@ -1305,7 +1314,7 @@
       >
         <div
           style="
-            color: #0b0c0c;
+            color: var(--Focus-Text);
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 16px;
             font-weight: 300;
@@ -1319,9 +1328,9 @@
       </div>
       <div
         style="
+          background: var(--Focus-Default);
           box-sizing: border-box;
           height: 40px;
-          background: #fd0;
           flex-direction: row;
           justify-content: center;
           align-items: center;
@@ -1338,7 +1347,7 @@
       >
         <div
           style="
-            color: #0b0c0c;
+            color: var(--Focus-Text);
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 16px;
             font-weight: 300;
@@ -1352,9 +1361,9 @@
       </div>
       <div
         style="
+          background: var(--Focus-Default);
           box-sizing: border-box;
           height: 40px;
-          background: #fd0;
           flex-direction: row;
           justify-content: center;
           align-items: center;
@@ -1372,7 +1381,7 @@
       >
         <div
           style="
-            color: #0b0c0c;
+            color: var(--Focus-Text);
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 18px;
             font-weight: 700;
@@ -1395,7 +1404,7 @@
         >
           <svg
             style="
-              fill: #0b0c0c;
+              fill: var(--Text-Primary);
               height: 19px;
               width: 17.4978px;
               line-height: 0;
@@ -1413,10 +1422,10 @@
       </div>
       <div
         style="
+          background: var(--Other-Green);
           box-sizing: border-box;
           height: 40px;
           opacity: 0.5;
-          background: #00703c;
           flex-direction: column;
           justify-content: center;
           align-items: center;
@@ -1433,7 +1442,7 @@
       >
         <div
           style="
-            color: #fff;
+            color: var(--Background);
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 16px;
             font-weight: 300;
@@ -1447,10 +1456,10 @@
       </div>
       <div
         style="
+          background: var(--Other-Light-Grey);
           box-sizing: border-box;
           height: 40px;
           opacity: 0.5;
-          background: #f3f2f1;
           flex-direction: row;
           justify-content: center;
           align-items: center;
@@ -1467,7 +1476,7 @@
       >
         <div
           style="
-            color: #0b0c0c;
+            color: var(--Text-Primary);
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 16px;
             font-weight: 300;
@@ -1481,10 +1490,10 @@
       </div>
       <div
         style="
+          background: var(--Error);
           box-sizing: border-box;
           height: 40px;
           opacity: 0.5;
-          background: #d4351c;
           flex-direction: row;
           justify-content: center;
           align-items: center;
@@ -1501,7 +1510,7 @@
       >
         <div
           style="
-            color: #fff;
+            color: var(--Background);
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 16px;
             font-weight: 300;
@@ -1515,10 +1524,10 @@
       </div>
       <div
         style="
+          background: var(--Other-Green);
           box-sizing: border-box;
           height: 40px;
           opacity: 0.5;
-          background: #00703c;
           flex-direction: row;
           justify-content: center;
           align-items: center;
@@ -1536,7 +1545,7 @@
       >
         <div
           style="
-            color: #fff;
+            color: var(--Background);
             font-family: GDS Transport Website, arial, sans-serif;
             font-size: 18px;
             font-weight: 700;
@@ -1559,7 +1568,7 @@
         >
           <svg
             style="
-              fill: #fff;
+              fill: var(--Background);
               height: 19px;
               width: 17.4978px;
               line-height: 0;

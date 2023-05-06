@@ -5,12 +5,19 @@ use self::css_properties::CssProperties;
 use super::figma_api;
 use anyhow::{anyhow, Context, Result};
 use horrorshow::{helper::doctype, html};
+use indexmap::IndexMap;
 use lightningcss::stylesheet::{MinifyOptions, ParserOptions, PrinterOptions, StyleAttribute};
 use std::{io::Write, vec};
 
 mod css_properties;
 
 type CSSRulePairs = (String, Option<String>);
+pub type CSSVariablesMap<'a> = IndexMap<&'a str, CSSVariable>;
+
+pub struct CSSVariable {
+    name: String,
+    value: Option<String>,
+}
 
 fn create_inline_css(properties: &[CSSRulePairs]) -> Result<String> {
     use std::fmt::Write;
@@ -34,16 +41,20 @@ fn create_inline_css(properties: &[CSSRulePairs]) -> Result<String> {
         .code)
 }
 
-fn inline_css(node: &Node, parent: Option<&Node>) -> Result<Option<String>> {
+fn inline_css(
+    node: &Node,
+    parent: Option<&Node>,
+    css_variables: &mut CSSVariablesMap,
+) -> Result<Option<String>> {
     let css: Vec<(String, Option<String>)> = vec![
         ("align-items".into(), node.align_items()),
-        ("background".into(), node.background()),
+        ("background".into(), node.background(css_variables)),
         ("border-radius".into(), node.border_radius()),
         ("box-shadow".into(), node.box_shadow()),
         ("box-sizing".into(), node.box_sizing()),
-        ("color".into(), node.color()),
+        ("color".into(), node.color(css_variables)),
         ("display".into(), node.display()),
-        ("fill".into(), node.fill()),
+        ("fill".into(), node.fill(css_variables)),
         ("flex-direction".into(), node.flex_direction()),
         ("flex-grow".into(), node.flex_grow()),
         ("font-family".into(), node.font_family()),
@@ -73,11 +84,12 @@ fn inline_css(node: &Node, parent: Option<&Node>) -> Result<Option<String>> {
     }
 }
 
-fn node_to_html(node: &Node, parent: Option<&Node>) -> String {
+fn node_to_html(node: &Node, parent: Option<&Node>, css_variables: &mut CSSVariablesMap) -> String {
+    let style = inline_css(node, parent, css_variables).unwrap_or_default();
     match node.r#type {
         NodeType::Vector | NodeType::BooleanOperation => html! {
             svg(
-                style?=inline_css(node, parent).unwrap_or_default(),
+                style?=style.as_deref(),
                 data-figma-name=&node.name,
                 data-figma-id=&node.id,
                 viewBox="0 0 100 100"
@@ -91,19 +103,25 @@ fn node_to_html(node: &Node, parent: Option<&Node>) -> String {
             }
         }
         .to_string(),
-        _ => html! {
-            div(
-                style?=inline_css(node, parent).unwrap_or_default(),
-                data-figma-name=&node.name,
-                data-figma-id=&node.id
-            ) {
-                @ for child in node.enabled_children() {
-                    : horrorshow::Raw(node_to_html(child, Some(node)))
+        _ => {
+            let child_nodes = node
+                .enabled_children()
+                .map(|child| node_to_html(child, Some(node), css_variables))
+                .collect::<Vec<_>>();
+            html! {
+                div(
+                    style?=style.as_deref(),
+                    data-figma-name=&node.name,
+                    data-figma-id=&node.id
+                ) {
+                    @ for child_html in child_nodes.iter() {
+                        : horrorshow::Raw(child_html)
+                    }
+                    : &node.characters.as_deref().unwrap_or_default();
                 }
-                : &node.characters.as_deref().unwrap_or_default();
             }
+            .to_string()
         }
-        .to_string(),
     }
 }
 
@@ -119,6 +137,33 @@ pub fn main(
         .find(|(n, _)| n.id == node_id)
         .with_context(|| format!("Failed to find node with id {}", node_id))?;
 
+    let mut css_variables: CSSVariablesMap = file
+        .styles
+        .iter()
+        .map(|(key, style)| {
+            (
+                key.as_str(),
+                CSSVariable {
+                    name: format!(
+                        "--{}",
+                        style.name.replace(|c: char| !c.is_alphanumeric(), "-")
+                    ),
+                    value: None,
+                },
+            )
+        })
+        .collect();
+
+    let body_inner_html = node_to_html(body, None, &mut css_variables);
+
+    let mut body_css_properties = vec![("margin".into(), Some("0".into()))];
+    body_css_properties.extend(
+        css_variables
+            .into_values()
+            .filter_map(|v| Some((v.name, Some(v.value?)))),
+    );
+    let body_css = create_inline_css(&body_css_properties)?;
+
     writeln!(
         stdout,
         "{}",
@@ -128,10 +173,10 @@ pub fn main(
                 head {
                     meta(charset="utf-8");
                     title : format!("{} component", &body.name);
-                    style(type="text/css"): "body{margin: 0;}";
+                    style(type="text/css"): format!("body{{{body_css}}}");
                 }
                 body {
-                    : horrorshow::Raw(node_to_html(body, None))
+                    : horrorshow::Raw(&body_inner_html)
                 }
             }
         }
