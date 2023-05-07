@@ -16268,7 +16268,7 @@
   },
   "name": "Design Tokens for Figma",
   "lastModified": "2023-03-15T16:02:52Z",
-  "thumbnailUrl": "https://s3-alpha.figma.com/thumbnails/df199dfe-4a44-4f26-a913-eca3c9133a0f?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWCSFI5A2UI%2F20230423%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230423T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=8689a77a44a4413d394b959be7a948c94a420e9326a5dbef0b45afbb299ba91b",
+  "thumbnailUrl": "https://s3-alpha.figma.com/thumbnails/df199dfe-4a44-4f26-a913-eca3c9133a0f?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ4GOSFWCRNAWVJNA%2F20230507%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230507T120000Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&X-Amz-Signature=e321a0e7d6a4b847c4ae89a952d720c40d43280a702b2bd52aee2b75dd1cbbe4",
   "version": "3172855371",
   "role": "viewer",
   "editorType": "figma",

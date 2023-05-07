@@ -1,5 +1,8 @@
 .DEFAULT_GOAL := all
 
+# My unchanged copy of https://www.figma.com/community/file/946837271092540314
+gov-uk-figma-file = WwTlihidmAqp0bky272vd9
+
 example-figma-files = \
 example-figma-files/design-tokens-for-figma.json \
 example-figma-files/gov-uk-design-system.json \
@@ -36,10 +39,9 @@ example-figma-files/design-tokens-for-figma.json :
     'https://api.figma.com/v1/files/2MQ759R5kJtzQn4qSHuqR7' \
 	| jq > $@
 
-# My unchanged copy of https://www.figma.com/community/file/946837271092540314
 example-figma-files/gov-uk-design-system.json :
 	curl -sH "X-Figma-Token: ${FIGMA_TOKEN}" \
-	'https://api.figma.com/v1/files/JFMsvJ0Q5v1daC6pySgvfZ' \
+	'https://api.figma.com/v1/files/$(gov-uk-figma-file)' \
         | jq > $@
 
 example-figma-files/gov-uk-design-system-components/get-started-page.json : example-figma-files/gov-uk-design-system.json
@@ -62,32 +64,32 @@ example-figma-files/gov-uk-design-system-components/tag.json : example-figma-fil
 
 example-figma-files/gov-uk-design-system-components/get-started-page.svg :
 	curl $$(curl -sH "X-Figma-Token: ${FIGMA_TOKEN}" \
-	'https://api.figma.com/v1/images/JFMsvJ0Q5v1daC6pySgvfZ?ids=756:127&format=svg&svg_include_id=true' \
+	'https://api.figma.com/v1/images/$(gov-uk-figma-file)?ids=756:127&format=svg&svg_include_id=true' \
         | jq '.images["756:127"]' -r) > $@
 
 example-figma-files/gov-uk-design-system-components/button.svg :
 	curl $$(curl -sH "X-Figma-Token: ${FIGMA_TOKEN}" \
-	'https://api.figma.com/v1/images/JFMsvJ0Q5v1daC6pySgvfZ?ids=213:6&format=svg&svg_include_id=true' \
+	'https://api.figma.com/v1/images/$(gov-uk-figma-file)?ids=213:6&format=svg&svg_include_id=true' \
         | jq '.images["213:6"]' -r) > $@
 
 example-figma-files/gov-uk-design-system-components/cookie-banner.svg :
 	curl $$(curl -sH "X-Figma-Token: ${FIGMA_TOKEN}" \
-	'https://api.figma.com/v1/images/JFMsvJ0Q5v1daC6pySgvfZ?ids=18330:13859&format=svg&svg_include_id=true' \
+	'https://api.figma.com/v1/images/$(gov-uk-figma-file)?ids=18330:13859&format=svg&svg_include_id=true' \
         | jq '.images["18330:13859"]' -r) > $@
 
 example-figma-files/gov-uk-design-system-components/footer.svg :
 	curl $$(curl -sH "X-Figma-Token: ${FIGMA_TOKEN}" \
-	'https://api.figma.com/v1/images/JFMsvJ0Q5v1daC6pySgvfZ?ids=19792:14489&format=svg&svg_include_id=true' \
+	'https://api.figma.com/v1/images/$(gov-uk-figma-file)?ids=19792:14489&format=svg&svg_include_id=true' \
         | jq '.images["19792:14489"]' -r) > $@
 
 example-figma-files/gov-uk-design-system-components/header.svg :
 	curl $$(curl -sH "X-Figma-Token: ${FIGMA_TOKEN}" \
-	'https://api.figma.com/v1/images/JFMsvJ0Q5v1daC6pySgvfZ?ids=20226:12488&format=svg&svg_include_id=true' \
+	'https://api.figma.com/v1/images/$(gov-uk-figma-file)?ids=20226:12488&format=svg&svg_include_id=true' \
         | jq '.images["20226:12488"]' -r) > $@
 
 example-figma-files/gov-uk-design-system-components/tag.svg :
 	curl $$(curl -sH "X-Figma-Token: ${FIGMA_TOKEN}" \
-	'https://api.figma.com/v1/images/JFMsvJ0Q5v1daC6pySgvfZ?ids=147:17&format=svg&svg_include_id=true' \
+	'https://api.figma.com/v1/images/$(gov-uk-figma-file)?ids=147:17&format=svg&svg_include_id=true' \
         | jq '.images["147:17"]' -r) > $@
 
 src/design_tokens/example-output.json : example-figma-files/design-tokens-for-figma.json
