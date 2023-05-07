@@ -1,11 +1,16 @@
 name: Release
 on:
-  - workflow_dispatch
+  push:
+    tags:
+      - "file-tools-*"
 jobs:
   build:
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
@@ -18,3 +23,16 @@ jobs:
           path:
             target/release/figma-file-tools${{ runner.os == 'Windows' && '.exe'
             || '' }}
+  release:
+    needs:
+      - build (ubuntu-latest)
+      - build (windows-latest)
+      - build (macos-latest)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ncipollo/release-action@v1
+        with:
+          artifacts: "figma-file-tools-*"
