@@ -62,7 +62,6 @@ fn inline_css(
         ("height".into(), node.height()),
         ("justify-content".into(), node.justify_content()),
         ("left".into(), node.left(parent)),
-        ("line-height".into(), node.line_height()),
         ("padding".into(), node.padding()),
         ("opacity".into(), CssProperties::opacity(node)),
         ("outline".into(), node.outline()),

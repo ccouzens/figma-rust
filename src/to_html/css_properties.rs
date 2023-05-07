@@ -24,7 +24,6 @@ pub trait CssProperties {
     fn height(&self) -> Option<String>;
     fn justify_content(&self) -> Option<String>;
     fn left(&self, parent: Option<&Node>) -> Option<String>;
-    fn line_height(&self) -> Option<String>;
     fn opacity(&self) -> Option<String>;
     fn outline_offset(&self) -> Option<String>;
     fn outline(&self) -> Option<String>;
@@ -257,13 +256,6 @@ impl CssProperties for Node {
             .unwrap_or(0.0);
         let self_offset_left = self.absolute_bounding_box()?.x?;
         Some(format!("{}px", self_offset_left - parent_offset_left))
-    }
-
-    fn line_height(&self) -> Option<String> {
-        match self.style.as_ref() {
-            Some(_) => None,
-            None => Some("0".into()),
-        }
     }
 
     fn padding(&self) -> Option<String> {
