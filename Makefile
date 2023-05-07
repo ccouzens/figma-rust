@@ -63,32 +63,32 @@ example-figma-files/gov-uk-design-system-components/tag.json : example-figma-fil
 	jq '.document.children[] | select(.name == "🗝️  Styles and Components").children[] | select(.id == "147:17")' < $< > $@
 
 example-figma-files/gov-uk-design-system-components/get-started-page.svg :
-	curl $$(curl -sH "X-Figma-Token: ${FIGMA_TOKEN}" \
+	curl -s $$(curl -sH "X-Figma-Token: ${FIGMA_TOKEN}" \
 	'https://api.figma.com/v1/images/$(gov-uk-figma-file)?ids=756:127&format=svg&svg_include_id=true' \
         | jq '.images["756:127"]' -r) > $@
 
 example-figma-files/gov-uk-design-system-components/button.svg :
-	curl $$(curl -sH "X-Figma-Token: ${FIGMA_TOKEN}" \
+	curl -s $$(curl -sH "X-Figma-Token: ${FIGMA_TOKEN}" \
 	'https://api.figma.com/v1/images/$(gov-uk-figma-file)?ids=213:6&format=svg&svg_include_id=true' \
         | jq '.images["213:6"]' -r) > $@
 
 example-figma-files/gov-uk-design-system-components/cookie-banner.svg :
-	curl $$(curl -sH "X-Figma-Token: ${FIGMA_TOKEN}" \
+	curl -s $$(curl -sH "X-Figma-Token: ${FIGMA_TOKEN}" \
 	'https://api.figma.com/v1/images/$(gov-uk-figma-file)?ids=18330:13859&format=svg&svg_include_id=true' \
         | jq '.images["18330:13859"]' -r) > $@
 
 example-figma-files/gov-uk-design-system-components/footer.svg :
-	curl $$(curl -sH "X-Figma-Token: ${FIGMA_TOKEN}" \
+	curl -s $$(curl -sH "X-Figma-Token: ${FIGMA_TOKEN}" \
 	'https://api.figma.com/v1/images/$(gov-uk-figma-file)?ids=19792:14489&format=svg&svg_include_id=true' \
         | jq '.images["19792:14489"]' -r) > $@
 
 example-figma-files/gov-uk-design-system-components/header.svg :
-	curl $$(curl -sH "X-Figma-Token: ${FIGMA_TOKEN}" \
+	curl -s $$(curl -sH "X-Figma-Token: ${FIGMA_TOKEN}" \
 	'https://api.figma.com/v1/images/$(gov-uk-figma-file)?ids=20226:12488&format=svg&svg_include_id=true' \
         | jq '.images["20226:12488"]' -r) > $@
 
 example-figma-files/gov-uk-design-system-components/tag.svg :
-	curl $$(curl -sH "X-Figma-Token: ${FIGMA_TOKEN}" \
+	curl -s $$(curl -sH "X-Figma-Token: ${FIGMA_TOKEN}" \
 	'https://api.figma.com/v1/images/$(gov-uk-figma-file)?ids=147:17&format=svg&svg_include_id=true' \
         | jq '.images["147:17"]' -r) > $@
 
