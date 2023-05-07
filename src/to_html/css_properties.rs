@@ -178,7 +178,7 @@ impl CssProperties for Node {
         let style = if matches!(font_style.italic, Some(true)) {
             "italic"
         } else {
-            "normal"
+            ""
         };
         let variant = if matches!(
             font_style.text_case,
@@ -186,7 +186,7 @@ impl CssProperties for Node {
         ) {
             "small-caps"
         } else {
-            "normal"
+            ""
         };
         let weight = font_style.font_weight;
         let size = font_style.font_size;
