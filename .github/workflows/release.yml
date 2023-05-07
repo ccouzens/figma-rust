@@ -15,4 +15,6 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: figma-file-tools-${{ runner.arch }}-${{ runner.os }}
-          path: target/release/figma-rust
+          path:
+            target/release/figma-file-tools${{ runner.os == 'Windows' && '.exe'
+            }}
