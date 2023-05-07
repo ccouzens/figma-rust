@@ -2,3 +2,5 @@
 /node_modules
 /private
 /example-figma-files
+/src/**/*.json
+

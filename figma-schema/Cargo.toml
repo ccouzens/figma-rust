@@ -1,7 +1,13 @@
 [package]
 name = "figma-schema"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
+authors = ["Chris Couzens <ccouzens@gmail.com>"]
+description = "Figma REST API schema"
+license = "MIT"
+repository = "https://github.com/ccouzens/figma-rust"
+keywords = ["Figma"]
+
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
