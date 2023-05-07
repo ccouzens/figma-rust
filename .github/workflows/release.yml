@@ -37,8 +37,8 @@ jobs:
           path: figma-file-tools-X64-Linux
       - run: "chmod +x figma-file-tools-X64-Linux/figma-file-tools"
       - run:
-          "tar czf figma-file-tools-X64-Linux.tar.gz
-          figma-file-tools-X64-Linux/figma-file-tools"
+          tar --create --gzip --file figma-file-tools-X64-Linux.tar.gz
+          --directory figma-file-tools-X64-Linux figma-file-tools
       - uses: actions/download-artifact@v3
         with:
           name: figma-file-tools-X64-Windows
@@ -49,8 +49,8 @@ jobs:
           path: figma-file-tools-X64-macOS
       - run: "chmod +x figma-file-tools-X64-macOS/figma-file-tools"
       - run:
-          "tar czf figma-file-tools-X64-macOS.tar.gz
-          figma-file-tools-X64-macOS/figma-file-tools"
+          tar --create --gzip --file figma-file-tools-X64-macOS.tar.gz
+          --directory figma-file-tools-X64-macOS figma-file-tools
       - uses: ncipollo/release-action@v1
         with:
           artifacts: "figma-file-tools-X64-Linux.tar.gz,figma-file-tools-X64-Windows/figma-file-tools.exe,figma-file-tools-X64-macOS.tar.gz"
