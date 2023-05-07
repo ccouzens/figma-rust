@@ -17,4 +17,4 @@ jobs:
           name: figma-file-tools-${{ runner.arch }}-${{ runner.os }}
           path:
             target/release/figma-file-tools${{ runner.os == 'Windows' && '.exe'
-            }}
+            || '' }}
