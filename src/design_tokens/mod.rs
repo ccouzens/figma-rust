@@ -5,7 +5,6 @@ mod opacity_tokens;
 mod radius_tokens;
 mod size_tokens;
 mod spacing_tokens;
-use super::figma_api;
 use anyhow::{Context, Result};
 use indexmap::IndexMap;
 use serde::Serialize;
@@ -49,18 +48,18 @@ fn insert_by_name(output: &mut MapOrJson, name: &[&str], value: serde_json::Valu
 }
 
 fn token_document_transformer(
-    file: &figma_api::File,
+    file: &figma_schema::File,
     output: &mut MapOrJson,
     prefixes: &[&str],
     stderr: &mut impl Write,
-    transformer: impl Fn(&figma_api::Node, &figma_api::File) -> Option<serde_json::Value>,
+    transformer: impl Fn(&figma_schema::Node, &figma_schema::File) -> Option<serde_json::Value>,
 ) {
     for (node, nodes) in file.document.depth_first_stack_iter() {
         let parent = nodes.iter().nth_back(1).cloned();
         let name = match parent {
-            Some(figma_api::Node {
+            Some(figma_schema::Node {
                 name: parent_name,
-                r#type: figma_api::NodeType::ComponentSet,
+                r#type: figma_schema::NodeType::ComponentSet,
                 ..
             }) => Cow::Owned(
                 once(parent_name.as_str())
@@ -102,11 +101,11 @@ fn token_document_transformer(
 }
 
 fn token_style_transformer(
-    f: &figma_api::File,
+    f: &figma_schema::File,
     output: &mut MapOrJson,
     name: &str,
     stderr: &mut impl Write,
-    style_type: figma_api::StyleType,
+    style_type: figma_schema::StyleType,
 ) {
     for style in f.styles.values() {
         #[derive(Debug, Serialize)]
@@ -143,7 +142,7 @@ fn token_style_transformer(
 }
 
 pub fn main(
-    file: &figma_api::File,
+    file: &figma_schema::File,
     stdout: &mut impl Write,
     stderr: &mut impl Write,
 ) -> Result<()> {
@@ -191,28 +190,28 @@ pub fn main(
         &mut output,
         "color",
         stderr,
-        figma_api::StyleType::Fill,
+        figma_schema::StyleType::Fill,
     );
     token_style_transformer(
         file,
         &mut output,
         "grid",
         stderr,
-        figma_api::StyleType::Grid,
+        figma_schema::StyleType::Grid,
     );
     token_style_transformer(
         file,
         &mut output,
         "font",
         stderr,
-        figma_api::StyleType::Text,
+        figma_schema::StyleType::Text,
     );
     token_style_transformer(
         file,
         &mut output,
         "effect",
         stderr,
-        figma_api::StyleType::Effect,
+        figma_schema::StyleType::Effect,
     );
 
     serde_json::to_writer_pretty(stdout, &output).context("Failed to write design tokens")?;

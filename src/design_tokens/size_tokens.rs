@@ -1,4 +1,4 @@
-use crate::figma_api::{self, File, Node};
+use figma_schema::{self, File, Node};
 use serde::Serialize;
 use serde_json::json;
 
@@ -17,9 +17,9 @@ struct SizeToken<'a> {
 pub fn as_size_token(node: &Node, file: &File) -> Option<serde_json::Value> {
     if !matches!(
         node.r#type,
-        figma_api::NodeType::Component { .. }
-            | figma_api::NodeType::Rectangle { .. }
-            | figma_api::NodeType::Frame { .. }
+        figma_schema::NodeType::Component { .. }
+            | figma_schema::NodeType::Rectangle { .. }
+            | figma_schema::NodeType::Frame { .. }
     ) {
         return None;
     }

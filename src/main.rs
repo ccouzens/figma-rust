@@ -1,5 +1,4 @@
 mod design_tokens;
-pub mod figma_api;
 mod to_html;
 mod typescript_props;
 
@@ -53,7 +52,7 @@ fn main() -> Result<()> {
         }
     }
 
-    let file: figma_api::File =
+    let file: figma_schema::File =
         serde_json::from_value(file_or_error).context("Failed to parse JSON as Figma API")?;
 
     match &args.command {

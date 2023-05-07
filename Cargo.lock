@@ -432,12 +432,21 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "clap",
+ "figma-schema",
  "horrorshow",
  "indexmap",
  "itertools",
  "lightningcss",
  "serde",
  "serde_json",
+]
+
+[[package]]
+name = "figma-schema"
+version = "0.1.0"
+dependencies = [
+ "indexmap",
+ "serde",
  "typeshare",
 ]
 

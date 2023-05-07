@@ -1,6 +1,3 @@
-use crate::figma_api::Node;
-
-use super::figma_api;
 use anyhow::{Context, Result};
 use indexmap::{IndexMap, IndexSet};
 use serde::Serialize;
@@ -16,7 +13,7 @@ enum MapOrInterface<'a> {
 #[derive(Debug, Serialize)]
 struct Interface<'a> {
     types: IndexMap<&'a str, IndexSet<&'a str>>,
-    parent_nodes: Vec<&'a figma_api::Node>,
+    parent_nodes: Vec<&'a figma_schema::Node>,
 }
 
 const FAILED_TO_WRITE: &str = "Failed to write";
@@ -179,7 +176,7 @@ impl<'a> MapOrInterface<'a> {
 
 fn insert_by_name<'a>(
     transformed: &mut MapOrInterface<'a>,
-    nodes: &[&'a Node],
+    nodes: &[&'a figma_schema::Node],
     value: Interface<'a>,
 ) -> bool {
     match transformed {
@@ -206,15 +203,15 @@ fn insert_by_name<'a>(
 }
 
 pub fn main(
-    file: &figma_api::File,
+    file: &figma_schema::File,
     stdout: &mut impl Write,
     stderr: &mut impl Write,
 ) -> Result<()> {
     let mut transformed = MapOrInterface::Map(IndexMap::new());
 
     for (node, parent_nodes) in file.document.depth_first_stack_iter() {
-        if let figma_api::Node {
-            r#type: figma_api::NodeType::ComponentSet,
+        if let figma_schema::Node {
+            r#type: figma_schema::NodeType::ComponentSet,
             ..
         } = node
         {

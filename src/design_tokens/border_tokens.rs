@@ -1,4 +1,4 @@
-use crate::figma_api::{self, File, Node, NodeType};
+use figma_schema::{self, File, Node, NodeType};
 use serde::Serialize;
 use serde_json::json;
 
@@ -71,9 +71,9 @@ pub fn as_border_token(node: &Node, _file: &File) -> Option<serde_json::Value> {
         export_key: "border",
         stroke_align: StrokeAlign {
             value: match node.stroke_align()? {
-                figma_api::StrokeAlign::Inside => "inside",
-                figma_api::StrokeAlign::Outside => "outside",
-                figma_api::StrokeAlign::Center => "center",
+                figma_schema::StrokeAlign::Inside => "inside",
+                figma_schema::StrokeAlign::Outside => "outside",
+                figma_schema::StrokeAlign::Center => "center",
             },
             r#type: "string"
         },

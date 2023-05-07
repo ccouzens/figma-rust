@@ -1,8 +1,7 @@
-use crate::figma_api::{Node, NodeType};
+use figma_schema::{Node, NodeType};
 
 use self::css_properties::CssProperties;
 
-use super::figma_api;
 use anyhow::{anyhow, Context, Result};
 use horrorshow::{helper::doctype, html};
 use indexmap::IndexMap;
@@ -123,7 +122,7 @@ fn node_to_html(node: &Node, parent: Option<&Node>, css_variables: &mut CSSVaria
 }
 
 pub fn main(
-    file: &figma_api::File,
+    file: &figma_schema::File,
     stdout: &mut impl Write,
     _stderr: &mut impl Write,
     node_id: &str,

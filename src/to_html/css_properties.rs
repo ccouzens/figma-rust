@@ -1,4 +1,4 @@
-use crate::figma_api::{
+use figma_schema::{
     AxisSizingMode, CounterAxisAlignItems, EffectType, LayoutMode, Node, NodeType,
     PrimaryAxisAlignItems, StrokeAlign, TextCase, TextDecoration,
 };
