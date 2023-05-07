@@ -282,6 +282,8 @@ public enum TextDecoration: String, Codable {
 public struct TypeStyle: Codable {
 	/// Font family of text (standard name)
 	public let fontFamily: String
+	/// Whether or not text is italicized
+	public let italic: Bool?
 	/// Numeric font weight
 	public let fontWeight: Double
 	/// Font size in px
@@ -293,8 +295,9 @@ public struct TypeStyle: Codable {
 	/// Line height in px
 	public let lineHeightPx: Double
 
-	public init(fontFamily: String, fontWeight: Double, fontSize: Double, textCase: TextCase?, textDecoration: TextDecoration?, lineHeightPx: Double) {
+	public init(fontFamily: String, italic: Bool?, fontWeight: Double, fontSize: Double, textCase: TextCase?, textDecoration: TextDecoration?, lineHeightPx: Double) {
 		self.fontFamily = fontFamily
+		self.italic = italic
 		self.fontWeight = fontWeight
 		self.fontSize = fontSize
 		self.textCase = textCase

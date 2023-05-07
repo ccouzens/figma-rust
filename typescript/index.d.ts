@@ -234,6 +234,8 @@ export enum TextDecoration {
 export interface TypeStyle {
 	/** Font family of text (standard name) */
 	fontFamily: string;
+	/** Whether or not text is italicized */
+	italic?: boolean;
 	/** Numeric font weight */
 	fontWeight: number;
 	/** Font size in px */

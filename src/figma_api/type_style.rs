@@ -27,13 +27,18 @@ pub enum TextDecoration {
 pub struct TypeStyle {
     /// Font family of text (standard name)
     pub font_family: String,
+    /// Whether or not text is italicized
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub italic: Option<bool>,
     /// Numeric font weight
     pub font_weight: f64,
     /// Font size in px
     pub font_size: f64,
     /// Text casing applied to the node, default is the original casing
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub text_case: Option<TextCase>,
     /// Text decoration applied to the node, default is none
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub text_decoration: Option<TextDecoration>,
     /// Line height in px
     pub line_height_px: f64,

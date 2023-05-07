@@ -10,7 +10,7 @@ use super::CSSVariablesMap;
 /// The CSS values are not optimized, but can be made so by use of another tool like `lightningcss`.
 pub trait CssProperties {
     fn align_items(&self) -> Option<String>;
-    fn background(&self, css_varaibles: &mut CSSVariablesMap) -> Option<String>;
+    fn background(&self, css_variables: &mut CSSVariablesMap) -> Option<String>;
     fn border_radius(&self) -> Option<String>;
     fn box_shadow(&self) -> Option<String>;
     fn box_sizing(&self) -> Option<String>;
@@ -19,9 +19,7 @@ pub trait CssProperties {
     fn fill(&self, css_variables: &mut CSSVariablesMap) -> Option<String>;
     fn flex_direction(&self) -> Option<String>;
     fn flex_grow(&self) -> Option<String>;
-    fn font_family(&self) -> Option<String>;
-    fn font_size(&self) -> Option<String>;
-    fn font_weight(&self) -> Option<String>;
+    fn font(&self, css_variables: &mut CSSVariablesMap) -> Option<String>;
     fn gap(&self) -> Option<String>;
     fn height(&self) -> Option<String>;
     fn justify_content(&self) -> Option<String>;
@@ -175,22 +173,39 @@ impl CssProperties for Node {
         }
     }
 
-    fn font_family(&self) -> Option<String> {
-        self.style.as_ref().map(|s| s.font_family.clone())
-    }
+    fn font(&self, css_variables: &mut CSSVariablesMap) -> Option<String> {
+        let font_style = self.style.as_ref()?;
 
-    fn font_size(&self) -> Option<String> {
-        self.style
-            .as_ref()
-            .map(|s| s.font_size)
-            .map(|fs| format!("{fs}px"))
-    }
+        let style = if matches!(font_style.italic, Some(true)) {
+            "italic"
+        } else {
+            "normal"
+        };
+        let variant = if matches!(
+            font_style.text_case,
+            Some(TextCase::SmallCaps | TextCase::SmallCapsForced)
+        ) {
+            "small-caps"
+        } else {
+            "normal"
+        };
+        let weight = font_style.font_weight;
+        let size = font_style.font_size;
+        let line_height = font_style.line_height_px;
+        let family = &font_style.font_family;
 
-    fn font_weight(&self) -> Option<String> {
-        self.style
-            .as_ref()
-            .map(|s| s.font_weight)
-            .map(|fw| format!("{fw}"))
+        let font_value = format!("{style} {variant} {weight} {size}px/{line_height}px {family}");
+
+        match self.styles.as_ref().and_then(|s| s.text.as_deref()) {
+            Some(s_ref) => match css_variables.get_mut(s_ref) {
+                Some(v) => {
+                    v.value = Some(font_value);
+                    Some(format!("var({})", v.name))
+                }
+                None => Some(font_value),
+            },
+            None => Some(font_value),
+        }
     }
 
     fn gap(&self) -> Option<String> {
@@ -245,8 +260,10 @@ impl CssProperties for Node {
     }
 
     fn line_height(&self) -> Option<String> {
-        let lh = self.style.as_ref().map(|s| s.line_height_px).unwrap_or(0.0);
-        Some(format!("{lh}px"))
+        match self.style.as_ref() {
+            Some(_) => None,
+            None => Some("0".into()),
+        }
     }
 
     fn padding(&self) -> Option<String> {

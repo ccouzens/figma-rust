@@ -326,6 +326,8 @@ enum class TextDecoration(val string: String) {
 data class TypeStyle (
 	/// Font family of text (standard name)
 	val fontFamily: String,
+	/// Whether or not text is italicized
+	val italic: Boolean? = null,
 	/// Numeric font weight
 	val fontWeight: Double,
 	/// Font size in px

@@ -6,9 +6,9 @@ pub struct Styles {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fill: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    text: Option<String>,
+    pub text: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    stroke: Option<String>,
+    pub stroke: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    effect: Option<String>,
+    pub effect: Option<String>,
 }
