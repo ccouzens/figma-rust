@@ -33,4 +33,4 @@ jobs:
       - uses: actions/checkout@v3
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: "figma-file-tools-*"
+          artifacts: "figma-file-tools-X64-Linux,figma-file-tools-X64-Windows,figma-file-tools-X64-macOS"
