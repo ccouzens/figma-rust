@@ -25,9 +25,7 @@ jobs:
             || '' }}
   release:
     needs:
-      - build (ubuntu-latest)
-      - build (windows-latest)
-      - build (macos-latest)
+      - build
     runs-on: ubuntu-latest
     permissions:
       contents: write
