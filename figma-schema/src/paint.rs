@@ -22,19 +22,19 @@ pub struct Paint {
     pub r#type: PaintType,
     /// Is the paint enabled?
     #[serde(skip_serializing_if = "Option::is_none")]
-    visible: Option<bool>,
+    pub visible: Option<bool>,
     /// Overall opacity of paint (colors within the paint can also have opacity values which would blend with this)
     #[serde(skip_serializing_if = "Option::is_none")]
-    opacity: Option<f64>,
+    pub opacity: Option<f64>,
     /// Solid color of the paint
     #[serde(skip_serializing_if = "Option::is_none")]
-    color: Option<Color>,
+    pub color: Option<Color>,
     /// How this node blends with nodes behind it in the scene
     #[serde(skip_serializing_if = "Option::is_none")]
-    blend_mode: Option<BlendMode>,
-    #[serde(skip_serializing_if = "Option::is_none")]
+    pub blend_mode: Option<BlendMode>,
     /// This field contains three vectors, each of which are a position in normalized object space (normalized object space is if the top left corner of the bounding box of the object is (0, 0) and the bottom right is (1,1)). The first position corresponds to the start of the gradient (value 0 for the purposes of calculating gradient stops), the second position is the end of the gradient (value 1), and the third handle position determines the width of the gradient. See image examples below:
-    gradient_handle_positions: Option<[Vector; 3]>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub gradient_handle_positions: Option<[Vector; 3]>,
 }
 
 impl Paint {

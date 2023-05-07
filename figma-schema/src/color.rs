@@ -5,11 +5,11 @@ use serde::{Deserialize, Serialize};
 #[typeshare::typeshare]
 pub struct Color {
     #[serde(rename = "r")]
-    red: f64,
+    pub red: f64,
     #[serde(rename = "g")]
-    green: f64,
+    pub green: f64,
     #[serde(rename = "b")]
-    blue: f64,
+    pub blue: f64,
     #[serde(rename = "a")]
     pub alpha: f64,
 }
