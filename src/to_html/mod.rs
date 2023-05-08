@@ -93,10 +93,9 @@ fn node_to_html(node: &Node, parent: Option<&Node>, css_variables: &mut CSSVaria
                         style?=style.as_deref(),
                         data-figma-name=&node.name,
                         data-figma-id=&node.id,
-                        viewBox="0 0 100 100"
+                        viewBox="-5 -81 100 100"
                     ) {
                         text(
-                            y=".9em",
                             font-size="90"
                         ) {
                             : "�"
