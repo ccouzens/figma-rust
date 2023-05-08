@@ -54,7 +54,7 @@ absolute positioning is used to position the outer `<div>` as the component-set
 itself doesn't use auto-layout.
 
 The HTML maps directly to nodes within Figma. A deeply nested Figma design will
-generate deeploy nested html.
+generate deeply nested html.
 
 No fallback fonts are specified.
 
