@@ -1,6 +1,6 @@
 use figma_schema::{
-    AxisSizingMode, CounterAxisAlignItems, EffectType, LayoutAlign, LayoutMode, Node, NodeType,
-    PrimaryAxisAlignItems, StrokeAlign, TextCase, TextDecoration,
+    AxisSizingMode, CounterAxisAlignItems, EffectType, LayoutAlign, LayoutMode, LayoutPositioning,
+    Node, NodeType, PrimaryAxisAlignItems, StrokeAlign, TextCase, TextDecoration,
 };
 
 use super::CSSVariablesMap;
@@ -270,7 +270,9 @@ impl CssProperties for Node {
 
     fn left(&self, parent: Option<&Node>) -> Option<String> {
         let parent = parent?;
-        if is_auto_layout(parent) {
+        if is_auto_layout(parent)
+            && !matches!(self.layout_positioning, Some(LayoutPositioning::Absolute))
+        {
             return None;
         }
         let parent_offset_left = parent
@@ -295,11 +297,17 @@ impl CssProperties for Node {
 
     fn position(&self, parent: Option<&Node>) -> Option<String> {
         if let Some(parent) = parent {
-            if !is_auto_layout(parent) {
+            if !is_auto_layout(parent)
+                || matches!(self.layout_positioning, Some(LayoutPositioning::Absolute))
+            {
                 return Some("absolute".into());
             }
         }
-        if !is_auto_layout(self) && self.enabled_children().next().is_some() {
+        if !is_auto_layout(self) && self.enabled_children().next().is_some()
+            || self
+                .enabled_children()
+                .any(|n| matches!(n.layout_positioning, Some(LayoutPositioning::Absolute)))
+        {
             Some("relative".into())
         } else {
             None
@@ -367,7 +375,9 @@ impl CssProperties for Node {
 
     fn top(&self, parent: Option<&Node>) -> Option<String> {
         let parent = parent?;
-        if is_auto_layout(parent) {
+        if is_auto_layout(parent)
+            && !matches!(self.layout_positioning, Some(LayoutPositioning::Absolute))
+        {
             return None;
         }
         let parent_offset_top = parent

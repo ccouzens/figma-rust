@@ -63,6 +63,7 @@ pub struct StrokeWeights {
     /// The left stroke weight
     pub left: f64,
 }
+
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 #[typeshare::typeshare]
@@ -72,6 +73,13 @@ pub enum LayoutAlign {
     Min,
     Center,
     Max,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+#[typeshare::typeshare]
+pub enum LayoutPositioning {
+    Absolute,
 }
 
 /// [Figma documentation](https://www.figma.com/developers/api#node-types)
@@ -148,6 +156,9 @@ pub struct Node {
     /// The distance between children of the frame. Can be negative. This property is only applicable for auto-layout frames.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub item_spacing: Option<f64>,
+    /// Determines whether a layer's size and position should be determined by auto-layout settings or manually adjustable.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub layout_positioning: Option<LayoutPositioning>,
     /// Whether this layer uses auto-layout to position its children.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub layout_mode: Option<LayoutMode>,

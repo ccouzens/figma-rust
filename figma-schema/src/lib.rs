@@ -19,8 +19,8 @@ pub use self::{
     effect::{Effect, EffectType},
     file::File,
     node::{
-        AxisSizingMode, CounterAxisAlignItems, LayoutAlign, LayoutMode, Node, NodeType,
-        PrimaryAxisAlignItems, StrokeAlign, StrokeWeights,
+        AxisSizingMode, CounterAxisAlignItems, LayoutAlign, LayoutMode, LayoutPositioning, Node,
+        NodeType, PrimaryAxisAlignItems, StrokeAlign, StrokeWeights,
     },
     paint::Paint,
     rectangle::Rectangle,
