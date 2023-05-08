@@ -47,6 +47,7 @@ fn inline_css(
 ) -> Result<Option<String>> {
     let css: Vec<(String, Option<String>)> = vec![
         ("align-items".into(), node.align_items()),
+        ("align-self".into(), node.align_self(parent)),
         ("background".into(), node.background(css_variables)),
         ("border-radius".into(), node.border_radius()),
         ("box-shadow".into(), node.box_shadow()),

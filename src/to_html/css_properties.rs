@@ -10,6 +10,7 @@ use super::CSSVariablesMap;
 /// The CSS values are not optimized, but can be made so by use of another tool like `lightningcss`.
 pub trait CssProperties {
     fn align_items(&self) -> Option<String>;
+    fn align_self(&self, parent: Option<&Node>) -> Option<String>;
     fn background(&self, css_variables: &mut CSSVariablesMap) -> Option<String>;
     fn border_radius(&self) -> Option<String>;
     fn box_shadow(&self) -> Option<String>;
@@ -80,6 +81,16 @@ impl CssProperties for Node {
             Some(CounterAxisAlignItems::Center) => Some("center".into()),
             Some(CounterAxisAlignItems::Max) => Some("flex-end".into()),
             Some(CounterAxisAlignItems::Baseline) => Some("baseline".into()),
+        }
+    }
+
+    fn align_self(self: &Node, parent: Option<&Node>) -> Option<String> {
+        if parent.map(is_auto_layout) != Some(true) {
+            return None;
+        }
+        match self.layout_align {
+            Some(LayoutAlign::Stretch) => Some("stretch".into()),
+            _ => None,
         }
     }
 
