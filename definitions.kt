@@ -280,6 +280,12 @@ enum class CounterAxisAlignItems(val string: String) {
 }
 
 @Serializable
+enum class LayoutPositioning(val string: String) {
+	@SerialName("ABSOLUTE")
+	Absolute("ABSOLUTE"),
+}
+
+@Serializable
 enum class LayoutMode(val string: String) {
 	@SerialName("NONE")
 	None("NONE"),
@@ -405,6 +411,8 @@ data class Node (
 	val counterAxisAlignItems: CounterAxisAlignItems? = null,
 	/// The distance between children of the frame. Can be negative. This property is only applicable for auto-layout frames.
 	val itemSpacing: Double? = null,
+	/// Determines whether a layer's size and position should be determined by auto-layout settings or manually adjustable.
+	val layoutPositioning: LayoutPositioning? = null,
 	/// Whether this layer uses auto-layout to position its children.
 	val layoutMode: LayoutMode? = null,
 	/// The padding between the left border of the frame and its children. This property is only applicable for auto-layout frames.

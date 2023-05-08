@@ -200,6 +200,10 @@ export enum CounterAxisAlignItems {
 	Baseline = "BASELINE",
 }
 
+export enum LayoutPositioning {
+	Absolute = "ABSOLUTE",
+}
+
 export enum LayoutMode {
 	None = "NONE",
 	Horizontal = "HORIZONTAL",
@@ -306,6 +310,8 @@ export interface Node {
 	counterAxisAlignItems?: CounterAxisAlignItems;
 	/** The distance between children of the frame. Can be negative. This property is only applicable for auto-layout frames. */
 	itemSpacing?: number;
+	/** Determines whether a layer's size and position should be determined by auto-layout settings or manually adjustable. */
+	layoutPositioning?: LayoutPositioning;
 	/** Whether this layer uses auto-layout to position its children. */
 	layoutMode?: LayoutMode;
 	/** The padding between the left border of the frame and its children. This property is only applicable for auto-layout frames. */
