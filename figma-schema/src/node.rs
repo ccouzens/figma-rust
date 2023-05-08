@@ -63,6 +63,16 @@ pub struct StrokeWeights {
     /// The left stroke weight
     pub left: f64,
 }
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+#[typeshare::typeshare]
+pub enum LayoutAlign {
+    Inherit,
+    Stretch,
+    Min,
+    Center,
+    Max,
+}
 
 /// [Figma documentation](https://www.figma.com/developers/api#node-types)
 #[derive(Debug, Deserialize, Serialize)]
@@ -165,6 +175,9 @@ pub struct Node {
     /// Style of text including font family and weight
     #[serde(skip_serializing_if = "Option::is_none")]
     pub style: Option<TypeStyle>,
+    /// Determines if the layer should stretch along the parent’s counter axis. This property is only provided for direct children of auto-layout frames.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub layout_align: Option<LayoutAlign>,
     /// This property is applicable only for direct children of auto-layout frames, ignored otherwise. Determines whether a layer should stretch along the parent’s primary axis. A 0 corresponds to a fixed size and 1 corresponds to stretch
     #[serde(skip_serializing_if = "Option::is_none")]
     pub layout_grow: Option<f64>,

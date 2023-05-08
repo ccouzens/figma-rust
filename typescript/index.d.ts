@@ -248,6 +248,14 @@ export interface TypeStyle {
 	lineHeightPx: number;
 }
 
+export enum LayoutAlign {
+	Inherit = "INHERIT",
+	Stretch = "STRETCH",
+	Min = "MIN",
+	Center = "CENTER",
+	Max = "MAX",
+}
+
 /** [Figma documentation](https://www.figma.com/developers/api#node-types) */
 export interface Node {
 	/** A string uniquely identifying this node within the document. */
@@ -316,6 +324,8 @@ export interface Node {
 	characters?: string;
 	/** Style of text including font family and weight */
 	style?: TypeStyle;
+	/** Determines if the layer should stretch along the parent’s counter axis. This property is only provided for direct children of auto-layout frames. */
+	layoutAlign?: LayoutAlign;
 	/** This property is applicable only for direct children of auto-layout frames, ignored otherwise. Determines whether a layer should stretch along the parent’s primary axis. A 0 corresponds to a fixed size and 1 corresponds to stretch */
 	layoutGrow?: number;
 }

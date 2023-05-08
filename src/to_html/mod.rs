@@ -50,7 +50,7 @@ fn inline_css(
         ("background".into(), node.background(css_variables)),
         ("border-radius".into(), node.border_radius()),
         ("box-shadow".into(), node.box_shadow()),
-        ("box-sizing".into(), node.box_sizing()),
+        ("box-sizing".into(), node.box_sizing(parent)),
         ("color".into(), node.color(css_variables)),
         ("display".into(), node.display()),
         ("fill".into(), node.fill(css_variables)),
@@ -58,7 +58,7 @@ fn inline_css(
         ("flex-grow".into(), node.flex_grow()),
         ("font".into(), node.font(css_variables)),
         ("gap".into(), node.gap()),
-        ("height".into(), node.height()),
+        ("height".into(), node.height(parent)),
         ("justify-content".into(), node.justify_content()),
         ("left".into(), node.left(parent)),
         ("padding".into(), node.padding()),
@@ -69,7 +69,7 @@ fn inline_css(
         ("text-decoration-line".into(), node.text_decoration_line()),
         ("text-transform".into(), node.text_transform()),
         ("top".into(), node.top(parent)),
-        ("width".into(), node.width()),
+        ("width".into(), node.width(parent)),
     ];
 
     let css_string = create_inline_css(&css).context("Failed to generate instance CSS")?;

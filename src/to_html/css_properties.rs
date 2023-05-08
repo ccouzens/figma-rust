@@ -1,5 +1,5 @@
 use figma_schema::{
-    AxisSizingMode, CounterAxisAlignItems, EffectType, LayoutMode, Node, NodeType,
+    AxisSizingMode, CounterAxisAlignItems, EffectType, LayoutAlign, LayoutMode, Node, NodeType,
     PrimaryAxisAlignItems, StrokeAlign, TextCase, TextDecoration,
 };
 
@@ -13,7 +13,7 @@ pub trait CssProperties {
     fn background(&self, css_variables: &mut CSSVariablesMap) -> Option<String>;
     fn border_radius(&self) -> Option<String>;
     fn box_shadow(&self) -> Option<String>;
-    fn box_sizing(&self) -> Option<String>;
+    fn box_sizing(&self, parent: Option<&Node>) -> Option<String>;
     fn color(&self, css_variables: &mut CSSVariablesMap) -> Option<String>;
     fn display(&self) -> Option<String>;
     fn fill(&self, css_variables: &mut CSSVariablesMap) -> Option<String>;
@@ -21,7 +21,7 @@ pub trait CssProperties {
     fn flex_grow(&self) -> Option<String>;
     fn font(&self, css_variables: &mut CSSVariablesMap) -> Option<String>;
     fn gap(&self) -> Option<String>;
-    fn height(&self) -> Option<String>;
+    fn height(&self, parent: Option<&Node>) -> Option<String>;
     fn justify_content(&self) -> Option<String>;
     fn left(&self, parent: Option<&Node>) -> Option<String>;
     fn opacity(&self) -> Option<String>;
@@ -32,7 +32,7 @@ pub trait CssProperties {
     fn text_decoration_line(&self) -> Option<String>;
     fn text_transform(&self) -> Option<String>;
     fn top(&self, parent: Option<&Node>) -> Option<String>;
-    fn width(&self) -> Option<String>;
+    fn width(&self, parent: Option<&Node>) -> Option<String>;
 }
 
 fn is_auto_layout(node: &Node) -> bool {
@@ -125,8 +125,10 @@ impl CssProperties for Node {
         }
     }
 
-    fn box_sizing(&self) -> Option<String> {
-        if self.padding().is_some() && (self.width().is_some() || self.height().is_some()) {
+    fn box_sizing(&self, parent: Option<&Node>) -> Option<String> {
+        if self.padding().is_some()
+            && (self.width(parent).is_some() || self.height(parent).is_some())
+        {
             Some("border-box".into())
         } else {
             None
@@ -216,7 +218,17 @@ impl CssProperties for Node {
         }
     }
 
-    fn height(&self) -> Option<String> {
+    fn height(&self, parent: Option<&Node>) -> Option<String> {
+        if matches!(
+            parent,
+            Some(Node {
+                layout_mode: Some(LayoutMode::Horizontal),
+                ..
+            })
+        ) && matches!(self.layout_align, Some(LayoutAlign::Stretch))
+        {
+            return None;
+        }
         if matches!(self.layout_mode, Some(LayoutMode::Vertical))
             && !matches!(self.primary_axis_sizing_mode, Some(AxisSizingMode::Fixed))
         {
@@ -355,7 +367,17 @@ impl CssProperties for Node {
         Some(format!("{}px", self_offset_top - parent_offset_top))
     }
 
-    fn width(&self) -> Option<String> {
+    fn width(&self, parent: Option<&Node>) -> Option<String> {
+        if matches!(
+            parent,
+            Some(Node {
+                layout_mode: Some(LayoutMode::Vertical),
+                ..
+            })
+        ) && matches!(self.layout_align, Some(LayoutAlign::Stretch))
+        {
+            return None;
+        }
         if matches!(self.layout_mode, Some(LayoutMode::Horizontal))
             && !matches!(self.primary_axis_sizing_mode, Some(AxisSizingMode::Fixed))
         {

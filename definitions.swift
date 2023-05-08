@@ -306,6 +306,14 @@ public struct TypeStyle: Codable {
 	}
 }
 
+public enum LayoutAlign: String, Codable {
+	case inherit = "INHERIT"
+	case stretch = "STRETCH"
+	case min = "MIN"
+	case center = "CENTER"
+	case max = "MAX"
+}
+
 /// [Figma documentation](https://www.figma.com/developers/api#node-types)
 public struct Node: Codable {
 	/// A string uniquely identifying this node within the document.
@@ -374,10 +382,12 @@ public struct Node: Codable {
 	public let characters: String?
 	/// Style of text including font family and weight
 	public let style: TypeStyle?
+	/// Determines if the layer should stretch along the parent’s counter axis. This property is only provided for direct children of auto-layout frames.
+	public let layoutAlign: LayoutAlign?
 	/// This property is applicable only for direct children of auto-layout frames, ignored otherwise. Determines whether a layer should stretch along the parent’s primary axis. A 0 corresponds to a fixed size and 1 corresponds to stretch
 	public let layoutGrow: Double?
 
-	public init(id: String, name: String, visible: Bool?, type: NodeType, children: [Node]?, backgroundColor: Color?, fills: [Paint]?, strokes: [Paint]?, strokeWeight: Double?, individualStrokeWeights: StrokeWeights?, strokeAlign: StrokeAlign?, strokeDashes: [Double]?, cornerRadius: Double?, rectangleCornerRadii: [Double]?, transitionDuration: Double?, transitionEasing: EasingType?, opacity: Double?, absoluteBoundingBox: Rectangle?, absoluteRenderBounds: Rectangle?, primaryAxisSizingMode: AxisSizingMode?, counterAxisSizingMode: AxisSizingMode?, primaryAxisAlignItems: PrimaryAxisAlignItems?, counterAxisAlignItems: CounterAxisAlignItems?, itemSpacing: Double?, layoutMode: LayoutMode?, paddingLeft: Double?, paddingRight: Double?, paddingTop: Double?, paddingBottom: Double?, effects: [Effect]?, styles: Styles?, characters: String?, style: TypeStyle?, layoutGrow: Double?) {
+	public init(id: String, name: String, visible: Bool?, type: NodeType, children: [Node]?, backgroundColor: Color?, fills: [Paint]?, strokes: [Paint]?, strokeWeight: Double?, individualStrokeWeights: StrokeWeights?, strokeAlign: StrokeAlign?, strokeDashes: [Double]?, cornerRadius: Double?, rectangleCornerRadii: [Double]?, transitionDuration: Double?, transitionEasing: EasingType?, opacity: Double?, absoluteBoundingBox: Rectangle?, absoluteRenderBounds: Rectangle?, primaryAxisSizingMode: AxisSizingMode?, counterAxisSizingMode: AxisSizingMode?, primaryAxisAlignItems: PrimaryAxisAlignItems?, counterAxisAlignItems: CounterAxisAlignItems?, itemSpacing: Double?, layoutMode: LayoutMode?, paddingLeft: Double?, paddingRight: Double?, paddingTop: Double?, paddingBottom: Double?, effects: [Effect]?, styles: Styles?, characters: String?, style: TypeStyle?, layoutAlign: LayoutAlign?, layoutGrow: Double?) {
 		self.id = id
 		self.name = name
 		self.visible = visible
@@ -411,6 +421,7 @@ public struct Node: Codable {
 		self.styles = styles
 		self.characters = characters
 		self.style = style
+		self.layoutAlign = layoutAlign
 		self.layoutGrow = layoutGrow
 	}
 }

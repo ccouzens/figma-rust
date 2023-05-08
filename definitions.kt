@@ -340,6 +340,20 @@ data class TypeStyle (
 	val lineHeightPx: Double
 )
 
+@Serializable
+enum class LayoutAlign(val string: String) {
+	@SerialName("INHERIT")
+	Inherit("INHERIT"),
+	@SerialName("STRETCH")
+	Stretch("STRETCH"),
+	@SerialName("MIN")
+	Min("MIN"),
+	@SerialName("CENTER")
+	Center("CENTER"),
+	@SerialName("MAX")
+	Max("MAX"),
+}
+
 /// [Figma documentation](https://www.figma.com/developers/api#node-types)
 @Serializable
 data class Node (
@@ -409,6 +423,8 @@ data class Node (
 	val characters: String? = null,
 	/// Style of text including font family and weight
 	val style: TypeStyle? = null,
+	/// Determines if the layer should stretch along the parent’s counter axis. This property is only provided for direct children of auto-layout frames.
+	val layoutAlign: LayoutAlign? = null,
 	/// This property is applicable only for direct children of auto-layout frames, ignored otherwise. Determines whether a layer should stretch along the parent’s primary axis. A 0 corresponds to a fixed size and 1 corresponds to stretch
 	val layoutGrow: Double? = null
 )
