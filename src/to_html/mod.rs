@@ -84,22 +84,28 @@ fn inline_css(
 fn node_to_html(node: &Node, parent: Option<&Node>, css_variables: &mut CSSVariablesMap) -> String {
     let style = inline_css(node, parent, css_variables).unwrap_or_default();
     match node.r#type {
-        NodeType::Vector | NodeType::BooleanOperation => html! {
-            svg(
-                style?=style.as_deref(),
-                data-figma-name=&node.name,
-                data-figma-id=&node.id,
-                viewBox="0 0 100 100"
-            ) {
-                text(
-                    y=".9em",
-                    font-size="90"
-                ) {
-                    : "�"
+        NodeType::Vector | NodeType::BooleanOperation => {
+            if CssProperties::opacity(node).as_deref() == Some("0") {
+                "".into()
+            } else {
+                html! {
+                    svg(
+                        style?=style.as_deref(),
+                        data-figma-name=&node.name,
+                        data-figma-id=&node.id,
+                        viewBox="0 0 100 100"
+                    ) {
+                        text(
+                            y=".9em",
+                            font-size="90"
+                        ) {
+                            : "�"
+                        }
+                    }
                 }
+                .to_string()
             }
         }
-        .to_string(),
         _ => {
             let child_nodes = node
                 .enabled_children()

@@ -180,7 +180,7 @@ impl CssProperties for Node {
 
     fn fill(&self, css_variables: &mut CSSVariablesMap) -> Option<String> {
         match self.r#type {
-            NodeType::Vector => fills_color(self, css_variables),
+            NodeType::Vector | NodeType::BooleanOperation => fills_color(self, css_variables),
             _ => None,
         }
     }
@@ -307,7 +307,7 @@ impl CssProperties for Node {
     }
 
     fn opacity(&self) -> Option<String> {
-        if self.r#type == NodeType::Vector
+        if matches!(self.r#type, NodeType::Vector | NodeType::BooleanOperation)
             && !self.fills().is_empty()
             && self.fills().iter().all(|f| f.opacity() == 0.0)
         {
