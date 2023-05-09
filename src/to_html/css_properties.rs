@@ -1,6 +1,8 @@
+use std::cmp::Ordering;
+
 use figma_schema::{
     AxisSizingMode, CounterAxisAlignItems, EffectType, LayoutAlign, LayoutMode, LayoutPositioning,
-    Node, NodeType, PrimaryAxisAlignItems, StrokeAlign, TextCase, TextDecoration,
+    Node, NodeType, PrimaryAxisAlignItems, Rectangle, StrokeAlign, TextCase, TextDecoration,
 };
 
 use super::CSSVariablesMap;
@@ -71,6 +73,40 @@ fn stroke_color(node: &Node) -> Option<String> {
         .flat_map(|stroke| stroke.color())
         .flat_map(|color| color.to_option_rgb_string())
         .next()
+}
+
+fn absolute_bounding_box(node: &Node) -> Option<Rectangle> {
+    if let Some(r) = node.absolute_bounding_box.clone() {
+        return Some(r);
+    }
+    let bounding_boxes = || {
+        node.enabled_children()
+            .filter_map(|c| c.absolute_bounding_box.as_ref())
+    };
+    let min_x = bounding_boxes()
+        .filter_map(|r| r.x)
+        .min_by(|a, b| a.partial_cmp(b).unwrap_or(Ordering::Less))?;
+    let min_y = bounding_boxes()
+        .filter_map(|r| r.y)
+        .min_by(|a, b| a.partial_cmp(b).unwrap_or(Ordering::Less))?;
+    let max_x = bounding_boxes()
+        .filter_map(|r| match (r.x, r.width) {
+            (Some(x), Some(width)) => Some(x + width),
+            _ => None,
+        })
+        .max_by(|a, b| a.partial_cmp(b).unwrap_or(Ordering::Less))?;
+    let max_y = bounding_boxes()
+        .filter_map(|r| match (r.y, r.height) {
+            (Some(y), Some(height)) => Some(y + height),
+            _ => None,
+        })
+        .max_by(|a, b| a.partial_cmp(b).unwrap_or(Ordering::Less))?;
+    Some(Rectangle {
+        x: Some(min_x),
+        y: Some(min_y),
+        width: Some(max_x - min_x),
+        height: Some(max_y - min_y),
+    })
 }
 
 impl CssProperties for Node {
@@ -253,7 +289,7 @@ impl CssProperties for Node {
         if self.characters.is_some() {
             return None;
         }
-        self.absolute_bounding_box()
+        absolute_bounding_box(self)
             .and_then(|b| b.height)
             .map(|h| format!("{h}px"))
     }
@@ -275,11 +311,10 @@ impl CssProperties for Node {
         {
             return None;
         }
-        let parent_offset_left = parent
-            .absolute_bounding_box()
+        let parent_offset_left = absolute_bounding_box(parent)
             .and_then(|bb| bb.x)
             .unwrap_or(0.0);
-        let self_offset_left = self.absolute_bounding_box()?.x?;
+        let self_offset_left = absolute_bounding_box(self)?.x?;
         Some(format!("{}px", self_offset_left - parent_offset_left))
     }
 
@@ -380,11 +415,10 @@ impl CssProperties for Node {
         {
             return None;
         }
-        let parent_offset_top = parent
-            .absolute_bounding_box()
+        let parent_offset_top = absolute_bounding_box(parent)
             .and_then(|bb| bb.y)
             .unwrap_or(0.0);
-        let self_offset_top = self.absolute_bounding_box()?.y?;
+        let self_offset_top = absolute_bounding_box(self)?.y?;
         Some(format!("{}px", self_offset_top - parent_offset_top))
     }
 
@@ -412,7 +446,7 @@ impl CssProperties for Node {
         if self.characters.is_some() {
             return None;
         }
-        self.absolute_bounding_box()
+        absolute_bounding_box(self)
             .and_then(|b| b.width)
             .map(|w| format!("{w}px"))
     }
