@@ -4,6 +4,7 @@ mod component;
 mod easing_type;
 mod effect;
 mod file;
+mod layout_constraint;
 mod node;
 mod paint;
 mod rectangle;
@@ -18,6 +19,7 @@ pub use self::{
     easing_type::EasingType,
     effect::{Effect, EffectType},
     file::File,
+    layout_constraint::{LayoutConstraint, LayoutConstraintHorizontal, LayoutConstraintVertical},
     node::{
         AxisSizingMode, CounterAxisAlignItems, LayoutAlign, LayoutMode, LayoutPositioning, Node,
         NodeType, PrimaryAxisAlignItems, StrokeAlign, StrokeWeights,

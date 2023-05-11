@@ -252,6 +252,38 @@ export interface TypeStyle {
 	lineHeightPx: number;
 }
 
+export enum LayoutConstraintVertical {
+	/** Node is laid out relative to top of the containing frame */
+	Top = "TOP",
+	/** Node is laid out relative to bottom of the containing frame */
+	Bottom = "BOTTOM",
+	/** Node is vertically centered relative to containing frame */
+	Center = "CENTER",
+	/** Both top and bottom of node are constrained relative to containing frame (node stretches with frame) */
+	TopBottom = "TOP_BOTTOM",
+	/** Node scales vertically with containing frame */
+	Scale = "SCALE",
+}
+
+export enum LayoutConstraintHorizontal {
+	/** Node is laid out relative to left of the containing frame */
+	Left = "LEFT",
+	/** Node is laid out relative to right of the containing frame */
+	Right = "RIGHT",
+	/** Node is horizontally centered relative to containing frame */
+	Center = "CENTER",
+	/** Both left and right of node are constrained relative to containing frame (node stretches with frame) */
+	LeftRight = "LEFT_RIGHT",
+	/** Node scales horizontally with containing frame */
+	Scale = "SCALE",
+}
+
+/** Layout constraint relative to containing Frame */
+export interface LayoutConstraint {
+	vertical: LayoutConstraintVertical;
+	horizontal: LayoutConstraintHorizontal;
+}
+
 export enum LayoutAlign {
 	Inherit = "INHERIT",
 	Stretch = "STRETCH",
@@ -330,6 +362,8 @@ export interface Node {
 	characters?: string;
 	/** Style of text including font family and weight */
 	style?: TypeStyle;
+	/** Horizontal and vertical layout contraints for node */
+	constraints?: LayoutConstraint;
 	/** Determines if the layer should stretch along the parent’s counter axis. This property is only provided for direct children of auto-layout frames. */
 	layoutAlign?: LayoutAlign;
 	/** This property is applicable only for direct children of auto-layout frames, ignored otherwise. Determines whether a layer should stretch along the parent’s primary axis. A 0 corresponds to a fixed size and 1 corresponds to stretch */

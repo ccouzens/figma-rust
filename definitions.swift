@@ -310,6 +310,43 @@ public struct TypeStyle: Codable {
 	}
 }
 
+public enum LayoutConstraintVertical: String, Codable {
+	/// Node is laid out relative to top of the containing frame
+	case top = "TOP"
+	/// Node is laid out relative to bottom of the containing frame
+	case bottom = "BOTTOM"
+	/// Node is vertically centered relative to containing frame
+	case center = "CENTER"
+	/// Both top and bottom of node are constrained relative to containing frame (node stretches with frame)
+	case topBottom = "TOP_BOTTOM"
+	/// Node scales vertically with containing frame
+	case scale = "SCALE"
+}
+
+public enum LayoutConstraintHorizontal: String, Codable {
+	/// Node is laid out relative to left of the containing frame
+	case left = "LEFT"
+	/// Node is laid out relative to right of the containing frame
+	case right = "RIGHT"
+	/// Node is horizontally centered relative to containing frame
+	case center = "CENTER"
+	/// Both left and right of node are constrained relative to containing frame (node stretches with frame)
+	case leftRight = "LEFT_RIGHT"
+	/// Node scales horizontally with containing frame
+	case scale = "SCALE"
+}
+
+/// Layout constraint relative to containing Frame
+public struct LayoutConstraint: Codable {
+	public let vertical: LayoutConstraintVertical
+	public let horizontal: LayoutConstraintHorizontal
+
+	public init(vertical: LayoutConstraintVertical, horizontal: LayoutConstraintHorizontal) {
+		self.vertical = vertical
+		self.horizontal = horizontal
+	}
+}
+
 public enum LayoutAlign: String, Codable {
 	case inherit = "INHERIT"
 	case stretch = "STRETCH"
@@ -388,12 +425,14 @@ public struct Node: Codable {
 	public let characters: String?
 	/// Style of text including font family and weight
 	public let style: TypeStyle?
+	/// Horizontal and vertical layout contraints for node
+	public let constraints: LayoutConstraint?
 	/// Determines if the layer should stretch along the parent’s counter axis. This property is only provided for direct children of auto-layout frames.
 	public let layoutAlign: LayoutAlign?
 	/// This property is applicable only for direct children of auto-layout frames, ignored otherwise. Determines whether a layer should stretch along the parent’s primary axis. A 0 corresponds to a fixed size and 1 corresponds to stretch
 	public let layoutGrow: Double?
 
-	public init(id: String, name: String, visible: Bool?, type: NodeType, children: [Node]?, backgroundColor: Color?, fills: [Paint]?, strokes: [Paint]?, strokeWeight: Double?, individualStrokeWeights: StrokeWeights?, strokeAlign: StrokeAlign?, strokeDashes: [Double]?, cornerRadius: Double?, rectangleCornerRadii: [Double]?, transitionDuration: Double?, transitionEasing: EasingType?, opacity: Double?, absoluteBoundingBox: Rectangle?, absoluteRenderBounds: Rectangle?, primaryAxisSizingMode: AxisSizingMode?, counterAxisSizingMode: AxisSizingMode?, primaryAxisAlignItems: PrimaryAxisAlignItems?, counterAxisAlignItems: CounterAxisAlignItems?, itemSpacing: Double?, layoutPositioning: LayoutPositioning?, layoutMode: LayoutMode?, paddingLeft: Double?, paddingRight: Double?, paddingTop: Double?, paddingBottom: Double?, effects: [Effect]?, styles: Styles?, characters: String?, style: TypeStyle?, layoutAlign: LayoutAlign?, layoutGrow: Double?) {
+	public init(id: String, name: String, visible: Bool?, type: NodeType, children: [Node]?, backgroundColor: Color?, fills: [Paint]?, strokes: [Paint]?, strokeWeight: Double?, individualStrokeWeights: StrokeWeights?, strokeAlign: StrokeAlign?, strokeDashes: [Double]?, cornerRadius: Double?, rectangleCornerRadii: [Double]?, transitionDuration: Double?, transitionEasing: EasingType?, opacity: Double?, absoluteBoundingBox: Rectangle?, absoluteRenderBounds: Rectangle?, primaryAxisSizingMode: AxisSizingMode?, counterAxisSizingMode: AxisSizingMode?, primaryAxisAlignItems: PrimaryAxisAlignItems?, counterAxisAlignItems: CounterAxisAlignItems?, itemSpacing: Double?, layoutPositioning: LayoutPositioning?, layoutMode: LayoutMode?, paddingLeft: Double?, paddingRight: Double?, paddingTop: Double?, paddingBottom: Double?, effects: [Effect]?, styles: Styles?, characters: String?, style: TypeStyle?, constraints: LayoutConstraint?, layoutAlign: LayoutAlign?, layoutGrow: Double?) {
 		self.id = id
 		self.name = name
 		self.visible = visible
@@ -428,6 +467,7 @@ public struct Node: Codable {
 		self.styles = styles
 		self.characters = characters
 		self.style = style
+		self.constraints = constraints
 		self.layoutAlign = layoutAlign
 		self.layoutGrow = layoutGrow
 	}

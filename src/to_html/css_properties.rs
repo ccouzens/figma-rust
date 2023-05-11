@@ -1,8 +1,9 @@
 use std::cmp::Ordering;
 
 use figma_schema::{
-    AxisSizingMode, CounterAxisAlignItems, EffectType, LayoutAlign, LayoutMode, LayoutPositioning,
-    Node, NodeType, PrimaryAxisAlignItems, Rectangle, StrokeAlign, TextCase, TextDecoration,
+    AxisSizingMode, CounterAxisAlignItems, EffectType, LayoutAlign, LayoutConstraintHorizontal,
+    LayoutMode, LayoutPositioning, Node, NodeType, PrimaryAxisAlignItems, Rectangle, StrokeAlign,
+    TextCase, TextDecoration,
 };
 
 use super::CSSVariablesMap;
@@ -32,6 +33,7 @@ pub trait CssProperties {
     fn outline(&self) -> Option<String>;
     fn padding(&self) -> Option<String>;
     fn position(&self, parent: Option<&Node>) -> Option<String>;
+    fn right(&self, parent: Option<&Node>) -> Option<String>;
     fn text_decoration_line(&self) -> Option<String>;
     fn text_transform(&self) -> Option<String>;
     fn top(&self, parent: Option<&Node>) -> Option<String>;
@@ -311,11 +313,21 @@ impl CssProperties for Node {
         {
             return None;
         }
-        let parent_offset_left = absolute_bounding_box(parent)
-            .and_then(|bb| bb.x)
-            .unwrap_or(0.0);
-        let self_offset_left = absolute_bounding_box(self)?.x?;
-        Some(format!("{}px", self_offset_left - parent_offset_left))
+        let parent_rectangle = absolute_bounding_box(parent)?;
+        let left = absolute_bounding_box(self)?.x? - parent_rectangle.x?;
+        let parent_width = parent_rectangle.width?;
+        match self.constraints.as_ref()?.horizontal {
+            LayoutConstraintHorizontal::Left | LayoutConstraintHorizontal::LeftRight => {
+                Some(format!("{left}px"))
+            }
+            LayoutConstraintHorizontal::Right => None,
+            LayoutConstraintHorizontal::Center => {
+                Some(format!("calc(50% + {}px)", left - parent_width / 2.0))
+            }
+            LayoutConstraintHorizontal::Scale => {
+                Some(format!("calc(100% * {left}/{parent_width})"))
+            }
+        }
     }
 
     fn padding(&self) -> Option<String> {
@@ -391,6 +403,29 @@ impl CssProperties for Node {
         }
     }
 
+    fn right(&self, parent: Option<&Node>) -> Option<String> {
+        let parent = parent?;
+        if is_auto_layout(parent)
+            && !matches!(self.layout_positioning, Some(LayoutPositioning::Absolute))
+        {
+            return None;
+        }
+        let parent_rectangle = absolute_bounding_box(parent)?;
+        let self_rectangle = absolute_bounding_box(self)?;
+        let parent_width = parent_rectangle.width?;
+        let right = parent_rectangle.x? + parent_width - self_rectangle.x? - self_rectangle.width?;
+        match self.constraints.as_ref()?.horizontal {
+            LayoutConstraintHorizontal::Left => None,
+            LayoutConstraintHorizontal::Right | LayoutConstraintHorizontal::LeftRight => {
+                Some(format!("{}px", -right))
+            }
+            LayoutConstraintHorizontal::Center => None,
+            LayoutConstraintHorizontal::Scale => {
+                Some(format!("calc(100% * {right}/{parent_width})"))
+            }
+        }
+    }
+
     fn text_decoration_line(&self) -> Option<String> {
         match self.style.as_ref()?.text_decoration.as_ref()? {
             TextDecoration::Strikethrough => Some("line-through".into()),
@@ -415,9 +450,7 @@ impl CssProperties for Node {
         {
             return None;
         }
-        let parent_offset_top = absolute_bounding_box(parent)
-            .and_then(|bb| bb.y)
-            .unwrap_or(0.0);
+        let parent_offset_top = absolute_bounding_box(parent)?.y?;
         let self_offset_top = absolute_bounding_box(self)?.y?;
         Some(format!("{}px", self_offset_top - parent_offset_top))
     }

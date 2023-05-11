@@ -347,6 +347,51 @@ data class TypeStyle (
 )
 
 @Serializable
+enum class LayoutConstraintVertical(val string: String) {
+	/// Node is laid out relative to top of the containing frame
+	@SerialName("TOP")
+	Top("TOP"),
+	/// Node is laid out relative to bottom of the containing frame
+	@SerialName("BOTTOM")
+	Bottom("BOTTOM"),
+	/// Node is vertically centered relative to containing frame
+	@SerialName("CENTER")
+	Center("CENTER"),
+	/// Both top and bottom of node are constrained relative to containing frame (node stretches with frame)
+	@SerialName("TOP_BOTTOM")
+	TopBottom("TOP_BOTTOM"),
+	/// Node scales vertically with containing frame
+	@SerialName("SCALE")
+	Scale("SCALE"),
+}
+
+@Serializable
+enum class LayoutConstraintHorizontal(val string: String) {
+	/// Node is laid out relative to left of the containing frame
+	@SerialName("LEFT")
+	Left("LEFT"),
+	/// Node is laid out relative to right of the containing frame
+	@SerialName("RIGHT")
+	Right("RIGHT"),
+	/// Node is horizontally centered relative to containing frame
+	@SerialName("CENTER")
+	Center("CENTER"),
+	/// Both left and right of node are constrained relative to containing frame (node stretches with frame)
+	@SerialName("LEFT_RIGHT")
+	LeftRight("LEFT_RIGHT"),
+	/// Node scales horizontally with containing frame
+	@SerialName("SCALE")
+	Scale("SCALE"),
+}
+
+/// Layout constraint relative to containing Frame
+@Serializable
+data class LayoutConstraint (
+	val vertical: LayoutConstraintVertical,
+	val horizontal: LayoutConstraintHorizontal
+)
+
+@Serializable
 enum class LayoutAlign(val string: String) {
 	@SerialName("INHERIT")
 	Inherit("INHERIT"),
@@ -431,6 +476,8 @@ data class Node (
 	val characters: String? = null,
 	/// Style of text including font family and weight
 	val style: TypeStyle? = null,
+	/// Horizontal and vertical layout contraints for node
+	val constraints: LayoutConstraint? = null,
 	/// Determines if the layer should stretch along the parent’s counter axis. This property is only provided for direct children of auto-layout frames.
 	val layoutAlign: LayoutAlign? = null,
 	/// This property is applicable only for direct children of auto-layout frames, ignored otherwise. Determines whether a layer should stretch along the parent’s primary axis. A 0 corresponds to a fixed size and 1 corresponds to stretch

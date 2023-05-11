@@ -1,4 +1,7 @@
-use super::{Color, Component, EasingType, Effect, File, Paint, Rectangle, Styles, TypeStyle};
+use super::{
+    Color, Component, EasingType, Effect, File, LayoutConstraint, Paint, Rectangle, Styles,
+    TypeStyle,
+};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -186,6 +189,9 @@ pub struct Node {
     /// Style of text including font family and weight
     #[serde(skip_serializing_if = "Option::is_none")]
     pub style: Option<TypeStyle>,
+    /// Horizontal and vertical layout contraints for node
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub constraints: Option<LayoutConstraint>,
     /// Determines if the layer should stretch along the parent’s counter axis. This property is only provided for direct children of auto-layout frames.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub layout_align: Option<LayoutAlign>,
