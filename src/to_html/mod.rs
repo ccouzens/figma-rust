@@ -50,6 +50,7 @@ fn inline_css(
         ("align-self".into(), node.align_self(parent)),
         ("background".into(), node.background(css_variables)),
         ("border-radius".into(), node.border_radius()),
+        ("bottom".into(), node.bottom(parent)),
         ("box-shadow".into(), node.box_shadow()),
         ("box-sizing".into(), node.box_sizing(parent)),
         ("color".into(), node.color(css_variables)),

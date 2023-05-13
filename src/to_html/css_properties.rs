@@ -1,9 +1,9 @@
 use std::cmp::Ordering;
 
 use figma_schema::{
-    AxisSizingMode, CounterAxisAlignItems, EffectType, LayoutAlign, LayoutConstraintHorizontal,
-    LayoutMode, LayoutPositioning, Node, NodeType, PrimaryAxisAlignItems, Rectangle, StrokeAlign,
-    TextCase, TextDecoration,
+    AxisSizingMode, CounterAxisAlignItems, EffectType, LayoutAlign, LayoutConstraint,
+    LayoutConstraintHorizontal, LayoutConstraintVertical, LayoutMode, LayoutPositioning, Node,
+    NodeType, PrimaryAxisAlignItems, Rectangle, StrokeAlign, TextCase, TextDecoration,
 };
 
 use super::CSSVariablesMap;
@@ -16,6 +16,7 @@ pub trait CssProperties {
     fn align_self(&self, parent: Option<&Node>) -> Option<String>;
     fn background(&self, css_variables: &mut CSSVariablesMap) -> Option<String>;
     fn border_radius(&self) -> Option<String>;
+    fn bottom(&self, parent: Option<&Node>) -> Option<String>;
     fn box_shadow(&self) -> Option<String>;
     fn box_sizing(&self, parent: Option<&Node>) -> Option<String>;
     fn color(&self, css_variables: &mut CSSVariablesMap) -> Option<String>;
@@ -147,6 +148,30 @@ impl CssProperties for Node {
             .map(|[nw, ne, se, sw]| format!("{nw}px {ne}px {se}px {sw}px"))
     }
 
+    fn bottom(&self, parent: Option<&Node>) -> Option<String> {
+        let parent = parent?;
+        if is_auto_layout(parent)
+            && !matches!(self.layout_positioning, Some(LayoutPositioning::Absolute))
+        {
+            return None;
+        }
+        let parent_rectangle = absolute_bounding_box(parent)?;
+        let self_rectangle = absolute_bounding_box(self)?;
+        let parent_height = parent_rectangle.height?;
+        let bottom =
+            parent_rectangle.y? + parent_height - self_rectangle.y? - self_rectangle.height?;
+        match self.constraints.as_ref()?.vertical {
+            LayoutConstraintVertical::Top => None,
+            LayoutConstraintVertical::Bottom | LayoutConstraintVertical::TopBottom => {
+                Some(format!("{}px", -bottom))
+            }
+            LayoutConstraintVertical::Center => None,
+            LayoutConstraintVertical::Scale => {
+                Some(format!("calc(100% * {bottom}/{parent_height})"))
+            }
+        }
+    }
+
     fn box_shadow(&self) -> Option<String> {
         let shadows = itertools::join(
             self.effects
@@ -274,8 +299,16 @@ impl CssProperties for Node {
                 layout_mode: Some(LayoutMode::Horizontal),
                 ..
             })
-        ) && matches!(self.layout_align, Some(LayoutAlign::Stretch))
-        {
+        ) && matches!(self.layout_align, Some(LayoutAlign::Stretch)) {
+            return None;
+        }
+        if matches!(
+            parent,
+            Some(Node {
+                layout_mode: Some(LayoutMode::Vertical),
+                ..
+            })
+        ) && self.layout_grow == Some(1.0) {
             return None;
         }
         if matches!(self.layout_mode, Some(LayoutMode::Vertical))
@@ -289,6 +322,15 @@ impl CssProperties for Node {
             return None;
         }
         if self.characters.is_some() {
+            return None;
+        }
+        if matches!(
+            self.constraints,
+            Some(LayoutConstraint {
+                vertical: LayoutConstraintVertical::TopBottom | LayoutConstraintVertical::Scale,
+                ..
+            })
+        ) {
             return None;
         }
         absolute_bounding_box(self)
@@ -450,9 +492,19 @@ impl CssProperties for Node {
         {
             return None;
         }
-        let parent_offset_top = absolute_bounding_box(parent)?.y?;
-        let self_offset_top = absolute_bounding_box(self)?.y?;
-        Some(format!("{}px", self_offset_top - parent_offset_top))
+        let parent_rectangle = absolute_bounding_box(parent)?;
+        let top = absolute_bounding_box(self)?.y? - parent_rectangle.y?;
+        let parent_height = parent_rectangle.height?;
+        match self.constraints.as_ref()?.vertical {
+            LayoutConstraintVertical::Top | LayoutConstraintVertical::TopBottom => {
+                Some(format!("{top}px"))
+            }
+            LayoutConstraintVertical::Bottom => None,
+            LayoutConstraintVertical::Center => {
+                Some(format!("calc(50% + {}px)", top - parent_height / 2.0))
+            }
+            LayoutConstraintVertical::Scale => Some(format!("calc(100% * {top}/{parent_height})")),
+        }
     }
 
     fn width(&self, parent: Option<&Node>) -> Option<String> {
@@ -462,8 +514,16 @@ impl CssProperties for Node {
                 layout_mode: Some(LayoutMode::Vertical),
                 ..
             })
-        ) && matches!(self.layout_align, Some(LayoutAlign::Stretch))
-        {
+        ) && matches!(self.layout_align, Some(LayoutAlign::Stretch)) {
+            return None;
+        }
+        if matches!(
+            parent,
+            Some(Node {
+                layout_mode: Some(LayoutMode::Horizontal),
+                ..
+            })
+        ) && self.layout_grow == Some(1.0) {
             return None;
         }
         if matches!(self.layout_mode, Some(LayoutMode::Horizontal))
@@ -477,6 +537,16 @@ impl CssProperties for Node {
             return None;
         }
         if self.characters.is_some() {
+            return None;
+        }
+        if matches!(
+            self.constraints,
+            Some(LayoutConstraint {
+                horizontal: LayoutConstraintHorizontal::LeftRight
+                    | LayoutConstraintHorizontal::Scale,
+                ..
+            })
+        ) {
             return None;
         }
         absolute_bounding_box(self)
