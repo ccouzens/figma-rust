@@ -29,6 +29,26 @@ pub enum TextAutoResize {
     Truncate,
 }
 
+/// Type of hyperlink
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+#[typeshare::typeshare]
+pub enum HyperlinkType {
+    Url,
+    Node,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+#[typeshare::typeshare]
+pub struct Hyperlink {
+    pub r#type: Option<HyperlinkType>,
+    /// URL being linked to, if URL type
+    pub url: Option<String>,
+    /// ID of frame hyperlink points to, if NODE type
+    pub node_id: Option<String>,
+}
+
 /// Metadata for character formatting
 ///
 /// [Figma documentation](https://www.figma.com/developers/api#typestyle-type)
@@ -55,6 +75,8 @@ pub struct TypeStyle {
     pub text_decoration: Option<TextDecoration>,
     /// Dimensions along which text will auto resize, default is that the text does not auto-resize
     pub text_auto_resize: Option<TextAutoResize>,
+    /// Link to a URL or frame
+    pub hyperlink: Option<Hyperlink>,
     /// Line height in px
     pub line_height_px: f64,
 }

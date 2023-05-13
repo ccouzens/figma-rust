@@ -237,6 +237,20 @@ export enum TextAutoResize {
 	Truncate = "TRUNCATE",
 }
 
+/** Type of hyperlink */
+export enum HyperlinkType {
+	Url = "URL",
+	Node = "NODE",
+}
+
+export interface Hyperlink {
+	type?: HyperlinkType;
+	/** URL being linked to, if URL type */
+	url?: string;
+	/** ID of frame hyperlink points to, if NODE type */
+	nodeId?: string;
+}
+
 /**
  * Metadata for character formatting
  * 
@@ -259,6 +273,8 @@ export interface TypeStyle {
 	textDecoration?: TextDecoration;
 	/** Dimensions along which text will auto resize, default is that the text does not auto-resize */
 	textAutoResize?: TextAutoResize;
+	/** Link to a URL or frame */
+	hyperlink?: Hyperlink;
 	/** Line height in px */
 	lineHeightPx: number;
 }

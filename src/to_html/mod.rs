@@ -114,22 +114,34 @@ fn node_to_html(node: &Node, parent: Option<&Node>, css_variables: &mut CSSVaria
                 Some(c) => c,
             };
 
-            html! {
-             div(
-                 style?=style.as_deref(),
-                 data-figma-name=&node.name,
-                 data-figma-id=&node.id
-             )  {
-                    @ if !characters.contains('\n') {
-                        : &characters
-                    } else {
-                        @ for line in characters.split('\n') {
-                            p(style="margin: 0;") {
-                                : line
-                            }
+            let inner = html! {
+                @ if !characters.contains('\n') {
+                    : &characters
+                } else {
+                    @ for line in characters.split('\n') {
+                        p(style="margin: 0;") {
+                            : line
                         }
                     }
-                 }
+                }
+            };
+            let hyperlink = node.style.as_ref().and_then(|s| s.hyperlink.as_ref());
+
+            html! {
+              @ if let Some(hyperlink) = hyperlink {
+                    a(
+                         style?=style.as_deref(),
+                         data-figma-name=&node.name,
+                         data-figma-id=&node.id,
+                        href=hyperlink.url.as_deref().unwrap_or("#")
+                     )  { : &inner }
+                } else {
+                     div(
+                         style?=style.as_deref(),
+                         data-figma-name=&node.name,
+                         data-figma-id=&node.id
+                     )  { : &inner }
+                }
             }
             .to_string()
         }

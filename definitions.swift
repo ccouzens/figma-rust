@@ -287,6 +287,26 @@ public enum TextAutoResize: String, Codable {
 	case truncate = "TRUNCATE"
 }
 
+/// Type of hyperlink
+public enum HyperlinkType: String, Codable {
+	case url = "URL"
+	case node = "NODE"
+}
+
+public struct Hyperlink: Codable {
+	public let type: HyperlinkType?
+	/// URL being linked to, if URL type
+	public let url: String?
+	/// ID of frame hyperlink points to, if NODE type
+	public let nodeId: String?
+
+	public init(type: HyperlinkType?, url: String?, nodeId: String?) {
+		self.type = type
+		self.url = url
+		self.nodeId = nodeId
+	}
+}
+
 /// Metadata for character formatting
 /// 
 /// [Figma documentation](https://www.figma.com/developers/api#typestyle-type)
@@ -307,10 +327,12 @@ public struct TypeStyle: Codable {
 	public let textDecoration: TextDecoration?
 	/// Dimensions along which text will auto resize, default is that the text does not auto-resize
 	public let textAutoResize: TextAutoResize?
+	/// Link to a URL or frame
+	public let hyperlink: Hyperlink?
 	/// Line height in px
 	public let lineHeightPx: Double
 
-	public init(fontFamily: String, paragraphSpacing: Double?, italic: Bool?, fontWeight: Double, fontSize: Double, textCase: TextCase?, textDecoration: TextDecoration?, textAutoResize: TextAutoResize?, lineHeightPx: Double) {
+	public init(fontFamily: String, paragraphSpacing: Double?, italic: Bool?, fontWeight: Double, fontSize: Double, textCase: TextCase?, textDecoration: TextDecoration?, textAutoResize: TextAutoResize?, hyperlink: Hyperlink?, lineHeightPx: Double) {
 		self.fontFamily = fontFamily
 		self.paragraphSpacing = paragraphSpacing
 		self.italic = italic
@@ -319,6 +341,7 @@ public struct TypeStyle: Codable {
 		self.textCase = textCase
 		self.textDecoration = textDecoration
 		self.textAutoResize = textAutoResize
+		self.hyperlink = hyperlink
 		self.lineHeightPx = lineHeightPx
 	}
 }

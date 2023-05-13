@@ -336,6 +336,24 @@ enum class TextAutoResize(val string: String) {
 	Truncate("TRUNCATE"),
 }
 
+/// Type of hyperlink
+@Serializable
+enum class HyperlinkType(val string: String) {
+	@SerialName("URL")
+	Url("URL"),
+	@SerialName("NODE")
+	Node("NODE"),
+}
+
+@Serializable
+data class Hyperlink (
+	val type: HyperlinkType? = null,
+	/// URL being linked to, if URL type
+	val url: String? = null,
+	/// ID of frame hyperlink points to, if NODE type
+	val nodeId: String? = null
+)
+
 /// Metadata for character formatting
 /// 
 /// [Figma documentation](https://www.figma.com/developers/api#typestyle-type)
@@ -357,6 +375,8 @@ data class TypeStyle (
 	val textDecoration: TextDecoration? = null,
 	/// Dimensions along which text will auto resize, default is that the text does not auto-resize
 	val textAutoResize: TextAutoResize? = null,
+	/// Link to a URL or frame
+	val hyperlink: Hyperlink? = null,
 	/// Line height in px
 	val lineHeightPx: Double
 )
