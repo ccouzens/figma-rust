@@ -38,6 +38,8 @@ pub enum TextAutoResize {
 pub struct TypeStyle {
     /// Font family of text (standard name)
     pub font_family: String,
+    /// Space between paragraphs in px, 0 if not present
+    pub paragraph_spacing: Option<f64>,
     /// Whether or not text is italicized
     #[serde(skip_serializing_if = "Option::is_none")]
     pub italic: Option<bool>,

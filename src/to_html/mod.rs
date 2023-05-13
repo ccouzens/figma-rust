@@ -124,7 +124,7 @@ fn node_to_html(node: &Node, parent: Option<&Node>, css_variables: &mut CSSVaria
                         : &characters
                     } else {
                         @ for line in characters.split('\n') {
-                            p {
+                            p(style="margin: 0;") {
                                 : line
                             }
                         }

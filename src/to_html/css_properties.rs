@@ -219,7 +219,7 @@ impl CssProperties for Node {
     }
 
     fn display(&self) -> Option<String> {
-        if is_auto_layout(self) {
+        if is_auto_layout(self) || self.characters.as_deref().unwrap_or("").contains('\n') {
             Some("flex".into())
         } else {
             None
@@ -227,6 +227,9 @@ impl CssProperties for Node {
     }
 
     fn flex_direction(&self) -> Option<String> {
+        if self.characters.as_deref().unwrap_or("").contains('\n') {
+            return Some("column".into());
+        }
         match self.layout_mode {
             Some(LayoutMode::Horizontal) => Some("row".into()),
             Some(LayoutMode::Vertical) => Some("column".into()),
@@ -286,7 +289,9 @@ impl CssProperties for Node {
     }
 
     fn gap(&self) -> Option<String> {
-        let item_spacing = self.item_spacing?;
+        let item_spacing = self
+            .item_spacing
+            .or_else(|| self.style.as_ref().and_then(|s| s.paragraph_spacing))?;
         if item_spacing == 0.0 {
             None
         } else {
