@@ -230,6 +230,13 @@ export enum TextDecoration {
 	Underline = "UNDERLINE",
 }
 
+export enum TextAutoResize {
+	Height = "HEIGHT",
+	WidthAndHeight = "WIDTH_AND_HEIGHT",
+	/** The text will be shortened and trailing text will be replaced with "…" if the text contents is larger than the bounds */
+	Truncate = "TRUNCATE",
+}
+
 /**
  * Metadata for character formatting
  * 
@@ -248,6 +255,8 @@ export interface TypeStyle {
 	textCase?: TextCase;
 	/** Text decoration applied to the node, default is none */
 	textDecoration?: TextDecoration;
+	/** Dimensions along which text will auto resize, default is that the text does not auto-resize */
+	textAutoResize?: TextAutoResize;
 	/** Line height in px */
 	lineHeightPx: number;
 }

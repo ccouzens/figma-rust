@@ -72,6 +72,7 @@ fn inline_css(
         ("text-decoration-line".into(), node.text_decoration_line()),
         ("text-transform".into(), node.text_transform()),
         ("top".into(), node.top(parent)),
+        ("white-space".into(), node.white_space()),
         ("width".into(), node.width(parent)),
     ];
 

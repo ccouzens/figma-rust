@@ -28,6 +28,6 @@ pub use self::{
     rectangle::Rectangle,
     style::{Style, StyleType},
     styles::Styles,
-    type_style::{TextCase, TextDecoration, TypeStyle},
+    type_style::{TextAutoResize, TextCase, TextDecoration, TypeStyle},
     vector::Vector,
 };

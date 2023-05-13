@@ -280,6 +280,13 @@ public enum TextDecoration: String, Codable {
 	case underline = "UNDERLINE"
 }
 
+public enum TextAutoResize: String, Codable {
+	case height = "HEIGHT"
+	case widthAndHeight = "WIDTH_AND_HEIGHT"
+	/// The text will be shortened and trailing text will be replaced with "…" if the text contents is larger than the bounds
+	case truncate = "TRUNCATE"
+}
+
 /// Metadata for character formatting
 /// 
 /// [Figma documentation](https://www.figma.com/developers/api#typestyle-type)
@@ -296,16 +303,19 @@ public struct TypeStyle: Codable {
 	public let textCase: TextCase?
 	/// Text decoration applied to the node, default is none
 	public let textDecoration: TextDecoration?
+	/// Dimensions along which text will auto resize, default is that the text does not auto-resize
+	public let textAutoResize: TextAutoResize?
 	/// Line height in px
 	public let lineHeightPx: Double
 
-	public init(fontFamily: String, italic: Bool?, fontWeight: Double, fontSize: Double, textCase: TextCase?, textDecoration: TextDecoration?, lineHeightPx: Double) {
+	public init(fontFamily: String, italic: Bool?, fontWeight: Double, fontSize: Double, textCase: TextCase?, textDecoration: TextDecoration?, textAutoResize: TextAutoResize?, lineHeightPx: Double) {
 		self.fontFamily = fontFamily
 		self.italic = italic
 		self.fontWeight = fontWeight
 		self.fontSize = fontSize
 		self.textCase = textCase
 		self.textDecoration = textDecoration
+		self.textAutoResize = textAutoResize
 		self.lineHeightPx = lineHeightPx
 	}
 }

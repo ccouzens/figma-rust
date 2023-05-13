@@ -325,6 +325,17 @@ enum class TextDecoration(val string: String) {
 	Underline("UNDERLINE"),
 }
 
+@Serializable
+enum class TextAutoResize(val string: String) {
+	@SerialName("HEIGHT")
+	Height("HEIGHT"),
+	@SerialName("WIDTH_AND_HEIGHT")
+	WidthAndHeight("WIDTH_AND_HEIGHT"),
+	/// The text will be shortened and trailing text will be replaced with "…" if the text contents is larger than the bounds
+	@SerialName("TRUNCATE")
+	Truncate("TRUNCATE"),
+}
+
 /// Metadata for character formatting
 /// 
 /// [Figma documentation](https://www.figma.com/developers/api#typestyle-type)
@@ -342,6 +353,8 @@ data class TypeStyle (
 	val textCase: TextCase? = null,
 	/// Text decoration applied to the node, default is none
 	val textDecoration: TextDecoration? = null,
+	/// Dimensions along which text will auto resize, default is that the text does not auto-resize
+	val textAutoResize: TextAutoResize? = null,
 	/// Line height in px
 	val lineHeightPx: Double
 )

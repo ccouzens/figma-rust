@@ -10,12 +10,23 @@ pub enum TextCase {
     SmallCaps,
     SmallCapsForced,
 }
+
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 #[typeshare::typeshare]
 pub enum TextDecoration {
     Strikethrough,
     Underline,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+#[typeshare::typeshare]
+pub enum TextAutoResize {
+    Height,
+    WidthAndHeight,
+    /// The text will be shortened and trailing text will be replaced with "…" if the text contents is larger than the bounds
+    Truncate,
 }
 
 /// Metadata for character formatting
@@ -40,6 +51,8 @@ pub struct TypeStyle {
     /// Text decoration applied to the node, default is none
     #[serde(skip_serializing_if = "Option::is_none")]
     pub text_decoration: Option<TextDecoration>,
+    /// Dimensions along which text will auto resize, default is that the text does not auto-resize
+    pub text_auto_resize: Option<TextAutoResize>,
     /// Line height in px
     pub line_height_px: f64,
 }

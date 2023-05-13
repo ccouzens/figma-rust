@@ -3,7 +3,8 @@ use std::cmp::Ordering;
 use figma_schema::{
     AxisSizingMode, CounterAxisAlignItems, EffectType, LayoutAlign, LayoutConstraint,
     LayoutConstraintHorizontal, LayoutConstraintVertical, LayoutMode, LayoutPositioning, Node,
-    NodeType, PrimaryAxisAlignItems, Rectangle, StrokeAlign, TextCase, TextDecoration,
+    NodeType, PrimaryAxisAlignItems, Rectangle, StrokeAlign, TextAutoResize, TextCase,
+    TextDecoration, TypeStyle,
 };
 
 use super::CSSVariablesMap;
@@ -38,6 +39,7 @@ pub trait CssProperties {
     fn text_decoration_line(&self) -> Option<String>;
     fn text_transform(&self) -> Option<String>;
     fn top(&self, parent: Option<&Node>) -> Option<String>;
+    fn white_space(&self) -> Option<String>;
     fn width(&self, parent: Option<&Node>) -> Option<String>;
 }
 
@@ -299,7 +301,8 @@ impl CssProperties for Node {
                 layout_mode: Some(LayoutMode::Horizontal),
                 ..
             })
-        ) && matches!(self.layout_align, Some(LayoutAlign::Stretch)) {
+        ) && matches!(self.layout_align, Some(LayoutAlign::Stretch))
+        {
             return None;
         }
         if matches!(
@@ -308,7 +311,8 @@ impl CssProperties for Node {
                 layout_mode: Some(LayoutMode::Vertical),
                 ..
             })
-        ) && self.layout_grow == Some(1.0) {
+        ) && self.layout_grow == Some(1.0)
+        {
             return None;
         }
         if matches!(self.layout_mode, Some(LayoutMode::Vertical))
@@ -507,6 +511,13 @@ impl CssProperties for Node {
         }
     }
 
+    fn white_space(&self) -> Option<String> {
+        match self.r#type {
+            NodeType::Text => Some("pre-wrap".into()),
+            _ => None,
+        }
+    }
+
     fn width(&self, parent: Option<&Node>) -> Option<String> {
         if matches!(
             parent,
@@ -514,7 +525,8 @@ impl CssProperties for Node {
                 layout_mode: Some(LayoutMode::Vertical),
                 ..
             })
-        ) && matches!(self.layout_align, Some(LayoutAlign::Stretch)) {
+        ) && matches!(self.layout_align, Some(LayoutAlign::Stretch))
+        {
             return None;
         }
         if matches!(
@@ -523,7 +535,8 @@ impl CssProperties for Node {
                 layout_mode: Some(LayoutMode::Horizontal),
                 ..
             })
-        ) && self.layout_grow == Some(1.0) {
+        ) && self.layout_grow == Some(1.0)
+        {
             return None;
         }
         if matches!(self.layout_mode, Some(LayoutMode::Horizontal))
@@ -536,7 +549,16 @@ impl CssProperties for Node {
         {
             return None;
         }
-        if self.characters.is_some() {
+        if matches!(
+            self,
+            Node {
+                style: Some(TypeStyle {
+                    text_auto_resize: Some(TextAutoResize::WidthAndHeight),
+                    ..
+                }),
+                ..
+            }
+        ) {
             return None;
         }
         if matches!(
