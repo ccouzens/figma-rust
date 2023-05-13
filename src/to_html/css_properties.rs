@@ -336,7 +336,7 @@ impl CssProperties for Node {
         if matches!(
             self.constraints,
             Some(LayoutConstraint {
-                vertical: LayoutConstraintVertical::TopBottom | LayoutConstraintVertical::Scale,
+                vertical: LayoutConstraintVertical::TopBottom,
                 ..
             })
         ) {
@@ -585,8 +585,7 @@ impl CssProperties for Node {
         if matches!(
             self.constraints,
             Some(LayoutConstraint {
-                horizontal: LayoutConstraintHorizontal::LeftRight
-                    | LayoutConstraintHorizontal::Scale,
+                horizontal: LayoutConstraintHorizontal::LeftRight,
                 ..
             })
         ) {
