@@ -293,6 +293,8 @@ public enum TextAutoResize: String, Codable {
 public struct TypeStyle: Codable {
 	/// Font family of text (standard name)
 	public let fontFamily: String
+	/// Space between paragraphs in px, 0 if not present
+	public let paragraphSpacing: Double?
 	/// Whether or not text is italicized
 	public let italic: Bool?
 	/// Numeric font weight
@@ -308,8 +310,9 @@ public struct TypeStyle: Codable {
 	/// Line height in px
 	public let lineHeightPx: Double
 
-	public init(fontFamily: String, italic: Bool?, fontWeight: Double, fontSize: Double, textCase: TextCase?, textDecoration: TextDecoration?, textAutoResize: TextAutoResize?, lineHeightPx: Double) {
+	public init(fontFamily: String, paragraphSpacing: Double?, italic: Bool?, fontWeight: Double, fontSize: Double, textCase: TextCase?, textDecoration: TextDecoration?, textAutoResize: TextAutoResize?, lineHeightPx: Double) {
 		self.fontFamily = fontFamily
+		self.paragraphSpacing = paragraphSpacing
 		self.italic = italic
 		self.fontWeight = fontWeight
 		self.fontSize = fontSize

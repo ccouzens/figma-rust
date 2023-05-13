@@ -343,6 +343,8 @@ enum class TextAutoResize(val string: String) {
 data class TypeStyle (
 	/// Font family of text (standard name)
 	val fontFamily: String,
+	/// Space between paragraphs in px, 0 if not present
+	val paragraphSpacing: Double? = null,
 	/// Whether or not text is italicized
 	val italic: Boolean? = null,
 	/// Numeric font weight

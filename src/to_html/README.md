@@ -91,5 +91,5 @@ format the HTML.
 ```bash
 cargo run --release -- to-html 213:6 < example-figma-files/gov-uk-design-system.json \
 	| sed 's/font-family: GDS Transport Website;/font-family: GDS Transport Website,arial,sans-serif;/g' \
-	| npx prettier@2.8.4 --parser html > example-figma-files/gov-uk-design-system-components/button.html
+	| npx prettier@2.8.4 --parser html --html-whitespace-sensitivity strict > example-figma-files/gov-uk-design-system-components/button.html
 ```

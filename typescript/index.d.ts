@@ -245,6 +245,8 @@ export enum TextAutoResize {
 export interface TypeStyle {
 	/** Font family of text (standard name) */
 	fontFamily: string;
+	/** Space between paragraphs in px, 0 if not present */
+	paragraphSpacing?: number;
 	/** Whether or not text is italicized */
 	italic?: boolean;
 	/** Numeric font weight */
