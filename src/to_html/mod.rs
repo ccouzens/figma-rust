@@ -92,17 +92,8 @@ fn node_to_html(node: &Node, parent: Option<&Node>, css_variables: &mut CSSVaria
                 "".into()
             } else {
                 html! {
-                    svg(
-                        style?=style.as_deref(),
-                        data-figma-name=&node.name,
-                        data-figma-id=&node.id,
-                        viewBox="-5 -81 100 100"
-                    ) {
-                        text(
-                            font-size="90"
-                        ) {
-                            : "�"
-                        }
+                    svg( style?=style.as_deref(), viewBox="-5 -81 100 100" ) {
+                        text( font-size="90" ) { : "�" }
                     }
                 }
                 .to_string()
@@ -133,18 +124,9 @@ fn node_to_html(node: &Node, parent: Option<&Node>, css_variables: &mut CSSVaria
 
             html! {
               @ if let Some(hyperlink) = hyperlink.and_then(|h| h.url.as_deref().or(match h.node_id { Some(_) => Some("#"), None => None})) {
-                    a(
-                         style?=style.as_deref(),
-                         data-figma-name=&node.name,
-                         data-figma-id=&node.id,
-                         href=hyperlink
-                     )  { : &inner }
+                    a( style?=style.as_deref(), href=hyperlink )  { : &inner }
                 } else {
-                     div(
-                         style?=style.as_deref(),
-                         data-figma-name=&node.name,
-                         data-figma-id=&node.id
-                     )  { : &inner }
+                     div( style?=style.as_deref() )  { : &inner }
                 }
             }
             .to_string()
@@ -155,11 +137,7 @@ fn node_to_html(node: &Node, parent: Option<&Node>, css_variables: &mut CSSVaria
                 .map(|child| node_to_html(child, Some(node), css_variables))
                 .collect::<Vec<_>>();
             html! {
-                div(
-                    style?=style.as_deref(),
-                    data-figma-name=&node.name,
-                    data-figma-id=&node.id
-                ) {
+                div( style?=style.as_deref() ) {
                     @ for child_html in child_nodes.iter() {
                         : horrorshow::Raw(child_html)
                     }
