@@ -531,7 +531,7 @@ impl CssProperties for Node {
                     last_char_was_whitespace = false;
                 }
             }
-            return last_char_was_whitespace;
+            last_char_was_whitespace
         }) {
             Some("pre-wrap".into())
         } else {

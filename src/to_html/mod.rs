@@ -132,7 +132,7 @@ fn node_to_html(node: &Node, parent: Option<&Node>, css_variables: &mut CSSVaria
             let hyperlink = node.style.as_ref().and_then(|s| s.hyperlink.as_ref());
 
             html! {
-              @ if let Some(hyperlink) = hyperlink.and_then(|h| h.url.as_deref().or_else(|| match h.node_id { Some(_) => Some("#"), None => None})) {
+              @ if let Some(hyperlink) = hyperlink.and_then(|h| h.url.as_deref().or(match h.node_id { Some(_) => Some("#"), None => None})) {
                     a(
                          style?=style.as_deref(),
                          data-figma-name=&node.name,
