@@ -108,6 +108,31 @@ fn node_to_html(node: &Node, parent: Option<&Node>, css_variables: &mut CSSVaria
                 .to_string()
             }
         }
+        NodeType::Text => {
+            let characters = match node.characters.as_deref() {
+                None => return "".into(),
+                Some(c) => c,
+            };
+
+            html! {
+             div(
+                 style?=style.as_deref(),
+                 data-figma-name=&node.name,
+                 data-figma-id=&node.id
+             )  {
+                    @ if !characters.contains('\n') {
+                        : &characters
+                    } else {
+                        @ for line in characters.split('\n') {
+                            p {
+                                : line
+                            }
+                        }
+                    }
+                 }
+            }
+            .to_string()
+        }
         _ => {
             let child_nodes = node
                 .enabled_children()
@@ -122,7 +147,6 @@ fn node_to_html(node: &Node, parent: Option<&Node>, css_variables: &mut CSSVaria
                     @ for child_html in child_nodes.iter() {
                         : horrorshow::Raw(child_html)
                     }
-                    : &node.characters.as_deref().unwrap_or_default();
                 }
             }
             .to_string()

@@ -1,1 +1,290 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><title>Cookie banner component</title><style type="text/css">body{--Text-Primary: #0b0c0c; --Link-Default: #1d70b8; --Desktop-Heading-Medium: 700 24px / 30px GDS Transport Website,arial,sans-serif; --Desktop-Paragraph-Body: 300 19px / 25px GDS Transport Website,arial,sans-serif; --Background: #fff; --Other-Green: #00703c; --Other-Light-Grey: #f3f2f1; margin: 0}</style></head><body><div style="background: var(--Background); box-sizing: border-box; outline-offset: -1px; width: 1480px; border-radius: 5px; outline: 1px dashed #9747ff; flex-direction: column; gap: 20px; padding: 20px; display: flex" data-figma-name="Cookie banner" data-figma-id="18330:13859"><div style="background: var(--Other-Light-Grey); flex-direction: column; align-self: stretch; align-items: center; padding: 20px 0 10px; display: flex" data-figma-name="Responded=False" data-figma-id="18330:13858"><div style="background: var(--Other-Light-Grey); width: 960px; flex-direction: column; gap: 20px; display: flex" data-figma-name="Container" data-figma-id="18330:13824"><div style="color: var(--Text-Primary); font: var(--Desktop-Heading-Medium); white-space: pre-wrap; width: 630px" data-figma-name="Content: Heading" data-figma-id="18330:13825">Cookies on [name of service]</div><div style="width: 630px; flex-direction: column; gap: 20px; display: flex" data-figma-name="Body: Container" data-figma-id="18330:13826"><div style="color: var(--Text-Primary); font: var(--Desktop-Paragraph-Body); white-space: pre-wrap; align-self: stretch" data-figma-name="Content: Body" data-figma-id="18330:13827">We use some essential cookies to make this service work.</div><div style="color: var(--Text-Primary); font: var(--Desktop-Paragraph-Body); white-space: pre-wrap; align-self: stretch" data-figma-name="Content: Body" data-figma-id="18330:13828">We’d like to set additional cookies so we can remember your settings, understand how people use the service and make improvements.</div></div><div style="flex-direction: row; align-items: baseline; gap: 15px; padding: 0 0 20px; display: flex" data-figma-name="Button: Container" data-figma-id="18330:13829"><div style="background: var(--Other-Green); flex-direction: column; justify-content: center; align-items: center; padding: 8px 12px 7px; display: flex; box-shadow: inset 0 -2px #002d18" data-figma-name="Button" data-figma-id="18330:13830"><div style="color: var(--Background); font: var(--Desktop-Paragraph-Body); white-space: pre-wrap" data-figma-name="Content: Text" data-figma-id="I18330:13830;1:9">Accept additional cookies</div></div><div style="background: var(--Other-Green); flex-direction: column; justify-content: center; align-items: center; padding: 8px 12px 7px; display: flex; box-shadow: inset 0 -2px #002d18" data-figma-name="Button" data-figma-id="18330:13831"><div style="color: var(--Background); font: var(--Desktop-Paragraph-Body); white-space: pre-wrap" data-figma-name="Content: Text" data-figma-id="I18330:13831;1:9">Reject additional cookies</div></div><div style="background: var(--Other-Light-Grey); flex-direction: row; align-items: center; padding: 4px 0 2px; display: flex" data-figma-name="Links" data-figma-id="18330:13832"><div style="background: var(--Other-Light-Grey); flex-direction: row; align-items: center; display: flex; box-shadow: inset 0 -1px #1d70b8" data-figma-name="Link: Content" data-figma-id="I18330:13832;11983:2925"><div style="color: var(--Link-Default); white-space: pre-wrap; font: 300 19px / 19px GDS Transport Website,arial,sans-serif" data-figma-name="Content" data-figma-id="I18330:13832;11983:2926">View cookies</div></div></div></div></div></div><div style="background: var(--Other-Light-Grey); flex-direction: column; align-self: stretch; align-items: center; padding: 20px 0 10px; display: flex" data-figma-name="Responded=True" data-figma-id="18330:13857"><div style="background: var(--Other-Light-Grey); width: 960px; flex-direction: column; gap: 20px; display: flex" data-figma-name="Container" data-figma-id="18330:13841"><div style="width: 630px; flex-direction: column; gap: 20px; display: flex" data-figma-name="Body: Container" data-figma-id="18330:13843"><div style="color: var(--Text-Primary); font: var(--Desktop-Paragraph-Body); white-space: pre-wrap; align-self: stretch" data-figma-name="Content: Body" data-figma-id="18330:13844">You’ve accepted/rejected additional cookies. You can change your cookie settings at any time.</div></div><div style="flex-direction: row; align-items: baseline; gap: 15px; padding: 0 0 20px; display: flex" data-figma-name="Button: Container" data-figma-id="18330:13847"><div style="background: var(--Other-Green); flex-direction: column; justify-content: center; align-items: center; padding: 8px 12px 7px; display: flex; box-shadow: inset 0 -2px #002d18" data-figma-name="Button" data-figma-id="18330:13848"><div style="color: var(--Background); font: var(--Desktop-Paragraph-Body); white-space: pre-wrap" data-figma-name="Content: Text" data-figma-id="I18330:13848;1:9">Hide cookie message</div></div></div></div></div></div></body></html>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Cookie banner component</title>
+    <style type="text/css">
+      body {
+        --Text-Primary: #0b0c0c;
+        --Link-Default: #1d70b8;
+        --Desktop-Heading-Medium: 700 24px / 30px GDS Transport Website, arial,
+          sans-serif;
+        --Desktop-Paragraph-Body: 300 19px / 25px GDS Transport Website, arial,
+          sans-serif;
+        --Background: #fff;
+        --Other-Green: #00703c;
+        --Other-Light-Grey: #f3f2f1;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      style="
+        background: var(--Background);
+        box-sizing: border-box;
+        outline-offset: -1px;
+        width: 1480px;
+        border-radius: 5px;
+        outline: 1px dashed #9747ff;
+        flex-direction: column;
+        gap: 20px;
+        padding: 20px;
+        display: flex;
+      "
+      data-figma-name="Cookie banner"
+      data-figma-id="18330:13859"
+    >
+      <div
+        style="
+          background: var(--Other-Light-Grey);
+          flex-direction: column;
+          align-self: stretch;
+          align-items: center;
+          padding: 20px 0 10px;
+          display: flex;
+        "
+        data-figma-name="Responded=False"
+        data-figma-id="18330:13858"
+      >
+        <div
+          style="
+            background: var(--Other-Light-Grey);
+            width: 960px;
+            flex-direction: column;
+            gap: 20px;
+            display: flex;
+          "
+          data-figma-name="Container"
+          data-figma-id="18330:13824"
+        >
+          <div
+            style="
+              color: var(--Text-Primary);
+              font: var(--Desktop-Heading-Medium);
+              width: 630px;
+            "
+            data-figma-name="Content: Heading"
+            data-figma-id="18330:13825"
+          >
+            Cookies on [name of service]
+          </div>
+          <div
+            style="
+              width: 630px;
+              flex-direction: column;
+              gap: 20px;
+              display: flex;
+            "
+            data-figma-name="Body: Container"
+            data-figma-id="18330:13826"
+          >
+            <div
+              style="
+                color: var(--Text-Primary);
+                font: var(--Desktop-Paragraph-Body);
+                align-self: stretch;
+              "
+              data-figma-name="Content: Body"
+              data-figma-id="18330:13827"
+            >
+              We use some essential cookies to make this service work.
+            </div>
+            <div
+              style="
+                color: var(--Text-Primary);
+                font: var(--Desktop-Paragraph-Body);
+                align-self: stretch;
+              "
+              data-figma-name="Content: Body"
+              data-figma-id="18330:13828"
+            >
+              We’d like to set additional cookies so we can remember your
+              settings, understand how people use the service and make
+              improvements.
+            </div>
+          </div>
+          <div
+            style="
+              flex-direction: row;
+              align-items: baseline;
+              gap: 15px;
+              padding: 0 0 20px;
+              display: flex;
+            "
+            data-figma-name="Button: Container"
+            data-figma-id="18330:13829"
+          >
+            <div
+              style="
+                background: var(--Other-Green);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 8px 12px 7px;
+                display: flex;
+                box-shadow: inset 0 -2px #002d18;
+              "
+              data-figma-name="Button"
+              data-figma-id="18330:13830"
+            >
+              <div
+                style="
+                  color: var(--Background);
+                  font: var(--Desktop-Paragraph-Body);
+                "
+                data-figma-name="Content: Text"
+                data-figma-id="I18330:13830;1:9"
+              >
+                Accept additional cookies
+              </div>
+            </div>
+            <div
+              style="
+                background: var(--Other-Green);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 8px 12px 7px;
+                display: flex;
+                box-shadow: inset 0 -2px #002d18;
+              "
+              data-figma-name="Button"
+              data-figma-id="18330:13831"
+            >
+              <div
+                style="
+                  color: var(--Background);
+                  font: var(--Desktop-Paragraph-Body);
+                "
+                data-figma-name="Content: Text"
+                data-figma-id="I18330:13831;1:9"
+              >
+                Reject additional cookies
+              </div>
+            </div>
+            <div
+              style="
+                background: var(--Other-Light-Grey);
+                flex-direction: row;
+                align-items: center;
+                padding: 4px 0 2px;
+                display: flex;
+              "
+              data-figma-name="Links"
+              data-figma-id="18330:13832"
+            >
+              <div
+                style="
+                  background: var(--Other-Light-Grey);
+                  flex-direction: row;
+                  align-items: center;
+                  display: flex;
+                  box-shadow: inset 0 -1px #1d70b8;
+                "
+                data-figma-name="Link: Content"
+                data-figma-id="I18330:13832;11983:2925"
+              >
+                <div
+                  style="
+                    color: var(--Link-Default);
+                    font: 300 19px / 19px GDS Transport Website, arial,
+                      sans-serif;
+                  "
+                  data-figma-name="Content"
+                  data-figma-id="I18330:13832;11983:2926"
+                >
+                  View cookies
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        style="
+          background: var(--Other-Light-Grey);
+          flex-direction: column;
+          align-self: stretch;
+          align-items: center;
+          padding: 20px 0 10px;
+          display: flex;
+        "
+        data-figma-name="Responded=True"
+        data-figma-id="18330:13857"
+      >
+        <div
+          style="
+            background: var(--Other-Light-Grey);
+            width: 960px;
+            flex-direction: column;
+            gap: 20px;
+            display: flex;
+          "
+          data-figma-name="Container"
+          data-figma-id="18330:13841"
+        >
+          <div
+            style="
+              width: 630px;
+              flex-direction: column;
+              gap: 20px;
+              display: flex;
+            "
+            data-figma-name="Body: Container"
+            data-figma-id="18330:13843"
+          >
+            <div
+              style="
+                color: var(--Text-Primary);
+                font: var(--Desktop-Paragraph-Body);
+                align-self: stretch;
+              "
+              data-figma-name="Content: Body"
+              data-figma-id="18330:13844"
+            >
+              You’ve accepted/rejected additional cookies. You can change your
+              cookie settings at any time.
+            </div>
+          </div>
+          <div
+            style="
+              flex-direction: row;
+              align-items: baseline;
+              gap: 15px;
+              padding: 0 0 20px;
+              display: flex;
+            "
+            data-figma-name="Button: Container"
+            data-figma-id="18330:13847"
+          >
+            <div
+              style="
+                background: var(--Other-Green);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 8px 12px 7px;
+                display: flex;
+                box-shadow: inset 0 -2px #002d18;
+              "
+              data-figma-name="Button"
+              data-figma-id="18330:13848"
+            >
+              <div
+                style="
+                  color: var(--Background);
+                  font: var(--Desktop-Paragraph-Body);
+                "
+                data-figma-name="Content: Text"
+                data-figma-id="I18330:13848;1:9"
+              >
+                Hide cookie message
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

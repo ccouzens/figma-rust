@@ -512,9 +512,25 @@ impl CssProperties for Node {
     }
 
     fn white_space(&self) -> Option<String> {
-        match self.r#type {
-            NodeType::Text => Some("pre-wrap".into()),
-            _ => None,
+        let characters = self.characters.as_deref()?;
+        // If any line includes repeated, leading or trailing whitespace then we should preserve it
+        if characters.split('\n').any(|line| {
+            let mut last_char_was_whitespace = true;
+            for c in line.chars() {
+                if c.is_ascii_whitespace() {
+                    if last_char_was_whitespace {
+                        return true;
+                    }
+                    last_char_was_whitespace = true;
+                } else {
+                    last_char_was_whitespace = false;
+                }
+            }
+            return last_char_was_whitespace;
+        }) {
+            Some("pre-wrap".into())
+        } else {
+            None
         }
     }
 
