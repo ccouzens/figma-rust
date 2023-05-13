@@ -119,8 +119,12 @@ fn node_to_html(node: &Node, parent: Option<&Node>, css_variables: &mut CSSVaria
                     : &characters
                 } else {
                     @ for line in characters.split('\n') {
-                        p(style="margin: 0;") {
-                            : line
+                        @ if line.is_empty() {
+                          p(style=format!("margin: 0; height: {}px", node.style.as_ref().map(|s| s.line_height_px).unwrap_or(0.0)))
+                        } else {
+                            p(style="margin: 0;") {
+                                : line
+                            }
                         }
                     }
                 }
