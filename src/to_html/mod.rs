@@ -9,6 +9,7 @@ use lightningcss::stylesheet::{MinifyOptions, ParserOptions, PrinterOptions, Sty
 use std::{io::Write, vec};
 
 mod css_properties;
+mod intermediate_node;
 
 type CSSRulePairs = (String, Option<String>);
 pub type CSSVariablesMap<'a> = IndexMap<&'a str, CSSVariable>;
