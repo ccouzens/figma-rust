@@ -1,4 +1,6 @@
-use figma_schema::{NodeType, StrokeAlign};
+use figma_schema::{Node as FigmaNode, NodeType as FigmaNodeType, StrokeAlign};
+
+pub type CSSVariablesMap<'a> = IndexMap<&'a str, CSSVariable>;
 
 pub enum AlignItems {
     FlexStart,
@@ -58,7 +60,7 @@ pub struct Appearance {
     pub opacity: Option<f64>,
 }
 
-pub struct BoxAppearance {
+pub struct FrameAppearance {
     pub background: Option<String>,
     pub border_radius: Option<[f64; 4]>,
     pub box_shadow: Option<String>,
@@ -80,13 +82,13 @@ pub struct ContentAppearance {
 pub struct Figma<'a> {
     pub name: &'a str,
     pub id: &'a str,
-    pub r#type: NodeType,
+    pub r#type: FigmaNodeType,
 }
 
 pub enum IntermediateNodeType<'a> {
     Vector,
     Text { text: &'a str },
-    Box { children: Vec<IntermediateNode<'a>> },
+    Frame { children: Vec<IntermediateNode<'a>> },
 }
 
 pub struct IntermediateNode<'a> {
@@ -94,7 +96,42 @@ pub struct IntermediateNode<'a> {
     pub flex_container: Option<FlexContainer>,
     pub location: Location,
     pub appearance: Appearance,
-    pub box_appearance: Option<BoxAppearance>,
+    pub frame_appearance: Option<FrameAppearance>,
     pub content_appearance: ContentAppearance,
     pub node_type: IntermediateNodeType<'a>,
+}
+
+impl<'a> IntermediateNode<'a> {
+    fn from_figma_node(
+        node: &'a FigmaNode,
+        parent: Option<&'a FigmaNode>,
+        css_variables: &mut CSSVariablesMap,
+    ) -> Self {
+        IntermediateNode {
+            figma: Figma {
+                name: &node.name,
+                id: &node.id,
+                r#type: node.r#type,
+            },
+            flex_container: _,
+            location: _,
+            appearance: _,
+            frame_appearance: _,
+            content_appearance: _,
+            node_type: match node.r#type {
+                FigmaNodeType::Vector | FigmaNodeType::BooleanOperation => {
+                    IntermediateNodeType::Vector
+                }
+                FigmaNodeType::Text => IntermediateNodeType::Text {
+                    text: node.characters.as_deref().unwrap_or(""),
+                },
+                _ => IntermediateNodeType::Frame {
+                    children: node
+                        .enabled_children()
+                        .map(|child| Self::from_figma_node(child, Some(node), css_variables))
+                        .collect(),
+                },
+            },
+        }
+    }
 }
