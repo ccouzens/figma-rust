@@ -1,7 +1,15 @@
 use figma_schema::{Node as FigmaNode, NodeType as FigmaNodeType, StrokeAlign};
+use indexmap::IndexMap;
+use serde::Serialize;
+
+pub struct CSSVariable {
+    name: String,
+    value: Option<String>,
+}
 
 pub type CSSVariablesMap<'a> = IndexMap<&'a str, CSSVariable>;
 
+#[derive(Debug, Serialize)]
 pub enum AlignItems {
     FlexStart,
     Center,
@@ -9,15 +17,18 @@ pub enum AlignItems {
     Baseline,
 }
 
+#[derive(Debug, Serialize)]
 pub enum AlignSelf {
     Stretch,
 }
 
+#[derive(Debug, Serialize)]
 pub enum FlexDirection {
     Row,
     Column,
 }
 
+#[derive(Debug, Serialize)]
 pub enum Inset {
     Auto,
     /// To be used like so: calc(100% * dy / dx + c px)
@@ -28,6 +39,7 @@ pub enum Inset {
     },
 }
 
+#[derive(Debug, Serialize)]
 pub enum JustifyContent {
     FlexStart,
     Center,
@@ -35,11 +47,13 @@ pub enum JustifyContent {
     SpaceBetween,
 }
 
+#[derive(Debug, Serialize)]
 pub enum StrokeStyle {
     Solid,
     Dashed,
 }
 
+#[derive(Debug, Serialize)]
 pub struct FlexContainer {
     pub align_items: AlignItems,
     pub direction: FlexDirection,
@@ -47,6 +61,7 @@ pub struct FlexContainer {
     pub justify_content: Option<JustifyContent>,
 }
 
+#[derive(Debug, Serialize)]
 pub struct Location {
     pub padding: [f64; 4],
     pub align_self: Option<AlignSelf>,
@@ -56,10 +71,12 @@ pub struct Location {
     pub width: Option<f64>,
 }
 
+#[derive(Debug, Serialize)]
 pub struct Appearance {
     pub opacity: Option<f64>,
 }
 
+#[derive(Debug, Serialize)]
 pub struct FrameAppearance {
     pub background: Option<String>,
     pub border_radius: Option<[f64; 4]>,
@@ -67,36 +84,41 @@ pub struct FrameAppearance {
     pub stroke: Option<Stroke>,
 }
 
+#[derive(Debug, Serialize)]
 pub struct Stroke {
     pub weights: [f64; 4],
     pub style: StrokeStyle,
     pub offset: StrokeAlign,
 }
 
+#[derive(Debug, Serialize)]
 pub struct ContentAppearance {
     pub color: Option<String>,
     pub fill: Option<String>,
     pub font: Option<String>,
 }
 
+#[derive(Debug, Serialize)]
 pub struct Figma<'a> {
     pub name: &'a str,
     pub id: &'a str,
     pub r#type: FigmaNodeType,
 }
 
+#[derive(Debug, Serialize)]
 pub enum IntermediateNodeType<'a> {
     Vector,
     Text { text: &'a str },
     Frame { children: Vec<IntermediateNode<'a>> },
 }
 
+#[derive(Debug, Serialize)]
 pub struct IntermediateNode<'a> {
     pub figma: Figma<'a>,
     pub flex_container: Option<FlexContainer>,
     pub location: Location,
     pub appearance: Appearance,
-    pub frame_appearance: Option<FrameAppearance>,
+    pub frame_appearance: FrameAppearance,
     pub content_appearance: ContentAppearance,
     pub node_type: IntermediateNodeType<'a>,
 }
@@ -113,11 +135,27 @@ impl<'a> IntermediateNode<'a> {
                 id: &node.id,
                 r#type: node.r#type,
             },
-            flex_container: _,
-            location: _,
-            appearance: _,
-            frame_appearance: _,
-            content_appearance: _,
+            flex_container: None,
+            location: Location {
+                padding: [0.0, 0.0, 0.0, 0.0],
+                align_self: None,
+                flex_grow: None,
+                inset: None,
+                height: None,
+                width: None,
+            },
+            appearance: Appearance { opacity: None },
+            frame_appearance: FrameAppearance {
+                background: None,
+                border_radius: None,
+                box_shadow: None,
+                stroke: None,
+            },
+            content_appearance: ContentAppearance {
+                color: None,
+                fill: None,
+                font: None,
+            },
             node_type: match node.r#type {
                 FigmaNodeType::Vector | FigmaNodeType::BooleanOperation => {
                     IntermediateNodeType::Vector
