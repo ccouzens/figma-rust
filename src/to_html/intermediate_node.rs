@@ -2,9 +2,12 @@ use figma_schema::{Node as FigmaNode, NodeType as FigmaNodeType, StrokeAlign};
 use indexmap::IndexMap;
 use serde::Serialize;
 
+mod html_formatter;
+pub use html_formatter::HtmlFormatter;
+
 pub struct CSSVariable {
-    name: String,
-    value: Option<String>,
+    pub name: String,
+    pub value: Option<String>,
 }
 
 pub type CSSVariablesMap<'a> = IndexMap<&'a str, CSSVariable>;
@@ -124,7 +127,7 @@ pub struct IntermediateNode<'a> {
 }
 
 impl<'a> IntermediateNode<'a> {
-    fn from_figma_node(
+    pub fn from_figma_node(
         node: &'a FigmaNode,
         parent: Option<&'a FigmaNode>,
         css_variables: &mut CSSVariablesMap,

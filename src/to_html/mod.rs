@@ -1,10 +1,13 @@
 use figma_schema::{Node, NodeType};
+use html_escape::{encode_style, encode_text};
 
-use self::css_properties::CssProperties;
+use self::{
+    css_properties::CssProperties,
+    intermediate_node::{CSSVariable, CSSVariablesMap, HtmlFormatter, IntermediateNode},
+};
 
 use anyhow::{anyhow, Context, Result};
-use horrorshow::{helper::doctype, html};
-use indexmap::IndexMap;
+use horrorshow::html;
 use lightningcss::stylesheet::{MinifyOptions, ParserOptions, PrinterOptions, StyleAttribute};
 use std::{io::Write, vec};
 
@@ -12,12 +15,6 @@ mod css_properties;
 mod intermediate_node;
 
 type CSSRulePairs = (String, Option<String>);
-pub type CSSVariablesMap<'a> = IndexMap<&'a str, CSSVariable>;
-
-pub struct CSSVariable {
-    name: String,
-    value: Option<String>,
-}
 
 fn create_inline_css(properties: &[CSSRulePairs]) -> Result<String> {
     use std::fmt::Write;
@@ -178,7 +175,7 @@ pub fn main(
         })
         .collect();
 
-    let body_inner_html = node_to_html(body, None, &mut css_variables);
+    let intermediate_node = IntermediateNode::from_figma_node(body, None, &mut css_variables);
 
     let mut body_css_properties = vec![("margin".into(), Some("0".into()))];
     body_css_properties.extend(
@@ -190,22 +187,23 @@ pub fn main(
 
     writeln!(
         stdout,
-        "{}",
-        html! {
-            : doctype::HTML;
-            html {
-                head {
-                    meta(charset="utf-8");
-                    title : format!("{} component", &body.name);
-                    style(type="text/css"): format!("body{{{body_css}}}");
-                }
-                body {
-                    : horrorshow::Raw(&body_inner_html)
-                }
-            }
+        r#"<!DOCTYPE html>
+<html
+  ><head
+    ><meta charset="utf-8" /><title>{}</title
+    ><style type="text/css">
+{}
+    </style></head
+  ><body
+    >{}</body
+  ></html
+>"#,
+        encode_text(&body.name),
+        encode_style(&body_css),
+        HtmlFormatter {
+            intermediate_node: &intermediate_node,
+            nesting_depth: 2
         }
     )
-    .context("Failed to write HTML to stdout")?;
-
-    Ok(())
+    .context("Failed to write HTML to stdout")
 }
