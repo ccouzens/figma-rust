@@ -3,7 +3,9 @@ use indexmap::IndexMap;
 use serde::Serialize;
 
 mod html_formatter;
-pub use html_formatter::HtmlFormatter;
+pub use html_formatter::{format_css, HtmlFormatter};
+
+use super::css_properties::CssProperties;
 
 pub struct CSSVariable {
     pub name: String,
@@ -149,7 +151,7 @@ impl<'a> IntermediateNode<'a> {
             },
             appearance: Appearance { opacity: None },
             frame_appearance: FrameAppearance {
-                background: None,
+                background: node.background(css_variables),
                 border_radius: None,
                 box_shadow: None,
                 stroke: None,
@@ -174,5 +176,19 @@ impl<'a> IntermediateNode<'a> {
                 },
             },
         }
+    }
+
+    pub fn naive_css_string(&self) -> String {
+        let properties = &[("background", self.frame_appearance.background.as_deref())];
+        let mut output = String::new();
+        for (name, value) in properties.iter() {
+            if let Some(v) = value {
+                output.push_str(name);
+                output.push_str(": ");
+                output.push_str(v);
+                output.push(';');
+            }
+        }
+        output
     }
 }

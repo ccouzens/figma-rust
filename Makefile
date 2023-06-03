@@ -105,8 +105,7 @@ example-figma-files/gov-uk-design-system-components/get-started-page.html : exam
 
 example-figma-files/gov-uk-design-system-components/button.html : example-figma-files/gov-uk-design-system.json
 	cargo run --release -- to-html 213:6 < $< \
-		| sed 's/px GDS Transport Website/px GDS Transport Website,arial,sans-serif/g' \
-		| npx prettier@2.8.4 --parser html --html-whitespace-sensitivity strict > $@
+		| sed 's/px GDS Transport Website/px GDS Transport Website,arial,sans-serif/g' > $@
 
 example-figma-files/gov-uk-design-system-components/cookie-banner.html : example-figma-files/gov-uk-design-system.json
 	cargo run --release -- to-html 18330:13859 < $< \

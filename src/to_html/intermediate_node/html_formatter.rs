@@ -1,4 +1,6 @@
-use std::fmt::Display;
+use anyhow::{anyhow, Context, Result};
+use lightningcss::stylesheet::{MinifyOptions, ParserOptions, PrinterOptions, StyleAttribute};
+use std::fmt::{Display, Write};
 
 use super::{IntermediateNode, IntermediateNodeType};
 
@@ -9,7 +11,7 @@ pub struct HtmlFormatter<'a> {
 
 use html_escape::{encode_double_quoted_attribute, encode_text};
 
-fn indent(f: &mut std::fmt::Formatter<'_>, level: u16) -> std::fmt::Result {
+fn indent(f: &mut impl Write, level: u16) -> std::fmt::Result {
     for _ in 0..level {
         write!(f, "  ")?
     }
@@ -17,37 +19,54 @@ fn indent(f: &mut std::fmt::Formatter<'_>, level: u16) -> std::fmt::Result {
     Ok(())
 }
 
-fn open_start_tag(f: &mut std::fmt::Formatter<'_>, _level: u16, name: &str) -> std::fmt::Result {
+fn open_start_tag(f: &mut impl Write, _level: u16, name: &str) -> std::fmt::Result {
     writeln!(f, "<{name}")
 }
 
-fn close_start_tag(f: &mut std::fmt::Formatter<'_>, level: u16) -> std::fmt::Result {
+fn close_start_tag(f: &mut impl Write, level: u16) -> std::fmt::Result {
     indent(f, level + 1)?;
     write!(f, ">")
 }
 
-fn attribute(
-    f: &mut std::fmt::Formatter<'_>,
-    level: u16,
-    name: &str,
-    value: &str,
-) -> std::fmt::Result {
+fn attribute(f: &mut impl Write, level: u16, name: &str, value: &str) -> std::fmt::Result {
     indent(f, level + 2)?;
     writeln!(f, "{name}=\"{}\"", encode_double_quoted_attribute(value))
 }
 
-fn text(f: &mut std::fmt::Formatter<'_>, _level: u16, value: &str) -> std::fmt::Result {
+fn text(f: &mut impl Write, _level: u16, value: &str) -> std::fmt::Result {
     write!(f, "{}", encode_text(value))
 }
 
-fn end_tag(f: &mut std::fmt::Formatter<'_>, level: u16, name: &str) -> std::fmt::Result {
+fn end_tag(f: &mut impl Write, level: u16, name: &str) -> std::fmt::Result {
     writeln!(f, "</{name}")?;
     indent(f, level)?;
     write!(f, ">")
 }
 
+pub fn format_css(level: u16, naive_css: &str) -> Result<String> {
+    let mut style_attribute = StyleAttribute::parse(naive_css, ParserOptions::default())
+        .map_err(|err| anyhow!("Failed to parse CSS\n{err}"))?;
+
+    style_attribute.minify(MinifyOptions::default());
+
+    let mut output = String::new();
+
+    for declaration in style_attribute.declarations.declarations.iter() {
+        output.push('\n');
+        indent(&mut output, level + 1)?;
+        output.push_str(
+            &declaration
+                .to_css_string(false, PrinterOptions::default())
+                .context("Failed to write CSS property")?,
+        );
+        output.push(';');
+    }
+
+    Ok(output)
+}
+
 fn common_attributes(
-    f: &mut std::fmt::Formatter<'_>,
+    f: &mut impl Write,
     level: u16,
     intermediate_node: &IntermediateNode<'_>,
 ) -> std::fmt::Result {
@@ -59,6 +78,11 @@ fn common_attributes(
         "data-figma-type",
         &format!("{:?}", intermediate_node.figma.r#type),
     )?;
+    let css = format_css(level + 2, &intermediate_node.naive_css_string())
+        .map_err(|_| std::fmt::Error)?;
+    if !css.is_empty() {
+        attribute(f, level, "style", &css)?;
+    }
     Ok(())
 }
 

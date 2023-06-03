@@ -433,7 +433,6 @@ dependencies = [
  "anyhow",
  "clap",
  "figma-schema",
- "horrorshow",
  "html-escape",
  "indexmap",
  "itertools",
@@ -511,12 +510,6 @@ name = "hermit-abi"
 version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fed44880c466736ef9a5c5b5facefb5ed0785676d0c02d612db14e54f0d84286"
-
-[[package]]
-name = "horrorshow"
-version = "0.8.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8371fb981840150b1a54f7cb117bf6699f7466a1d4861daac33bc6fe2b5abea0"
 
 [[package]]
 name = "html-escape"
