@@ -29,7 +29,7 @@ fn close_start_tag(f: &mut impl Write, level: u16) -> std::fmt::Result {
 }
 
 fn attribute(f: &mut impl Write, level: u16, name: &str, value: &str) -> std::fmt::Result {
-    indent(f, level + 2)?;
+    indent(f, level + 1)?;
     writeln!(f, "{name}=\"{}\"", encode_double_quoted_attribute(value))
 }
 
@@ -78,7 +78,7 @@ fn common_attributes(
         "data-figma-type",
         &format!("{:?}", intermediate_node.figma.r#type),
     )?;
-    let css = format_css(level + 2, &intermediate_node.naive_css_string())
+    let css = format_css(level + 1, &intermediate_node.naive_css_string())
         .map_err(|_| std::fmt::Error)?;
     if !css.is_empty() {
         attribute(f, level, "style", &css)?;

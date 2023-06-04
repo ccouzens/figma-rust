@@ -49,7 +49,6 @@ pub fn main(
             naive_css.push(';');
         }
     }
-    naive_css.push_str(&intermediate_node.naive_css_string());
 
     let body_css = format_css(3, &naive_css)?;
 
