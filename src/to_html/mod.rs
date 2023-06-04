@@ -59,8 +59,7 @@ pub fn main(
   ><head
     ><meta charset="utf-8" /><title>{}</title
     ><style type="text/css">
-      body {{{}
-      }}
+      body {{{}}}
     </style></head
   ><body
     >{}</body

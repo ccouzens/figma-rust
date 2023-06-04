@@ -1,3 +1,5 @@
+use std::borrow::Cow;
+
 use figma_schema::{Node as FigmaNode, NodeType as FigmaNodeType, StrokeAlign};
 use indexmap::IndexMap;
 use serde::Serialize;
@@ -149,7 +151,9 @@ impl<'a> IntermediateNode<'a> {
                 height: None,
                 width: None,
             },
-            appearance: Appearance { opacity: None },
+            appearance: Appearance {
+                opacity: node.opacity,
+            },
             frame_appearance: FrameAppearance {
                 background: node.background(css_variables),
                 border_radius: None,
@@ -179,7 +183,19 @@ impl<'a> IntermediateNode<'a> {
     }
 
     pub fn naive_css_string(&self) -> String {
-        let properties = &[("background", self.frame_appearance.background.as_deref())];
+        let properties = &[
+            (
+                "background",
+                self.frame_appearance
+                    .background
+                    .as_deref()
+                    .map(Cow::Borrowed),
+            ),
+            (
+                "opacity",
+                self.appearance.opacity.map(|o| Cow::Owned(format!("{o}"))),
+            ),
+        ];
         let mut output = String::new();
         for (name, value) in properties.iter() {
             if let Some(v) = value {

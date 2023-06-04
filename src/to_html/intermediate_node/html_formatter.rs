@@ -61,6 +61,8 @@ pub fn format_css(level: u16, naive_css: &str) -> Result<String> {
         );
         output.push(';');
     }
+    output.push('\n');
+    indent(&mut output, level)?;
 
     Ok(output)
 }
@@ -80,7 +82,7 @@ fn common_attributes(
     )?;
     let css = format_css(level + 1, &intermediate_node.naive_css_string())
         .map_err(|_| std::fmt::Error)?;
-    if !css.is_empty() {
+    if !css.trim().is_empty() {
         attribute(f, level, "style", &css)?;
     }
     Ok(())
