@@ -1,13 +1,16 @@
 use std::borrow::Cow;
 
-use figma_schema::{Node as FigmaNode, NodeType as FigmaNodeType, StrokeAlign};
+use figma_schema::{
+    LayoutConstraintVertical, LayoutMode, LayoutPositioning, Node as FigmaNode,
+    NodeType as FigmaNodeType, StrokeAlign,
+};
 use indexmap::IndexMap;
 use serde::Serialize;
 
 mod html_formatter;
 pub use html_formatter::{format_css, HtmlFormatter};
 
-use super::css_properties::CssProperties;
+use super::css_properties::{absolute_bounding_box, CssProperties};
 
 pub struct CSSVariable {
     pub name: String,
@@ -44,6 +47,53 @@ pub enum Inset {
         dx: f64,
         c: f64,
     },
+}
+
+impl Inset {
+    pub fn from_figma_node<'a>(
+        node: &'a FigmaNode,
+        parent: Option<&'a FigmaNode>,
+        css_variables: &mut CSSVariablesMap,
+    ) -> Option<[Inset; 4]> {
+        let parent = parent?;
+        if matches!(
+            parent.layout_mode,
+            Some(LayoutMode::Horizontal) | Some(LayoutMode::Vertical)
+        ) && !matches!(node.layout_positioning, Some(LayoutPositioning::Absolute))
+        {
+            return None;
+        }
+        let parent_rectangle = absolute_bounding_box(parent)?;
+        let node_rectangle = absolute_bounding_box(node)?;
+        let top_distance = node_rectangle.y? - parent_rectangle.y?;
+        let right_distance = parent_rectangle.x? + parent_rectangle.width?
+            - node_rectangle.x?
+            - node_rectangle.width?;
+        let bottom_distance = parent_rectangle.y? + parent_rectangle.height?
+            - node_rectangle.y?
+            - node_rectangle.height?;
+        let left_distance = node_rectangle.x? - parent_rectangle.x?;
+        let node_constraints = node.constraints.as_ref()?;
+        Some([match node_constraints.vertical {
+            LayoutConstraintVertical::Top | LayoutConstraintVertical::TopBottom => Self::Linear {
+                dy: 0.0,
+                dx: 1.0,
+                c: top_distance,
+            },
+            LayoutConstraintVertical::Bottom => Self::Auto,
+            LayoutConstraintVertical::Center => Self::Linear {
+                dy: 1.0,
+                dx: 2.0,
+                c: top_distance - parent_rectangle.height? / 2.0,
+            },
+            // LayoutConstraintVertical::Scale => Some(format!("calc(100% * {top}/{parent_height})")),
+            LayoutConstraintVertical::Scale => Self::Linear {
+                dy: top_distance,
+                dx: parent_rectangle.height?,
+                c: 0.0,
+            },
+        }])
+    }
 }
 
 #[derive(Debug, Serialize)]

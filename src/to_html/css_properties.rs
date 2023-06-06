@@ -80,13 +80,13 @@ fn stroke_color(node: &Node) -> Option<String> {
         .next()
 }
 
-fn absolute_bounding_box(node: &Node) -> Option<Rectangle> {
+pub fn absolute_bounding_box(node: &Node) -> Option<Rectangle> {
     if let Some(r) = node.absolute_bounding_box.clone() {
         return Some(r);
     }
     let bounding_boxes = || {
         node.enabled_children()
-            .filter_map(|c| c.absolute_bounding_box.as_ref())
+            .filter_map(|c| c.absolute_render_bounds.as_ref())
     };
     let min_x = bounding_boxes()
         .filter_map(|r| r.x)
