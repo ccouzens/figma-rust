@@ -285,7 +285,7 @@ impl<'a> IntermediateNode<'a> {
                     }
                     _ => None,
                 },
-                font: None,
+                font: node.font(css_variables),
             },
             node_type: match node.r#type {
                 FigmaNodeType::Vector | FigmaNodeType::BooleanOperation => {
@@ -327,6 +327,10 @@ impl<'a> IntermediateNode<'a> {
             (
                 "fill",
                 self.content_appearance.fill.as_deref().map(Cow::Borrowed),
+            ),
+            (
+                "font",
+                self.content_appearance.font.as_deref().map(Cow::Borrowed),
             ),
             (
                 "inset",
