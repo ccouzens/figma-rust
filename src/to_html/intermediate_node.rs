@@ -296,6 +296,13 @@ impl<'a> IntermediateNode<'a> {
         }
     }
 
+    fn children(&self) -> Option<&[Self]> {
+        match &self.node_type {
+            IntermediateNodeType::Frame { children } => Some(&children),
+            _ => None,
+        }
+    }
+
     pub fn naive_css_string(&self) -> String {
         let properties = &[
             (
@@ -317,6 +324,18 @@ impl<'a> IntermediateNode<'a> {
             (
                 "opacity",
                 self.appearance.opacity.map(|o| Cow::Owned(format!("{o}"))),
+            ),
+            (
+                "position",
+                if self.location.inset.is_some() {
+                    Some(Cow::Borrowed("absolute"))
+                } else if self.children().is_some_and(|children| {
+                    children.iter().any(|child| child.location.inset.is_some())
+                }) {
+                    Some(Cow::Borrowed("relative"))
+                } else {
+                    None
+                },
             ),
         ];
         let mut output = String::new();
