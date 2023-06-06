@@ -1,8 +1,8 @@
-use std::borrow::Cow;
+use std::{borrow::Cow, fmt};
 
 use figma_schema::{
-    LayoutConstraintVertical, LayoutMode, LayoutPositioning, Node as FigmaNode,
-    NodeType as FigmaNodeType, StrokeAlign,
+    LayoutConstraintHorizontal, LayoutConstraintVertical, LayoutMode, LayoutPositioning,
+    Node as FigmaNode, NodeType as FigmaNodeType, StrokeAlign,
 };
 use indexmap::IndexMap;
 use serde::Serialize;
@@ -74,25 +74,89 @@ impl Inset {
             - node_rectangle.height?;
         let left_distance = node_rectangle.x? - parent_rectangle.x?;
         let node_constraints = node.constraints.as_ref()?;
-        Some([match node_constraints.vertical {
-            LayoutConstraintVertical::Top | LayoutConstraintVertical::TopBottom => Self::Linear {
-                dy: 0.0,
-                dx: 1.0,
-                c: top_distance,
+        Some([
+            match node_constraints.vertical {
+                LayoutConstraintVertical::Top | LayoutConstraintVertical::TopBottom => {
+                    Self::Linear {
+                        dy: 0.0,
+                        dx: 1.0,
+                        c: top_distance,
+                    }
+                }
+                LayoutConstraintVertical::Bottom => Self::Auto,
+                LayoutConstraintVertical::Center => Self::Linear {
+                    dy: 1.0,
+                    dx: 2.0,
+                    c: top_distance - parent_rectangle.height? / 2.0,
+                },
+                LayoutConstraintVertical::Scale => Self::Linear {
+                    dy: top_distance,
+                    dx: parent_rectangle.height?,
+                    c: 0.0,
+                },
             },
-            LayoutConstraintVertical::Bottom => Self::Auto,
-            LayoutConstraintVertical::Center => Self::Linear {
-                dy: 1.0,
-                dx: 2.0,
-                c: top_distance - parent_rectangle.height? / 2.0,
+            match node_constraints.horizontal {
+                LayoutConstraintHorizontal::Left => Self::Auto,
+                LayoutConstraintHorizontal::Right | LayoutConstraintHorizontal::LeftRight => {
+                    Self::Linear {
+                        dy: 0.0,
+                        dx: 1.0,
+                        c: -right_distance,
+                    }
+                }
+                LayoutConstraintHorizontal::Center => Self::Auto,
+                LayoutConstraintHorizontal::Scale => Self::Linear {
+                    dy: right_distance,
+                    dx: parent_rectangle.width?,
+                    c: 0.0,
+                },
             },
-            // LayoutConstraintVertical::Scale => Some(format!("calc(100% * {top}/{parent_height})")),
-            LayoutConstraintVertical::Scale => Self::Linear {
-                dy: top_distance,
-                dx: parent_rectangle.height?,
-                c: 0.0,
+            match node_constraints.vertical {
+                LayoutConstraintVertical::Top => Self::Auto,
+                LayoutConstraintVertical::Bottom | LayoutConstraintVertical::TopBottom => {
+                    Self::Linear {
+                        dy: 0.0,
+                        dx: 1.0,
+                        c: -bottom_distance,
+                    }
+                }
+                LayoutConstraintVertical::Center => Self::Auto,
+                LayoutConstraintVertical::Scale => Self::Linear {
+                    dy: bottom_distance,
+                    dx: parent_rectangle.height?,
+                    c: 0.0,
+                },
             },
-        }])
+            match node_constraints.horizontal {
+                LayoutConstraintHorizontal::Left | LayoutConstraintHorizontal::LeftRight => {
+                    Self::Linear {
+                        dy: 0.0,
+                        dx: 1.0,
+                        c: left_distance,
+                    }
+                }
+                LayoutConstraintHorizontal::Right => Self::Auto,
+                LayoutConstraintHorizontal::Center => Self::Linear {
+                    dy: 1.0,
+                    dx: 2.0,
+                    c: left_distance - parent_rectangle.width? / 2.0,
+                },
+                LayoutConstraintHorizontal::Scale => Self::Linear {
+                    dy: left_distance,
+                    dx: parent_rectangle.width?,
+                    c: 0.0,
+                },
+            },
+        ])
+    }
+}
+
+impl fmt::Display for Inset {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Inset::Auto => write!(f, "auto"),
+            Inset::Linear { dy, dx, c } => write!(f, "calc(100% * {dy} / {dx} + {c}px)"),
+        }
     }
 }
 
@@ -197,7 +261,7 @@ impl<'a> IntermediateNode<'a> {
                 padding: [0.0, 0.0, 0.0, 0.0],
                 align_self: None,
                 flex_grow: None,
-                inset: None,
+                inset: Inset::from_figma_node(node, parent, css_variables),
                 height: None,
                 width: None,
             },
@@ -240,6 +304,15 @@ impl<'a> IntermediateNode<'a> {
                     .background
                     .as_deref()
                     .map(Cow::Borrowed),
+            ),
+            (
+                "inset",
+                self.location
+                    .inset
+                    .as_ref()
+                    .map(|[top, right, bottom, left]| {
+                        Cow::Owned(format!("{top} {right} {bottom} {left}"))
+                    }),
             ),
             (
                 "opacity",
