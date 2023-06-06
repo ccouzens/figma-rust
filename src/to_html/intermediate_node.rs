@@ -53,7 +53,6 @@ impl Inset {
     pub fn from_figma_node<'a>(
         node: &'a FigmaNode,
         parent: Option<&'a FigmaNode>,
-        css_variables: &mut CSSVariablesMap,
     ) -> Option<[Inset; 4]> {
         let parent = parent?;
         if matches!(
@@ -266,7 +265,7 @@ impl<'a> IntermediateNode<'a> {
                 ],
                 align_self: None,
                 flex_grow: None,
-                inset: Inset::from_figma_node(node, parent, css_variables),
+                inset: Inset::from_figma_node(node, parent),
                 height: None,
                 width: None,
             },
