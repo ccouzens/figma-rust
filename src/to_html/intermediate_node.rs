@@ -258,7 +258,12 @@ impl<'a> IntermediateNode<'a> {
             },
             flex_container: None,
             location: Location {
-                padding: [0.0, 0.0, 0.0, 0.0],
+                padding: [
+                    node.padding_top.unwrap_or(0.0),
+                    node.padding_right.unwrap_or(0.0),
+                    node.padding_bottom.unwrap_or(0.0),
+                    node.padding_left.unwrap_or(0.0),
+                ],
                 align_self: None,
                 flex_grow: None,
                 inset: Inset::from_figma_node(node, parent, css_variables),
@@ -345,6 +350,17 @@ impl<'a> IntermediateNode<'a> {
                 "opacity",
                 self.appearance.opacity.map(|o| Cow::Owned(format!("{o}"))),
             ),
+            ("padding", {
+                let p = self.location.padding;
+                if p == [0.0, 0.0, 0.0, 0.0] {
+                    None
+                } else {
+                    Some(Cow::Owned(format!(
+                        "{}px {}px {}px {}px",
+                        p[0], p[1], p[2], p[3]
+                    )))
+                }
+            }),
             (
                 "position",
                 if self.location.inset.is_some() {
