@@ -10,7 +10,7 @@ use serde::Serialize;
 mod html_formatter;
 pub use html_formatter::{format_css, HtmlFormatter};
 
-use super::css_properties::{absolute_bounding_box, CssProperties};
+use super::css_properties::{absolute_bounding_box, fills_color, CssProperties};
 
 pub struct CSSVariable {
     pub name: String,
@@ -275,8 +275,16 @@ impl<'a> IntermediateNode<'a> {
                 stroke: None,
             },
             content_appearance: ContentAppearance {
-                color: None,
-                fill: None,
+                color: match node.r#type {
+                    FigmaNodeType::Text => fills_color(node, css_variables),
+                    _ => None,
+                },
+                fill: match node.r#type {
+                    FigmaNodeType::Vector | FigmaNodeType::BooleanOperation => {
+                        fills_color(node, css_variables)
+                    }
+                    _ => None,
+                },
                 font: None,
             },
             node_type: match node.r#type {
@@ -311,6 +319,14 @@ impl<'a> IntermediateNode<'a> {
                     .background
                     .as_deref()
                     .map(Cow::Borrowed),
+            ),
+            (
+                "color",
+                self.content_appearance.color.as_deref().map(Cow::Borrowed),
+            ),
+            (
+                "fill",
+                self.content_appearance.fill.as_deref().map(Cow::Borrowed),
             ),
             (
                 "inset",

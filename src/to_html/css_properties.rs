@@ -50,7 +50,7 @@ fn is_auto_layout(node: &Node) -> bool {
     )
 }
 
-fn fills_color(node: &Node, css_variables: &mut CSSVariablesMap) -> Option<String> {
+pub fn fills_color(node: &Node, css_variables: &mut CSSVariablesMap) -> Option<String> {
     let color_value = node
         .fills()
         .iter()
