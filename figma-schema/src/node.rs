@@ -25,7 +25,7 @@ pub enum LayoutMode {
     Vertical,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize, PartialEq)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 #[typeshare::typeshare]
 pub enum AxisSizingMode {

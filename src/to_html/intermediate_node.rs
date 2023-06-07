@@ -1,8 +1,9 @@
 use std::{borrow::Cow, fmt};
 
 use figma_schema::{
-    LayoutConstraintHorizontal, LayoutConstraintVertical, LayoutMode, LayoutPositioning,
-    Node as FigmaNode, NodeType as FigmaNodeType, StrokeAlign,
+    AxisSizingMode, LayoutAlign, LayoutConstraint, LayoutConstraintHorizontal,
+    LayoutConstraintVertical, LayoutMode, LayoutPositioning, Node as FigmaNode,
+    NodeType as FigmaNodeType, StrokeAlign, TextAutoResize, TypeStyle,
 };
 use indexmap::IndexMap;
 use serde::Serialize;
@@ -267,7 +268,64 @@ impl<'a> IntermediateNode<'a> {
                 flex_grow: None,
                 inset: Inset::from_figma_node(node, parent),
                 height: None,
-                width: None,
+                width: match (parent, node) {
+                    (
+                        Some(FigmaNode {
+                            layout_mode: Some(LayoutMode::Vertical),
+                            ..
+                        }),
+                        FigmaNode {
+                            layout_align: Some(LayoutAlign::Stretch),
+                            ..
+                        },
+                    )
+                    | (
+                        _,
+                        FigmaNode {
+                            style:
+                                Some(TypeStyle {
+                                    text_auto_resize: Some(TextAutoResize::WidthAndHeight),
+                                    ..
+                                }),
+                            ..
+                        }
+                        | FigmaNode {
+                            constraints:
+                                Some(LayoutConstraint {
+                                    horizontal: LayoutConstraintHorizontal::LeftRight,
+                                    ..
+                                }),
+                            ..
+                        },
+                    ) => None,
+                    (
+                        Some(FigmaNode {
+                            layout_mode: Some(LayoutMode::Horizontal),
+                            ..
+                        }),
+                        FigmaNode {
+                            layout_grow: Some(layout_grow),
+                            ..
+                        },
+                    ) if *layout_grow == 1.0 => None,
+                    (
+                        _,
+                        FigmaNode {
+                            layout_mode: Some(LayoutMode::Horizontal),
+                            primary_axis_sizing_mode,
+                            ..
+                        },
+                    ) if primary_axis_sizing_mode != &Some(AxisSizingMode::Fixed) => None,
+                    (
+                        _,
+                        FigmaNode {
+                            layout_mode: Some(LayoutMode::Vertical),
+                            counter_axis_sizing_mode,
+                            ..
+                        },
+                    ) if counter_axis_sizing_mode != &Some(AxisSizingMode::Fixed) => None,
+                    _ => absolute_bounding_box(node).and_then(|b| b.width),
+                },
             },
             appearance: Appearance {
                 opacity: node.opacity,
@@ -371,6 +429,10 @@ impl<'a> IntermediateNode<'a> {
                 } else {
                     None
                 },
+            ),
+            (
+                "width",
+                self.location.width.map(|w| Cow::Owned(format!("{w}px"))),
             ),
         ];
         let mut output = String::new();
