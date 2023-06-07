@@ -267,7 +267,60 @@ impl<'a> IntermediateNode<'a> {
                 align_self: None,
                 flex_grow: None,
                 inset: Inset::from_figma_node(node, parent),
-                height: None,
+                height: match (parent, node) {
+                    (
+                        Some(FigmaNode {
+                            layout_mode: Some(LayoutMode::Horizontal),
+                            ..
+                        }),
+                        FigmaNode {
+                            layout_align: Some(LayoutAlign::Stretch),
+                            ..
+                        },
+                    )
+                    | (
+                        _,
+                        FigmaNode {
+                            characters: Some(_),
+                            ..
+                        }
+                        | FigmaNode {
+                            constraints:
+                                Some(LayoutConstraint {
+                                    vertical: LayoutConstraintVertical::TopBottom,
+                                    ..
+                                }),
+                            ..
+                        },
+                    ) => None,
+                    (
+                        Some(FigmaNode {
+                            layout_mode: Some(LayoutMode::Vertical),
+                            ..
+                        }),
+                        FigmaNode {
+                            layout_grow: Some(layout_grow),
+                            ..
+                        },
+                    ) if *layout_grow == 1.0 => None,
+                    (
+                        _,
+                        FigmaNode {
+                            layout_mode: Some(LayoutMode::Vertical),
+                            primary_axis_sizing_mode,
+                            ..
+                        },
+                    ) if primary_axis_sizing_mode != &Some(AxisSizingMode::Fixed) => None,
+                    (
+                        _,
+                        FigmaNode {
+                            layout_mode: Some(LayoutMode::Horizontal),
+                            counter_axis_sizing_mode,
+                            ..
+                        },
+                    ) if counter_axis_sizing_mode != &Some(AxisSizingMode::Fixed) => None,
+                    _ => absolute_bounding_box(node).and_then(|b| b.height),
+                },
                 width: match (parent, node) {
                     (
                         Some(FigmaNode {
@@ -393,6 +446,10 @@ impl<'a> IntermediateNode<'a> {
             (
                 "font",
                 self.content_appearance.font.as_deref().map(Cow::Borrowed),
+            ),
+            (
+                "height",
+                self.location.height.map(|h| Cow::Owned(format!("{h}px"))),
             ),
             (
                 "inset",
