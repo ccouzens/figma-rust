@@ -385,7 +385,7 @@ impl<'a> IntermediateNode<'a> {
             },
             frame_appearance: FrameAppearance {
                 background: node.background(css_variables),
-                border_radius: None,
+                border_radius: node.rectangle_corner_radii(),
                 box_shadow: node.box_shadow(),
                 stroke: None,
             },
@@ -434,6 +434,12 @@ impl<'a> IntermediateNode<'a> {
                     .background
                     .as_deref()
                     .map(Cow::Borrowed),
+            ),
+            (
+                "border-radius",
+                self.frame_appearance
+                    .border_radius
+                    .map(|[nw, ne, se, sw]| Cow::Owned(format!("{nw}px {ne}px {se}px {sw}px"))),
             ),
             (
                 "box-shadow",
