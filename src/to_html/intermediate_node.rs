@@ -435,6 +435,21 @@ impl<'a> IntermediateNode<'a> {
                     .as_deref()
                     .map(Cow::Borrowed),
             ),
+            ("box-sizing", {
+                let Location {
+                    width,
+                    height,
+                    padding: [top, right, bottom, left],
+                    ..
+                } = self.location;
+                if (top != 0.0 || bottom != 0.0) && height.is_some()
+                    || (right != 0.0 || left != 0.0) && width.is_some()
+                {
+                    Some(Cow::Borrowed("border-box"))
+                } else {
+                    None
+                }
+            }),
             (
                 "color",
                 self.content_appearance.color.as_deref().map(Cow::Borrowed),
