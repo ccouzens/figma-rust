@@ -386,7 +386,7 @@ impl<'a> IntermediateNode<'a> {
             frame_appearance: FrameAppearance {
                 background: node.background(css_variables),
                 border_radius: None,
-                box_shadow: None,
+                box_shadow: node.box_shadow(),
                 stroke: None,
             },
             content_appearance: ContentAppearance {
@@ -432,6 +432,13 @@ impl<'a> IntermediateNode<'a> {
                 "background",
                 self.frame_appearance
                     .background
+                    .as_deref()
+                    .map(Cow::Borrowed),
+            ),
+            (
+                "box-shadow",
+                self.frame_appearance
+                    .box_shadow
                     .as_deref()
                     .map(Cow::Borrowed),
             ),
