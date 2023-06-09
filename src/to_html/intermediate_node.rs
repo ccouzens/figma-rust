@@ -3,7 +3,7 @@ use std::{borrow::Cow, fmt};
 use figma_schema::{
     AxisSizingMode, LayoutAlign, LayoutConstraint, LayoutConstraintHorizontal,
     LayoutConstraintVertical, LayoutMode, LayoutPositioning, Node as FigmaNode,
-    NodeType as FigmaNodeType, StrokeAlign, TextAutoResize, TypeStyle,
+    NodeType as FigmaNodeType, StrokeAlign, StrokeWeights, TextAutoResize, TypeStyle,
 };
 use indexmap::IndexMap;
 use serde::Serialize;
@@ -11,7 +11,7 @@ use serde::Serialize;
 mod html_formatter;
 pub use html_formatter::{format_css, HtmlFormatter};
 
-use super::css_properties::{absolute_bounding_box, fills_color, CssProperties};
+use super::css_properties::{absolute_bounding_box, fills_color, stroke_color, CssProperties};
 
 pub struct CSSVariable {
     pub name: String,
@@ -210,6 +210,7 @@ pub struct Stroke {
     pub weights: [f64; 4],
     pub style: StrokeStyle,
     pub offset: StrokeAlign,
+    pub color: String,
 }
 
 #[derive(Debug, Serialize)]
@@ -387,7 +388,44 @@ impl<'a> IntermediateNode<'a> {
                 background: node.background(css_variables),
                 border_radius: node.rectangle_corner_radii(),
                 box_shadow: node.box_shadow(),
-                stroke: None,
+                stroke: {
+                    let style =
+                        if node.stroke_dashes.as_ref().map(|sd| sd.is_empty()) == Some(false) {
+                            StrokeStyle::Dashed
+                        } else {
+                            StrokeStyle::Solid
+                        };
+                    match (
+                        stroke_color(node),
+                        &node.individual_stroke_weights,
+                        node.stroke_weight,
+                        node.stroke_align,
+                    ) {
+                        (
+                            Some(color),
+                            Some(StrokeWeights {
+                                top,
+                                right,
+                                bottom,
+                                left,
+                            }),
+                            _,
+                            Some(offset),
+                        ) => Some(Stroke {
+                            weights: [*top, *right, *bottom, *left],
+                            style,
+                            offset,
+                            color,
+                        }),
+                        (Some(color), _, Some(w), Some(offset)) => Some(Stroke {
+                            weights: [w, w, w, w],
+                            style,
+                            offset,
+                            color,
+                        }),
+                        _ => None,
+                    }
+                },
             },
             content_appearance: ContentAppearance {
                 color: match node.r#type {
@@ -491,6 +529,34 @@ impl<'a> IntermediateNode<'a> {
             (
                 "opacity",
                 self.appearance.opacity.map(|o| Cow::Owned(format!("{o}"))),
+            ),
+            (
+                "outline",
+                self.frame_appearance.stroke.as_ref().and_then(|s| {
+                    // Let top border represent the weight of all the borders
+                    let width = s.weights[0];
+                    if width == 0.0 {
+                        return None;
+                    }
+                    let style = match s.style {
+                        StrokeStyle::Solid => "solid",
+                        StrokeStyle::Dashed => "dashed",
+                    };
+                    let color = &s.color;
+                    Some(Cow::Owned(format!("{width}px {style} {color}")))
+                }),
+            ),
+            (
+                "outline-offset",
+                self.frame_appearance.stroke.as_ref().and_then(|s| {
+                    // Let top border represent the weight of all the borders
+                    let width = s.weights[0];
+                    match s.offset {
+                        StrokeAlign::Inside => Some(Cow::Owned(format!("-{width}px"))),
+                        StrokeAlign::Outside => None,
+                        StrokeAlign::Center => Some(Cow::Owned(format!("-{}px", width / 2.0))),
+                    }
+                }),
             ),
             ("padding", {
                 let p = self.location.padding;

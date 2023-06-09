@@ -71,7 +71,7 @@ pub fn fills_color(node: &Node, css_variables: &mut CSSVariablesMap) -> Option<S
     }
 }
 
-fn stroke_color(node: &Node) -> Option<String> {
+pub fn stroke_color(node: &Node) -> Option<String> {
     node.strokes()
         .iter()
         .filter(|p| p.visible() && p.opacity() != 0.0)
