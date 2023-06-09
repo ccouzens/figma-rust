@@ -595,6 +595,19 @@ impl<'a> IntermediateNode<'a> {
                     }),
             ),
             (
+                "justify-content",
+                self.flex_container.as_ref().and_then(|c| {
+                    c.justify_content.as_ref().map(|j| {
+                        Cow::Borrowed(match j {
+                            JustifyContent::FlexStart => "flex-start",
+                            JustifyContent::Center => "center",
+                            JustifyContent::FlexEnd => "flex-end",
+                            JustifyContent::SpaceBetween => "space-between",
+                        })
+                    })
+                }),
+            ),
+            (
                 "opacity",
                 self.appearance.opacity.map(|o| Cow::Owned(format!("{o}"))),
             ),
