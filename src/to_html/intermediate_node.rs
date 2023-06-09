@@ -1,9 +1,10 @@
 use std::{borrow::Cow, fmt};
 
 use figma_schema::{
-    AxisSizingMode, LayoutAlign, LayoutConstraint, LayoutConstraintHorizontal,
-    LayoutConstraintVertical, LayoutMode, LayoutPositioning, Node as FigmaNode,
-    NodeType as FigmaNodeType, StrokeAlign, StrokeWeights, TextAutoResize, TypeStyle,
+    AxisSizingMode, CounterAxisAlignItems, LayoutAlign, LayoutConstraint,
+    LayoutConstraintHorizontal, LayoutConstraintVertical, LayoutMode, LayoutPositioning,
+    Node as FigmaNode, NodeType as FigmaNodeType, StrokeAlign, StrokeWeights, TextAutoResize,
+    TypeStyle,
 };
 use indexmap::IndexMap;
 use serde::Serialize;
@@ -22,6 +23,7 @@ pub type CSSVariablesMap<'a> = IndexMap<&'a str, CSSVariable>;
 
 #[derive(Debug, Serialize)]
 pub enum AlignItems {
+    Stretch,
     FlexStart,
     Center,
     FlexEnd,
@@ -257,7 +259,31 @@ impl<'a> IntermediateNode<'a> {
                 id: &node.id,
                 r#type: node.r#type,
             },
-            flex_container: None,
+            flex_container: {
+                let align_items = match node.counter_axis_align_items {
+                    None => AlignItems::Stretch,
+                    Some(CounterAxisAlignItems::Min) => AlignItems::FlexStart,
+                    Some(CounterAxisAlignItems::Center) => AlignItems::Center,
+                    Some(CounterAxisAlignItems::Max) => AlignItems::FlexEnd,
+                    Some(CounterAxisAlignItems::Baseline) => AlignItems::Baseline,
+                };
+                let gap = node.item_spacing.unwrap_or(0.0);
+                match node.layout_mode {
+                    Some(LayoutMode::Horizontal) => Some(FlexContainer {
+                        align_items,
+                        direction: FlexDirection::Row,
+                        gap,
+                        justify_content: None,
+                    }),
+                    Some(LayoutMode::Vertical) => Some(FlexContainer {
+                        align_items,
+                        direction: FlexDirection::Column,
+                        gap,
+                        justify_content: None,
+                    }),
+                    _ => None,
+                }
+            },
             location: Location {
                 padding: [
                     node.padding_top.unwrap_or(0.0),
@@ -467,6 +493,18 @@ impl<'a> IntermediateNode<'a> {
     pub fn naive_css_string(&self) -> String {
         let properties = &[
             (
+                "align-items",
+                self.flex_container
+                    .as_ref()
+                    .and_then(|c| match c.align_items {
+                        AlignItems::Stretch => None,
+                        AlignItems::FlexStart => Some(Cow::Borrowed("flex-start")),
+                        AlignItems::Center => Some(Cow::Borrowed("center")),
+                        AlignItems::FlexEnd => Some(Cow::Borrowed("flex-end")),
+                        AlignItems::Baseline => Some(Cow::Borrowed("baseline")),
+                    }),
+            ),
+            (
                 "background",
                 self.frame_appearance
                     .background
@@ -506,12 +544,35 @@ impl<'a> IntermediateNode<'a> {
                 self.content_appearance.color.as_deref().map(Cow::Borrowed),
             ),
             (
+                "display",
+                self.flex_container.as_ref().map(|_| Cow::Borrowed("flex")),
+            ),
+            (
+                "flex-direction",
+                self.flex_container.as_ref().map(|c| {
+                    Cow::Borrowed(match c.direction {
+                        FlexDirection::Row => "row",
+                        FlexDirection::Column => "column",
+                    })
+                }),
+            ),
+            (
                 "fill",
                 self.content_appearance.fill.as_deref().map(Cow::Borrowed),
             ),
             (
                 "font",
                 self.content_appearance.font.as_deref().map(Cow::Borrowed),
+            ),
+            (
+                "gap",
+                self.flex_container.as_ref().and_then(|c| {
+                    if c.gap == 0.0 {
+                        None
+                    } else {
+                        Some(Cow::Owned(format!("{}px", c.gap)))
+                    }
+                }),
             ),
             (
                 "height",
