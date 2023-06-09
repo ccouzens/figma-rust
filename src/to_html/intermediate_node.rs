@@ -3,8 +3,8 @@ use std::{borrow::Cow, fmt};
 use figma_schema::{
     AxisSizingMode, CounterAxisAlignItems, LayoutAlign, LayoutConstraint,
     LayoutConstraintHorizontal, LayoutConstraintVertical, LayoutMode, LayoutPositioning,
-    Node as FigmaNode, NodeType as FigmaNodeType, StrokeAlign, StrokeWeights, TextAutoResize,
-    TypeStyle,
+    Node as FigmaNode, NodeType as FigmaNodeType, PrimaryAxisAlignItems, StrokeAlign,
+    StrokeWeights, TextAutoResize, TypeStyle,
 };
 use indexmap::IndexMap;
 use serde::Serialize;
@@ -268,18 +268,25 @@ impl<'a> IntermediateNode<'a> {
                     Some(CounterAxisAlignItems::Baseline) => AlignItems::Baseline,
                 };
                 let gap = node.item_spacing.unwrap_or(0.0);
+                let justify_content = match node.primary_axis_align_items {
+                    None => None,
+                    Some(PrimaryAxisAlignItems::Min) => Some(JustifyContent::FlexStart),
+                    Some(PrimaryAxisAlignItems::Center) => Some(JustifyContent::Center),
+                    Some(PrimaryAxisAlignItems::Max) => Some(JustifyContent::FlexEnd),
+                    Some(PrimaryAxisAlignItems::SpaceBetween) => Some(JustifyContent::SpaceBetween),
+                };
                 match node.layout_mode {
                     Some(LayoutMode::Horizontal) => Some(FlexContainer {
                         align_items,
                         direction: FlexDirection::Row,
                         gap,
-                        justify_content: None,
+                        justify_content,
                     }),
                     Some(LayoutMode::Vertical) => Some(FlexContainer {
                         align_items,
                         direction: FlexDirection::Column,
                         gap,
-                        justify_content: None,
+                        justify_content,
                     }),
                     _ => None,
                 }
