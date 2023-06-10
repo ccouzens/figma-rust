@@ -12,7 +12,6 @@ pub trait CssProperties {
     fn box_shadow(&self) -> Option<String>;
     fn font(&self, css_variables: &mut CSSVariablesMap) -> Option<String>;
     fn text_decoration_line(&self) -> Option<String>;
-    fn text_transform(&self) -> Option<String>;
     fn white_space(&self) -> Option<String>;
 }
 
@@ -157,16 +156,6 @@ impl CssProperties for Node {
         match self.style.as_ref()?.text_decoration.as_ref()? {
             TextDecoration::Strikethrough => Some("line-through".into()),
             TextDecoration::Underline => Some("underline".into()),
-        }
-    }
-
-    fn text_transform(&self) -> Option<String> {
-        match self.style.as_ref()?.text_case.as_ref()? {
-            TextCase::Upper => Some("uppercase".into()),
-            TextCase::Lower => Some("lowercase".into()),
-            TextCase::Title => Some("capitalize".into()),
-            TextCase::SmallCaps => None,
-            TextCase::SmallCapsForced => None,
         }
     }
 

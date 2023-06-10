@@ -4,7 +4,7 @@ use figma_schema::{
     AxisSizingMode, CounterAxisAlignItems, LayoutAlign, LayoutConstraint,
     LayoutConstraintHorizontal, LayoutConstraintVertical, LayoutMode, LayoutPositioning,
     Node as FigmaNode, NodeType as FigmaNodeType, PrimaryAxisAlignItems, StrokeAlign,
-    StrokeWeights, TextAutoResize, TypeStyle,
+    StrokeWeights, TextAutoResize, TextCase, TypeStyle,
 };
 use indexmap::IndexMap;
 use serde::Serialize;
@@ -200,6 +200,7 @@ pub struct Appearance {
     pub fill: Option<String>,
     pub font: Option<String>,
     pub opacity: Option<f64>,
+    pub text_tranform: Option<TextCase>,
 }
 
 #[derive(Debug, Serialize)]
@@ -441,6 +442,7 @@ impl<'a> IntermediateNode<'a> {
                 },
                 font: node.font(css_variables),
                 opacity: node.opacity,
+                text_tranform: node.style.as_ref().and_then(|s| s.text_case),
             },
             frame_appearance: FrameAppearance {
                 background: node.background(css_variables),
@@ -675,6 +677,16 @@ impl<'a> IntermediateNode<'a> {
                 } else {
                     None
                 },
+            ),
+            (
+                "text-transform",
+                self.appearance.text_tranform.and_then(|t| match t {
+                    TextCase::Upper => Some(Cow::Borrowed("uppercase")),
+                    TextCase::Lower => Some(Cow::Borrowed("lowercase")),
+                    TextCase::Title => Some(Cow::Borrowed("capitalize")),
+                    TextCase::SmallCaps => None,
+                    TextCase::SmallCapsForced => None,
+                }),
             ),
             (
                 "width",
