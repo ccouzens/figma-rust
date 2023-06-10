@@ -242,6 +242,7 @@ pub struct IntermediateNode<'a> {
     pub appearance: Appearance,
     pub frame_appearance: FrameAppearance,
     pub node_type: IntermediateNodeType<'a>,
+    pub href: Option<&'a str>,
 }
 
 impl<'a> IntermediateNode<'a> {
@@ -503,12 +504,17 @@ impl<'a> IntermediateNode<'a> {
                         .collect(),
                 },
             },
+            href: node
+                .style
+                .as_ref()
+                .and_then(|s| s.hyperlink.as_ref())
+                .and_then(|h| h.url.as_deref().or_else(|| h.node_id.as_ref().map(|_| "#"))),
         }
     }
 
     fn children(&self) -> Option<&[Self]> {
         match &self.node_type {
-            IntermediateNodeType::Frame { children } => Some(&children),
+            IntermediateNodeType::Frame { children } => Some(children),
             _ => None,
         }
     }

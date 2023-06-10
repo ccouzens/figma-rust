@@ -77,6 +77,9 @@ fn common_attributes(
         attribute(f, level, "data-figma-id", figma.id)?;
         attribute(f, level, "data-figma-type", &format!("{:?}", figma.r#type))?;
     }
+    if let Some(href) = intermediate_node.href {
+        attribute(f, level, "href", href)?;
+    }
     let css = format_css(level + 1, &intermediate_node.naive_css_string())
         .map_err(|_| std::fmt::Error)?;
     if !css.trim().is_empty() {
@@ -87,6 +90,11 @@ fn common_attributes(
 
 impl<'a> Display for HtmlFormatter<'a> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let container_type = if self.intermediate_node.href.is_some() {
+            "a"
+        } else {
+            "div"
+        };
         match &self.intermediate_node.node_type {
             IntermediateNodeType::Vector => {
                 open_start_tag(f, self.nesting_depth, "svg")?;
@@ -101,14 +109,14 @@ impl<'a> Display for HtmlFormatter<'a> {
                 end_tag(f, self.nesting_depth, "svg")?;
             }
             IntermediateNodeType::Text { text: inner_text } => {
-                open_start_tag(f, self.nesting_depth, "div")?;
+                open_start_tag(f, self.nesting_depth, container_type)?;
                 common_attributes(f, self.nesting_depth, self.intermediate_node)?;
                 close_start_tag(f, self.nesting_depth)?;
                 text(f, self.nesting_depth, inner_text)?;
-                end_tag(f, self.nesting_depth, "div")?;
+                end_tag(f, self.nesting_depth, container_type)?;
             }
             IntermediateNodeType::Frame { children } => {
-                open_start_tag(f, self.nesting_depth, "div")?;
+                open_start_tag(f, self.nesting_depth, container_type)?;
                 common_attributes(f, self.nesting_depth, self.intermediate_node)?;
                 close_start_tag(f, self.nesting_depth)?;
                 for child in children.iter() {
@@ -121,7 +129,7 @@ impl<'a> Display for HtmlFormatter<'a> {
                         }
                     )?;
                 }
-                end_tag(f, self.nesting_depth, "div")?;
+                end_tag(f, self.nesting_depth, container_type)?;
             }
         }
         Ok(())
