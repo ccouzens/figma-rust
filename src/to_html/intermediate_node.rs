@@ -4,7 +4,7 @@ use figma_schema::{
     AxisSizingMode, CounterAxisAlignItems, LayoutAlign, LayoutConstraint,
     LayoutConstraintHorizontal, LayoutConstraintVertical, LayoutMode, LayoutPositioning,
     Node as FigmaNode, NodeType as FigmaNodeType, PrimaryAxisAlignItems, StrokeAlign,
-    StrokeWeights, TextAutoResize, TextCase, TypeStyle,
+    StrokeWeights, TextAutoResize, TextCase, TextDecoration, TypeStyle,
 };
 use indexmap::IndexMap;
 use serde::Serialize;
@@ -201,6 +201,7 @@ pub struct Appearance {
     pub font: Option<String>,
     pub opacity: Option<f64>,
     pub text_tranform: Option<TextCase>,
+    pub text_decoration_line: Option<TextDecoration>,
 }
 
 #[derive(Debug, Serialize)]
@@ -442,6 +443,7 @@ impl<'a> IntermediateNode<'a> {
                 },
                 font: node.font(css_variables),
                 opacity: node.opacity,
+                text_decoration_line: node.style.as_ref().and_then(|s| s.text_decoration),
                 text_tranform: node.style.as_ref().and_then(|s| s.text_case),
             },
             frame_appearance: FrameAppearance {
@@ -677,6 +679,15 @@ impl<'a> IntermediateNode<'a> {
                 } else {
                     None
                 },
+            ),
+            (
+                "text-decoration-line",
+                self.appearance.text_decoration_line.map(|t| {
+                    Cow::Borrowed(match t {
+                        TextDecoration::Strikethrough => "line-through",
+                        TextDecoration::Underline => "underline",
+                    })
+                }),
             ),
             (
                 "text-transform",

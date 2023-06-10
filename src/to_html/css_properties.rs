@@ -1,6 +1,6 @@
 use std::cmp::Ordering;
 
-use figma_schema::{EffectType, Node, NodeType, Rectangle, TextCase, TextDecoration};
+use figma_schema::{EffectType, Node, NodeType, Rectangle, TextCase};
 
 use super::CSSVariablesMap;
 
@@ -11,7 +11,6 @@ pub trait CssProperties {
     fn background(&self, css_variables: &mut CSSVariablesMap) -> Option<String>;
     fn box_shadow(&self) -> Option<String>;
     fn font(&self, css_variables: &mut CSSVariablesMap) -> Option<String>;
-    fn text_decoration_line(&self) -> Option<String>;
     fn white_space(&self) -> Option<String>;
 }
 
@@ -149,13 +148,6 @@ impl CssProperties for Node {
                 None => Some(font_value),
             },
             None => Some(font_value),
-        }
-    }
-
-    fn text_decoration_line(&self) -> Option<String> {
-        match self.style.as_ref()?.text_decoration.as_ref()? {
-            TextDecoration::Strikethrough => Some("line-through".into()),
-            TextDecoration::Underline => Some("underline".into()),
         }
     }
 
