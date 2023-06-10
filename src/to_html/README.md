@@ -11,32 +11,29 @@ Generate HTML files from files fetched through the
 
 ```html
 <div
+  data-figma-name="Viewport=Desktop, Type=Primary, Hover=False, Focus=False, Disabled=False"
+  data-figma-id="1:19"
+  data-figma-type="Component"
   style="
-    background: #00703c;
+    background: var(--Other-Green);
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 8px 12px 7px;
-    line-height: 0;
     display: flex;
     position: absolute;
-    top: 23px;
-    left: 17px;
+    inset: 23px auto auto 17px;
     box-shadow: inset 0 -2px #002d18;
   "
-  data-figma-name="Viewport=Desktop, Type=Primary, Hover=False, Focus=False, Disabled=False"
-  data-figma-id="1:19"
 >
   <div
-    style="
-      color: #fff;
-      font-family: GDS Transport Website;
-      font-size: 19px;
-      font-weight: 300;
-      line-height: 25px;
-    "
     data-figma-name="Content: Text"
     data-figma-id="1:9"
+    data-figma-type="Text"
+    style="
+      color: var(--Background);
+      font: var(--Desktop-Paragraph-Body);
+    "
   >
     Button
   </div>
@@ -63,6 +60,9 @@ Vectors are replaced by an SVG placeholder.
 Semantic HTML elements aren't used. Everything is a `<div>` or `<svg>` (for
 vectors). Component appropriate elements like `<button>` or `<input>` are not
 used.
+
+The unusual formatting is to keep indentation and newlines within HTML tags so
+that the text content can safely have `white-space: pre-line` applied.
 
 ## Direction
 
@@ -91,5 +91,5 @@ format the HTML.
 ```bash
 cargo run --release -- to-html 213:6 < example-figma-files/gov-uk-design-system.json \
 	| sed 's/font-family: GDS Transport Website;/font-family: GDS Transport Website,arial,sans-serif;/g' \
-	| npx prettier@2.8.4 --parser html --html-whitespace-sensitivity strict > example-figma-files/gov-uk-design-system-components/button.html
+	> example-figma-files/gov-uk-design-system-components/button.html
 ```

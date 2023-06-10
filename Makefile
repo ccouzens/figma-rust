@@ -100,33 +100,27 @@ src/typescript_props/example-output.ts : example-figma-files/gov-uk-design-syste
 
 example-figma-files/gov-uk-design-system-components/get-started-page.html : example-figma-files/gov-uk-design-system.json
 	cargo run --release -- to-html 756:127 < $< \
-		| sed 's/px GDS Transport Website/px GDS Transport Website,arial,sans-serif/g' \
-		| grep -v 'data-figma-' > $@
+		| sed 's/px GDS Transport Website/px GDS Transport Website,arial,sans-serif/g' > $@
 
 example-figma-files/gov-uk-design-system-components/button.html : example-figma-files/gov-uk-design-system.json
 	cargo run --release -- to-html 213:6 < $< \
-		| sed 's/px GDS Transport Website/px GDS Transport Website,arial,sans-serif/g' \
-		| grep -v 'data-figma-' > $@
+		| sed 's/px GDS Transport Website/px GDS Transport Website,arial,sans-serif/g' > $@
 
 example-figma-files/gov-uk-design-system-components/cookie-banner.html : example-figma-files/gov-uk-design-system.json
 	cargo run --release -- to-html 18330:13859 < $< \
-		| sed 's/px GDS Transport Website/px GDS Transport Website,arial,sans-serif/g' \
-		| grep -v 'data-figma-' > $@
+		| sed 's/px GDS Transport Website/px GDS Transport Website,arial,sans-serif/g' > $@
 
 example-figma-files/gov-uk-design-system-components/footer.html : example-figma-files/gov-uk-design-system.json
 	cargo run --release -- to-html 19792:14489 < $< \
-		| sed 's/px GDS Transport Website/px GDS Transport Website,arial,sans-serif/g' \
-		| grep -v 'data-figma-' > $@
+		| sed 's/px GDS Transport Website/px GDS Transport Website,arial,sans-serif/g' > $@
 
 example-figma-files/gov-uk-design-system-components/header.html : example-figma-files/gov-uk-design-system.json
 	cargo run --release -- to-html 20226:12488 < $< \
-		| sed 's/px GDS Transport Website/px GDS Transport Website,arial,sans-serif/g' \
-		| grep -v 'data-figma-' > $@
+		| sed 's/px GDS Transport Website/px GDS Transport Website,arial,sans-serif/g' > $@
 
 example-figma-files/gov-uk-design-system-components/tag.html : example-figma-files/gov-uk-design-system.json
 	cargo run --release -- to-html 147:17 < $< \
-		| sed 's/px GDS Transport Website/px GDS Transport Website,arial,sans-serif/g' \
-		| grep -v 'data-figma-' > $@
+		| sed 's/px GDS Transport Website/px GDS Transport Website,arial,sans-serif/g' > $@
 
 definitions.kt :
 	typeshare . --lang=kotlin --output-file=$@
