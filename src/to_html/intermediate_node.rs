@@ -81,6 +81,7 @@ pub struct Appearance {
     pub fill: Option<String>,
     pub font: Option<String>,
     pub opacity: Option<f64>,
+    pub preserve_whitespace: bool,
     pub text_tranform: Option<TextCase>,
     pub text_decoration_line: Option<TextDecoration>,
 }
@@ -327,6 +328,27 @@ impl<'a> IntermediateNode<'a> {
                 opacity: node.opacity,
                 text_decoration_line: node.style.as_ref().and_then(|s| s.text_decoration),
                 text_tranform: node.style.as_ref().and_then(|s| s.text_case),
+                preserve_whitespace: node
+                    .characters
+                    .as_deref()
+                    .map(|text| {
+                        text.contains("\n") || {
+                            // detect if the first or last characters are whitespace, or if there is double whitespace
+                            let mut last_char_was_whitespace = true;
+                            for c in text.chars() {
+                                if c.is_ascii_whitespace() {
+                                    if last_char_was_whitespace {
+                                        break;
+                                    }
+                                    last_char_was_whitespace = true
+                                } else {
+                                    last_char_was_whitespace = false
+                                }
+                            }
+                            last_char_was_whitespace
+                        }
+                    })
+                    .unwrap_or(false),
             },
             frame_appearance: FrameAppearance {
                 background: node.background(css_variables),
@@ -585,6 +607,12 @@ impl<'a> IntermediateNode<'a> {
                     TextCase::SmallCaps => None,
                     TextCase::SmallCapsForced => None,
                 }),
+            ),
+            (
+                "white-space",
+                self.appearance
+                    .preserve_whitespace
+                    .then_some(Cow::Borrowed("pre-wrap")),
             ),
             (
                 "width",

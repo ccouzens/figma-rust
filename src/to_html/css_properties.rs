@@ -11,7 +11,6 @@ pub trait CssProperties {
     fn background(&self, css_variables: &mut CSSVariablesMap) -> Option<String>;
     fn box_shadow(&self) -> Option<String>;
     fn font(&self, css_variables: &mut CSSVariablesMap) -> Option<String>;
-    fn white_space(&self) -> Option<String>;
 }
 
 pub fn fills_color(node: &Node, css_variables: &mut CSSVariablesMap) -> Option<String> {
@@ -148,29 +147,6 @@ impl CssProperties for Node {
                 None => Some(font_value),
             },
             None => Some(font_value),
-        }
-    }
-
-    fn white_space(&self) -> Option<String> {
-        let characters = self.characters.as_deref()?;
-        // If any line includes repeated, leading or trailing whitespace then we should preserve it
-        if characters.split('\n').any(|line| {
-            let mut last_char_was_whitespace = true;
-            for c in line.chars() {
-                if c.is_ascii_whitespace() {
-                    if last_char_was_whitespace {
-                        return true;
-                    }
-                    last_char_was_whitespace = true;
-                } else {
-                    last_char_was_whitespace = false;
-                }
-            }
-            last_char_was_whitespace
-        }) {
-            Some("pre-wrap".into())
-        } else {
-            None
         }
     }
 }
