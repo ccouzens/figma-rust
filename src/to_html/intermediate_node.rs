@@ -298,8 +298,27 @@ impl<'a> IntermediateNode<'a> {
                     node.padding_bottom.unwrap_or(0.0),
                     node.padding_left.unwrap_or(0.0),
                 ],
-                align_self: None,
-                flex_grow: None,
+                align_self: match (
+                    parent.and_then(|p| p.layout_mode.as_ref()),
+                    node.layout_align.as_ref(),
+                ) {
+                    (
+                        Some(LayoutMode::Horizontal | LayoutMode::Vertical),
+                        Some(LayoutAlign::Stretch),
+                    ) => Some(AlignSelf::Stretch),
+                    _ => None,
+                },
+                flex_grow: match (
+                    parent.and_then(|p| p.layout_mode.as_ref()),
+                    node.layout_grow,
+                ) {
+                    (Some(LayoutMode::Horizontal | LayoutMode::Vertical), Some(grow))
+                        if grow != 0.0 =>
+                    {
+                        Some(grow)
+                    }
+                    _ => None,
+                },
                 inset: Inset::from_figma_node(node, parent),
                 height: match (parent, node) {
                     (
@@ -512,6 +531,13 @@ impl<'a> IntermediateNode<'a> {
                     }),
             ),
             (
+                "align-self",
+                match self.location.align_self {
+                    Some(AlignSelf::Stretch) => Some(Cow::Borrowed("stretch")),
+                    _ => None,
+                },
+            ),
+            (
                 "background",
                 self.frame_appearance
                     .background
@@ -566,6 +592,10 @@ impl<'a> IntermediateNode<'a> {
             (
                 "fill",
                 self.content_appearance.fill.as_deref().map(Cow::Borrowed),
+            ),
+            (
+                "flex-grow",
+                self.location.flex_grow.map(|g| Cow::Owned(format!("{g}"))),
             ),
             (
                 "font",
