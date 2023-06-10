@@ -196,6 +196,9 @@ pub struct Location {
 
 #[derive(Debug, Serialize)]
 pub struct Appearance {
+    pub color: Option<String>,
+    pub fill: Option<String>,
+    pub font: Option<String>,
     pub opacity: Option<f64>,
 }
 
@@ -216,13 +219,6 @@ pub struct Stroke {
 }
 
 #[derive(Debug, Serialize)]
-pub struct ContentAppearance {
-    pub color: Option<String>,
-    pub fill: Option<String>,
-    pub font: Option<String>,
-}
-
-#[derive(Debug, Serialize)]
 pub struct Figma<'a> {
     pub name: &'a str,
     pub id: &'a str,
@@ -238,12 +234,11 @@ pub enum IntermediateNodeType<'a> {
 
 #[derive(Debug, Serialize)]
 pub struct IntermediateNode<'a> {
-    pub figma: Figma<'a>,
+    pub figma: Option<Figma<'a>>,
     pub flex_container: Option<FlexContainer>,
     pub location: Location,
     pub appearance: Appearance,
     pub frame_appearance: FrameAppearance,
-    pub content_appearance: ContentAppearance,
     pub node_type: IntermediateNodeType<'a>,
 }
 
@@ -254,11 +249,11 @@ impl<'a> IntermediateNode<'a> {
         css_variables: &mut CSSVariablesMap,
     ) -> Self {
         IntermediateNode {
-            figma: Figma {
+            figma: Some(Figma {
                 name: &node.name,
                 id: &node.id,
                 r#type: node.r#type,
-            },
+            }),
             flex_container: {
                 let align_items = match node.counter_axis_align_items {
                     None => AlignItems::Stretch,
@@ -434,6 +429,17 @@ impl<'a> IntermediateNode<'a> {
                 },
             },
             appearance: Appearance {
+                color: match node.r#type {
+                    FigmaNodeType::Text => fills_color(node, css_variables),
+                    _ => None,
+                },
+                fill: match node.r#type {
+                    FigmaNodeType::Vector | FigmaNodeType::BooleanOperation => {
+                        fills_color(node, css_variables)
+                    }
+                    _ => None,
+                },
+                font: node.font(css_variables),
                 opacity: node.opacity,
             },
             frame_appearance: FrameAppearance {
@@ -478,19 +484,6 @@ impl<'a> IntermediateNode<'a> {
                         _ => None,
                     }
                 },
-            },
-            content_appearance: ContentAppearance {
-                color: match node.r#type {
-                    FigmaNodeType::Text => fills_color(node, css_variables),
-                    _ => None,
-                },
-                fill: match node.r#type {
-                    FigmaNodeType::Vector | FigmaNodeType::BooleanOperation => {
-                        fills_color(node, css_variables)
-                    }
-                    _ => None,
-                },
-                font: node.font(css_variables),
             },
             node_type: match node.r#type {
                 FigmaNodeType::Vector | FigmaNodeType::BooleanOperation => {
@@ -572,10 +565,7 @@ impl<'a> IntermediateNode<'a> {
                     None
                 }
             }),
-            (
-                "color",
-                self.content_appearance.color.as_deref().map(Cow::Borrowed),
-            ),
+            ("color", self.appearance.color.as_deref().map(Cow::Borrowed)),
             (
                 "display",
                 self.flex_container.as_ref().map(|_| Cow::Borrowed("flex")),
@@ -589,18 +579,12 @@ impl<'a> IntermediateNode<'a> {
                     })
                 }),
             ),
-            (
-                "fill",
-                self.content_appearance.fill.as_deref().map(Cow::Borrowed),
-            ),
+            ("fill", self.appearance.fill.as_deref().map(Cow::Borrowed)),
             (
                 "flex-grow",
                 self.location.flex_grow.map(|g| Cow::Owned(format!("{g}"))),
             ),
-            (
-                "font",
-                self.content_appearance.font.as_deref().map(Cow::Borrowed),
-            ),
+            ("font", self.appearance.font.as_deref().map(Cow::Borrowed)),
             (
                 "gap",
                 self.flex_container.as_ref().and_then(|c| {

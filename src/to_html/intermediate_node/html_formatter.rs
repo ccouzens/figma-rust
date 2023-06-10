@@ -72,14 +72,11 @@ fn common_attributes(
     level: u16,
     intermediate_node: &IntermediateNode<'_>,
 ) -> std::fmt::Result {
-    attribute(f, level, "data-figma-name", intermediate_node.figma.name)?;
-    attribute(f, level, "data-figma-id", intermediate_node.figma.id)?;
-    attribute(
-        f,
-        level,
-        "data-figma-type",
-        &format!("{:?}", intermediate_node.figma.r#type),
-    )?;
+    if let Some(figma) = intermediate_node.figma.as_ref() {
+        attribute(f, level, "data-figma-name", figma.name)?;
+        attribute(f, level, "data-figma-id", figma.id)?;
+        attribute(f, level, "data-figma-type", &format!("{:?}", figma.r#type))?;
+    }
     let css = format_css(level + 1, &intermediate_node.naive_css_string())
         .map_err(|_| std::fmt::Error)?;
     if !css.trim().is_empty() {
