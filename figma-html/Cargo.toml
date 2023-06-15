@@ -1,0 +1,16 @@
+[package]
+name = "figma-html"
+version = "0.1.0"
+edition = "2021"
+authors = ["Chris Couzens <ccouzens@gmail.com>"]
+description = "Figma to CSS and HTML toolkit"
+license = "MIT"
+repository = "https://github.com/ccouzens/figma-rust"
+keywords = ["Figma"]
+
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+figma-schema = { path = "../figma-schema" }
+

@@ -7,10 +7,12 @@ edition = "2021"
 [workspace]
 members = [
   "figma-schema",
+  "figma-html",
 ]
 
 [dependencies]
 figma-schema = { path = "./figma-schema" }
+figma-html = { path = "./figma-html" }
 anyhow = "1.0.68"
 clap = { version = "4.0.32", features = ["derive"] }
 html-escape = "0.2.13"
