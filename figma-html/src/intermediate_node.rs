@@ -332,7 +332,7 @@ impl<'a> IntermediateNode<'a> {
                     .characters
                     .as_deref()
                     .map(|text| {
-                        text.contains("\n") || {
+                        text.contains('\n') || {
                             // detect if the first or last characters are whitespace, or if there is double whitespace
                             let mut last_char_was_whitespace = true;
                             for c in text.chars() {

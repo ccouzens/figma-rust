@@ -432,13 +432,24 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "clap",
+ "figma-html",
+ "figma-schema",
+ "indexmap",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "figma-html"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
  "figma-schema",
  "html-escape",
  "indexmap",
  "itertools",
  "lightningcss",
  "serde",
- "serde_json",
 ]
 
 [[package]]

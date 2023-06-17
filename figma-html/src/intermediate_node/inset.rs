@@ -6,7 +6,7 @@ use figma_schema::{
 };
 use serde::Serialize;
 
-use crate::to_html::css_properties::absolute_bounding_box;
+use crate::css_properties::absolute_bounding_box;
 
 #[derive(Debug, Serialize)]
 pub enum Inset {
