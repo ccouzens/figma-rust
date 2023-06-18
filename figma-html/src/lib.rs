@@ -8,7 +8,7 @@ use self::intermediate_node::{
 };
 
 mod css_properties;
-mod intermediate_node;
+pub mod intermediate_node;
 
 pub fn file_collect_css_variables(file: &figma_schema::File) -> CSSVariablesMap {
     file.styles

@@ -7,7 +7,7 @@ use figma_schema::{
     TextCase, TextDecoration, TypeStyle,
 };
 use indexmap::IndexMap;
-use serde::Serialize;
+use serde::{Serialize, Deserialize};
 
 mod html_formatter;
 mod inset;
@@ -16,7 +16,7 @@ pub use inset::Inset;
 
 use super::css_properties::{absolute_bounding_box, fills_color, stroke_color, CssProperties};
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct CSSVariable {
     pub name: String,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -25,7 +25,7 @@ pub struct CSSVariable {
 
 pub type CSSVariablesMap<'a> = IndexMap<&'a str, CSSVariable>;
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub enum AlignItems {
     Stretch,
     FlexStart,
@@ -34,18 +34,18 @@ pub enum AlignItems {
     Baseline,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub enum AlignSelf {
     Stretch,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub enum FlexDirection {
     Row,
     Column,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub enum JustifyContent {
     FlexStart,
     Center,
@@ -53,13 +53,13 @@ pub enum JustifyContent {
     SpaceBetween,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub enum StrokeStyle {
     Solid,
     Dashed,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct FlexContainer {
     pub align_items: AlignItems,
     pub direction: FlexDirection,
@@ -68,7 +68,7 @@ pub struct FlexContainer {
     pub justify_content: Option<JustifyContent>,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Location {
     pub padding: [f64; 4],
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -83,7 +83,7 @@ pub struct Location {
     pub width: Option<f64>,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Appearance {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub color: Option<String>,
@@ -100,7 +100,7 @@ pub struct Appearance {
     pub text_decoration_line: Option<TextDecoration>,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct FrameAppearance {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub background: Option<String>,
@@ -112,7 +112,7 @@ pub struct FrameAppearance {
     pub stroke: Option<Stroke>,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Stroke {
     pub weights: [f64; 4],
     pub style: StrokeStyle,
@@ -120,21 +120,21 @@ pub struct Stroke {
     pub color: String,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Figma<'a> {
     pub name: &'a str,
     pub id: &'a str,
     pub r#type: FigmaNodeType,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub enum IntermediateNodeType<'a> {
     Vector,
     Text { text: &'a str },
     Frame { children: Vec<IntermediateNode<'a>> },
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct IntermediateNode<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub figma: Option<Figma<'a>>,

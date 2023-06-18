@@ -4,11 +4,11 @@ use figma_schema::{
     LayoutConstraintHorizontal, LayoutConstraintVertical, LayoutMode, LayoutPositioning,
     Node as FigmaNode,
 };
-use serde::Serialize;
+use serde::{Serialize, Deserialize};
 
 use crate::css_properties::absolute_bounding_box;
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub enum Inset {
     Auto,
     /// To be used like so: calc(100% * dy / dx + c px)
