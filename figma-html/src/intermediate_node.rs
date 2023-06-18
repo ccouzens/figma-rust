@@ -27,15 +27,15 @@ pub type CSSVariablesMap<'a> = IndexMap<Cow<'a, str>, CSSVariable>;
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub enum Size {
-    Variable { name: String },
     Pixels(f64),
+    Other(String),
 }
 
 impl fmt::Display for Size {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            Size::Variable { name } => write!(f, "--{name}"),
             Size::Pixels(p) => write!(f, "{p}px"),
+            Size::Other(o) => write!(f, "{o}"),
         }
     }
 }
@@ -522,7 +522,8 @@ impl<'a> IntermediateNode<'a> {
                     ..
                 } = &self.location;
                 if (top != &Size::Pixels(0.0) || bottom != &Size::Pixels(0.0)) && height.is_some()
-                    || (right != &Size::Pixels(0.0) || left != &Size::Pixels(0.0)) && width.is_some()
+                    || (right != &Size::Pixels(0.0) || left != &Size::Pixels(0.0))
+                        && width.is_some()
                 {
                     Some(Cow::Borrowed("border-box"))
                 } else {
@@ -561,7 +562,10 @@ impl<'a> IntermediateNode<'a> {
             ),
             (
                 "height",
-                self.location.height.as_ref().map(|h| Cow::Owned(format!("{h}"))),
+                self.location
+                    .height
+                    .as_ref()
+                    .map(|h| Cow::Owned(format!("{h}"))),
             ),
             (
                 "inset",
@@ -669,7 +673,10 @@ impl<'a> IntermediateNode<'a> {
             ),
             (
                 "width",
-                self.location.width.as_ref().map(|w| Cow::Owned(format!("{w}"))),
+                self.location
+                    .width
+                    .as_ref()
+                    .map(|w| Cow::Owned(format!("{w}"))),
             ),
         ];
         let mut output = String::new();
