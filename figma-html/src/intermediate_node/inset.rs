@@ -4,7 +4,7 @@ use figma_schema::{
     LayoutConstraintHorizontal, LayoutConstraintVertical, LayoutMode, LayoutPositioning,
     Node as FigmaNode,
 };
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 use crate::css_properties::absolute_bounding_box;
 

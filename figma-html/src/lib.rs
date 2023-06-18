@@ -1,4 +1,7 @@
-use std::{io::Write, borrow::{Cow, Borrow}};
+use std::{
+    borrow::{Borrow, Cow},
+    io::Write,
+};
 
 use figma_schema::Node;
 use html_escape::{encode_style, encode_text};

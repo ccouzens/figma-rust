@@ -7,7 +7,7 @@ use figma_schema::{
     TextCase, TextDecoration, TypeStyle,
 };
 use indexmap::IndexMap;
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 mod html_formatter;
 mod inset;
@@ -130,7 +130,7 @@ pub struct Figma<'a> {
 #[derive(Debug, Serialize, Deserialize)]
 pub enum IntermediateNodeType<'a> {
     Vector,
-    Text { text: &'a str },
+    Text { text: Cow<'a, str> },
     Frame { children: Vec<IntermediateNode<'a>> },
 }
 
@@ -145,7 +145,7 @@ pub struct IntermediateNode<'a> {
     pub frame_appearance: FrameAppearance,
     pub node_type: IntermediateNodeType<'a>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub href: Option<&'a str>,
+    pub href: Option<Cow<'a, str>>,
 }
 
 impl<'a> IntermediateNode<'a> {
@@ -419,7 +419,7 @@ impl<'a> IntermediateNode<'a> {
                     IntermediateNodeType::Vector
                 }
                 FigmaNodeType::Text => IntermediateNodeType::Text {
-                    text: node.characters.as_deref().unwrap_or(""),
+                    text: Cow::Borrowed(node.characters.as_deref().unwrap_or("")),
                 },
                 _ => IntermediateNodeType::Frame {
                     children: node
@@ -432,7 +432,8 @@ impl<'a> IntermediateNode<'a> {
                 .style
                 .as_ref()
                 .and_then(|s| s.hyperlink.as_ref())
-                .and_then(|h| h.url.as_deref().or_else(|| h.node_id.as_ref().map(|_| "#"))),
+                .and_then(|h| h.url.as_deref().or_else(|| h.node_id.as_ref().map(|_| "#")))
+                .map(Cow::Borrowed),
         }
     }
 
