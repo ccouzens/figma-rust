@@ -16,8 +16,10 @@ pub use inset::Inset;
 
 use super::css_properties::{absolute_bounding_box, fills_color, stroke_color, CssProperties};
 
+#[derive(Debug, Serialize)]
 pub struct CSSVariable {
     pub name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
 
