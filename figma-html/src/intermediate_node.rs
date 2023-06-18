@@ -1,4 +1,4 @@
-use std::borrow::Cow;
+use std::{borrow::Cow, fmt};
 
 use figma_schema::{
     AxisSizingMode, CounterAxisAlignItems, LayoutAlign, LayoutConstraint,
@@ -24,6 +24,21 @@ pub struct CSSVariable {
 }
 
 pub type CSSVariablesMap<'a> = IndexMap<Cow<'a, str>, CSSVariable>;
+
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
+pub enum Size {
+    Variable { name: String },
+    Pixels(f64),
+}
+
+impl fmt::Display for Size {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Size::Variable { name } => write!(f, "--{name}"),
+            Size::Pixels(p) => write!(f, "{p}px"),
+        }
+    }
+}
 
 #[derive(Debug, Serialize, Deserialize)]
 pub enum AlignItems {
@@ -63,14 +78,14 @@ pub enum StrokeStyle {
 pub struct FlexContainer {
     pub align_items: AlignItems,
     pub direction: FlexDirection,
-    pub gap: f64,
+    pub gap: Size,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub justify_content: Option<JustifyContent>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Location {
-    pub padding: [f64; 4],
+    pub padding: [Size; 4],
     #[serde(skip_serializing_if = "Option::is_none")]
     pub align_self: Option<AlignSelf>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -78,9 +93,9 @@ pub struct Location {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub inset: Option<[Inset; 4]>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub height: Option<f64>,
+    pub height: Option<Size>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub width: Option<f64>,
+    pub width: Option<Size>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -105,7 +120,7 @@ pub struct FrameAppearance {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub background: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub border_radius: Option<[f64; 4]>,
+    pub border_radius: Option<[Size; 4]>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub box_shadow: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -168,7 +183,7 @@ impl<'a> IntermediateNode<'a> {
                     Some(CounterAxisAlignItems::Max) => AlignItems::FlexEnd,
                     Some(CounterAxisAlignItems::Baseline) => AlignItems::Baseline,
                 };
-                let gap = node.item_spacing.unwrap_or(0.0);
+                let gap = Size::Pixels(node.item_spacing.unwrap_or(0.0));
                 let justify_content = match node.primary_axis_align_items {
                     None => None,
                     Some(PrimaryAxisAlignItems::Min) => Some(JustifyContent::FlexStart),
@@ -194,10 +209,10 @@ impl<'a> IntermediateNode<'a> {
             },
             location: Location {
                 padding: [
-                    node.padding_top.unwrap_or(0.0),
-                    node.padding_right.unwrap_or(0.0),
-                    node.padding_bottom.unwrap_or(0.0),
-                    node.padding_left.unwrap_or(0.0),
+                    Size::Pixels(node.padding_top.unwrap_or(0.0)),
+                    Size::Pixels(node.padding_right.unwrap_or(0.0)),
+                    Size::Pixels(node.padding_bottom.unwrap_or(0.0)),
+                    Size::Pixels(node.padding_left.unwrap_or(0.0)),
                 ],
                 align_self: match (
                     parent.and_then(|p| p.layout_mode.as_ref()),
@@ -273,7 +288,9 @@ impl<'a> IntermediateNode<'a> {
                             ..
                         },
                     ) if counter_axis_sizing_mode != &Some(AxisSizingMode::Fixed) => None,
-                    _ => absolute_bounding_box(node).and_then(|b| b.height),
+                    _ => absolute_bounding_box(node)
+                        .and_then(|b| b.height)
+                        .map(Size::Pixels),
                 },
                 width: match (parent, node) {
                     (
@@ -331,7 +348,9 @@ impl<'a> IntermediateNode<'a> {
                             ..
                         },
                     ) if counter_axis_sizing_mode != &Some(AxisSizingMode::Fixed) => None,
-                    _ => absolute_bounding_box(node).and_then(|b| b.width),
+                    _ => absolute_bounding_box(node)
+                        .and_then(|b| b.width)
+                        .map(Size::Pixels),
                 },
             },
             appearance: Appearance {
@@ -373,7 +392,16 @@ impl<'a> IntermediateNode<'a> {
             },
             frame_appearance: FrameAppearance {
                 background: node.background(css_variables),
-                border_radius: node.rectangle_corner_radii(),
+                border_radius: node
+                    .rectangle_corner_radii()
+                    .map(|[top, right, bottom, left]| {
+                        [
+                            Size::Pixels(top),
+                            Size::Pixels(right),
+                            Size::Pixels(bottom),
+                            Size::Pixels(left),
+                        ]
+                    }),
                 box_shadow: node.box_shadow(),
                 stroke: {
                     let style =
@@ -476,7 +504,8 @@ impl<'a> IntermediateNode<'a> {
                 "border-radius",
                 self.frame_appearance
                     .border_radius
-                    .map(|[nw, ne, se, sw]| Cow::Owned(format!("{nw}px {ne}px {se}px {sw}px"))),
+                    .as_ref()
+                    .map(|[nw, ne, se, sw]| Cow::Owned(format!("{nw} {ne} {se} {sw}"))),
             ),
             (
                 "box-shadow",
@@ -491,9 +520,9 @@ impl<'a> IntermediateNode<'a> {
                     height,
                     padding: [top, right, bottom, left],
                     ..
-                } = self.location;
-                if (top != 0.0 || bottom != 0.0) && height.is_some()
-                    || (right != 0.0 || left != 0.0) && width.is_some()
+                } = &self.location;
+                if (top != &Size::Pixels(0.0) || bottom != &Size::Pixels(0.0)) && height.is_some()
+                    || (right != &Size::Pixels(0.0) || left != &Size::Pixels(0.0)) && width.is_some()
                 {
                     Some(Cow::Borrowed("border-box"))
                 } else {
@@ -523,16 +552,16 @@ impl<'a> IntermediateNode<'a> {
             (
                 "gap",
                 self.flex_container.as_ref().and_then(|c| {
-                    if c.gap == 0.0 {
+                    if c.gap == Size::Pixels(0.0) {
                         None
                     } else {
-                        Some(Cow::Owned(format!("{}px", c.gap)))
+                        Some(Cow::Owned(format!("{}", c.gap)))
                     }
                 }),
             ),
             (
                 "height",
-                self.location.height.map(|h| Cow::Owned(format!("{h}px"))),
+                self.location.height.as_ref().map(|h| Cow::Owned(format!("{h}"))),
             ),
             (
                 "inset",
@@ -589,14 +618,16 @@ impl<'a> IntermediateNode<'a> {
                 }),
             ),
             ("padding", {
-                let p = self.location.padding;
-                if p == [0.0, 0.0, 0.0, 0.0] {
+                let p = &self.location.padding;
+                if p == &[
+                    Size::Pixels(0.0),
+                    Size::Pixels(0.0),
+                    Size::Pixels(0.0),
+                    Size::Pixels(0.0),
+                ] {
                     None
                 } else {
-                    Some(Cow::Owned(format!(
-                        "{}px {}px {}px {}px",
-                        p[0], p[1], p[2], p[3]
-                    )))
+                    Some(Cow::Owned(format!("{} {} {} {}", p[0], p[1], p[2], p[3])))
                 }
             }),
             (
@@ -638,7 +669,7 @@ impl<'a> IntermediateNode<'a> {
             ),
             (
                 "width",
-                self.location.width.map(|w| Cow::Owned(format!("{w}px"))),
+                self.location.width.as_ref().map(|w| Cow::Owned(format!("{w}"))),
             ),
         ];
         let mut output = String::new();
