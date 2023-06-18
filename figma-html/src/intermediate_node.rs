@@ -62,35 +62,51 @@ pub struct FlexContainer {
     pub align_items: AlignItems,
     pub direction: FlexDirection,
     pub gap: f64,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub justify_content: Option<JustifyContent>,
 }
 
 #[derive(Debug, Serialize)]
 pub struct Location {
     pub padding: [f64; 4],
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub align_self: Option<AlignSelf>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub flex_grow: Option<f64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub inset: Option<[Inset; 4]>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub height: Option<f64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub width: Option<f64>,
 }
 
 #[derive(Debug, Serialize)]
 pub struct Appearance {
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub color: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub fill: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub font: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub opacity: Option<f64>,
     pub preserve_whitespace: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub text_tranform: Option<TextCase>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub text_decoration_line: Option<TextDecoration>,
 }
 
 #[derive(Debug, Serialize)]
 pub struct FrameAppearance {
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub background: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub border_radius: Option<[f64; 4]>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub box_shadow: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub stroke: Option<Stroke>,
 }
 
@@ -118,12 +134,15 @@ pub enum IntermediateNodeType<'a> {
 
 #[derive(Debug, Serialize)]
 pub struct IntermediateNode<'a> {
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub figma: Option<Figma<'a>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub flex_container: Option<FlexContainer>,
     pub location: Location,
     pub appearance: Appearance,
     pub frame_appearance: FrameAppearance,
     pub node_type: IntermediateNodeType<'a>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub href: Option<&'a str>,
 }
 
