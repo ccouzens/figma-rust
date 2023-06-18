@@ -23,7 +23,7 @@ pub struct CSSVariable {
     pub value: Option<String>,
 }
 
-pub type CSSVariablesMap<'a> = IndexMap<&'a str, CSSVariable>;
+pub type CSSVariablesMap<'a> = IndexMap<Cow<'a, str>, CSSVariable>;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub enum AlignItems {
@@ -122,8 +122,8 @@ pub struct Stroke {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Figma<'a> {
-    pub name: &'a str,
-    pub id: &'a str,
+    pub name: Cow<'a, str>,
+    pub id: Cow<'a, str>,
     pub r#type: FigmaNodeType,
 }
 
@@ -156,8 +156,8 @@ impl<'a> IntermediateNode<'a> {
     ) -> Self {
         IntermediateNode {
             figma: Some(Figma {
-                name: &node.name,
-                id: &node.id,
+                name: Cow::Borrowed(&node.name),
+                id: Cow::Borrowed(&node.id),
                 r#type: node.r#type,
             }),
             flex_container: {

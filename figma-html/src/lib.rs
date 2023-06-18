@@ -1,4 +1,4 @@
-use std::io::Write;
+use std::{io::Write, borrow::{Cow, Borrow}};
 
 use figma_schema::Node;
 use html_escape::{encode_style, encode_text};
@@ -15,7 +15,7 @@ pub fn file_collect_css_variables(file: &figma_schema::File) -> CSSVariablesMap 
         .iter()
         .map(|(key, style)| {
             (
-                key.as_str(),
+                Cow::Borrowed(key.as_str()),
                 CSSVariable {
                     name: format!(
                         "--{}",
@@ -76,7 +76,7 @@ pub fn intermediate_node_to_html_writer(
     >{}</body
   ></html
 >"#,
-        encode_text(&node.figma.as_ref().map(|f| f.name).unwrap_or("")),
+        encode_text(&node.figma.as_ref().map(|f| f.name.borrow()).unwrap_or("")),
         encode_style(&body_css),
         HtmlFormatter {
             intermediate_node: node,

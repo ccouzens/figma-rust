@@ -1,6 +1,6 @@
 use anyhow::{anyhow, Context, Result};
 use lightningcss::stylesheet::{MinifyOptions, ParserOptions, PrinterOptions, StyleAttribute};
-use std::fmt::{Display, Write};
+use std::{fmt::{Display, Write}, borrow::Borrow};
 
 use super::{IntermediateNode, IntermediateNodeType};
 
@@ -73,8 +73,8 @@ fn common_attributes(
     intermediate_node: &IntermediateNode<'_>,
 ) -> std::fmt::Result {
     if let Some(figma) = intermediate_node.figma.as_ref() {
-        attribute(f, level, "data-figma-name", figma.name)?;
-        attribute(f, level, "data-figma-id", figma.id)?;
+        attribute(f, level, "data-figma-name", figma.name.borrow())?;
+        attribute(f, level, "data-figma-id", figma.id.borrow())?;
         attribute(f, level, "data-figma-type", &format!("{:?}", figma.r#type))?;
     }
     if let Some(href) = intermediate_node.href {
