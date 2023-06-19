@@ -1,4 +1,4 @@
-use std::{borrow::Cow, fmt};
+use std::borrow::Cow;
 
 use figma_schema::{
     AxisSizingMode, CounterAxisAlignItems, LayoutAlign, LayoutConstraint,
@@ -11,8 +11,10 @@ use serde::{Deserialize, Serialize};
 
 mod html_formatter;
 mod inset;
+mod size;
 pub use html_formatter::{format_css, HtmlFormatter};
 pub use inset::Inset;
+pub use size::Size;
 
 use super::css_properties::{absolute_bounding_box, fills_color, stroke_color, CssProperties};
 
@@ -24,21 +26,6 @@ pub struct CSSVariable {
 }
 
 pub type CSSVariablesMap<'a> = IndexMap<Cow<'a, str>, CSSVariable>;
-
-#[derive(Debug, Serialize, Deserialize, PartialEq)]
-pub enum Size {
-    Pixels(f64),
-    Other(String),
-}
-
-impl fmt::Display for Size {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            Size::Pixels(p) => write!(f, "{p}px"),
-            Size::Other(o) => write!(f, "{o}"),
-        }
-    }
-}
 
 #[derive(Debug, Serialize, Deserialize)]
 pub enum AlignItems {
