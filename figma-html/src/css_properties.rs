@@ -1,6 +1,6 @@
 use std::cmp::Ordering;
 
-use figma_schema::{EffectType, Node, NodeType, Rectangle, TextCase};
+use figma_schema::{Color, EffectType, Node, NodeType, Rectangle, TextCase};
 
 use super::CSSVariablesMap;
 
@@ -20,7 +20,21 @@ pub fn fills_color(node: &Node, css_variables: &mut CSSVariablesMap) -> Option<S
         .filter(|paint| paint.visible() && paint.opacity() != 0.0)
         .flat_map(|paint| paint.color())
         .flat_map(|c| c.to_option_rgb_string())
-        .next()?;
+        .next()
+        .or_else(|| {
+            node.fills()
+                .iter()
+                .filter(|paint| paint.visible())
+                .flat_map(|paint| paint.color())
+                .map(|c| {
+                    Color {
+                        alpha: 0.0,
+                        ..c.clone()
+                    }
+                    .to_rgb_string()
+                })
+                .next()
+        })?;
 
     match node.styles.as_ref().and_then(|s| s.fill.as_deref()) {
         Some(s_ref) => match css_variables.get_mut(s_ref) {
