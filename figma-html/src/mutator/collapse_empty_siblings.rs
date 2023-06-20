@@ -8,7 +8,7 @@ use crate::intermediate_node::{
 use super::recursive_visitor_mut;
 
 /**
- * Look for pairs of nodes where one can be converted into `padding` on the other.
+ * Look for pairs of nodes where one is merely sizing and can be converted into `padding` on the other.
  *
  * The node to be removed will be referred to as the empty node.
  * The node to stay will be referred to as the kept node.

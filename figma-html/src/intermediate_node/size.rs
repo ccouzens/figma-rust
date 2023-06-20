@@ -21,6 +21,12 @@ impl Add for &Size {
     type Output = Size;
 
     fn add(self, other: Self) -> Size {
+        if self == &Size::Pixels(0.0) {
+            return other.clone();
+        }
+        if other == &Size::Pixels(0.0) {
+            return self.clone();
+        }
         match (self, other) {
             (Size::Pixels(a), Size::Pixels(b)) => Size::Pixels(a + b),
             _ => Size::Other(format!("calc({self} + {other})")),
