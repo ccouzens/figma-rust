@@ -2,7 +2,7 @@ use std::{fmt, ops::Add};
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Serialize, Deserialize, PartialEq, Clone)]
 pub enum Size {
     Pixels(f64),
     Other(String),

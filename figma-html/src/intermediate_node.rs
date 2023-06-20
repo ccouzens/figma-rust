@@ -41,7 +41,7 @@ pub enum AlignSelf {
     Stretch,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Copy, Clone, PartialEq)]
 pub enum FlexDirection {
     Row,
     Column,

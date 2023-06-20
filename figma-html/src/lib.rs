@@ -5,6 +5,7 @@ use std::{
 
 use figma_schema::Node;
 use html_escape::{encode_style, encode_text};
+pub mod mutator;
 
 use self::intermediate_node::{
     format_css, CSSVariable, CSSVariablesMap, HtmlFormatter, IntermediateNode,
