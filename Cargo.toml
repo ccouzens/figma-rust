@@ -15,6 +15,6 @@ figma-schema = { path = "./figma-schema" }
 figma-html = { path = "./figma-html" }
 anyhow = "1.0.68"
 clap = { version = "4.0.32", features = ["derive"] }
-indexmap = { version = "1.9.2", features = ["serde"] }
+indexmap = { version = "2.0.0", features = ["serde"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = { version = "1.0", features = ["preserve_order"] }

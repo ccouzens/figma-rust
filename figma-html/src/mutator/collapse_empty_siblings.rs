@@ -2,7 +2,7 @@ use std::borrow::Cow;
 
 use crate::intermediate_node::{
     CSSVariablesMap, FlexContainer, FlexDirection, FrameAppearance, IntermediateNode,
-    IntermediateNodeType, JustifyContent, Size,
+    IntermediateNodeType, JustifyContent, Length,
 };
 
 use super::recursive_visitor_mut;
@@ -122,7 +122,7 @@ pub fn collapse_empty_siblings(
                             || (*flex_direction == FlexDirection::Column
                                 && empty_node.location.height.is_none()
                                 && kept_node.location.height.is_none()))
-                        && (*gap == Size::Pixels(0.0)
+                        && (gap == &Length::Zero
                             || (empty_node_background.is_none()
                                 || empty_node_background == parent_node_background))
                     {
@@ -133,8 +133,8 @@ pub fn collapse_empty_siblings(
                             .map(Cow::Borrowed)
                             .unwrap_or_else(|| {
                                 Cow::Owned(
-                                    &empty_node.location.padding[1]
-                                        + &empty_node.location.padding[3],
+                                    empty_node.location.padding[1].clone()
+                                        + empty_node.location.padding[3].clone(),
                                 )
                             });
                         let height = empty_node
@@ -144,33 +144,37 @@ pub fn collapse_empty_siblings(
                             .map(Cow::Borrowed)
                             .unwrap_or_else(|| {
                                 Cow::Owned(
-                                    &empty_node.location.padding[0]
-                                        + &empty_node.location.padding[2],
+                                    empty_node.location.padding[0].clone()
+                                        + empty_node.location.padding[2].clone(),
                                 )
                             });
                         if (*flex_direction == FlexDirection::Row
-                            && height.as_ref() == &Size::Pixels(0.0))
+                            && height.as_ref() == &Length::Zero)
                             || (*flex_direction == FlexDirection::Column
-                                && width.as_ref() == &Size::Pixels(0.0))
+                                && width.as_ref() == &Length::Zero)
                         {
                             match flex_direction {
                                 FlexDirection::Row => {
-                                    let width = width.as_ref() + gap;
-                                    if let Some(k_width) = kept_node.location.width.as_mut() {
-                                        *k_width = &width + k_width;
+                                    let width = width.into_owned() + gap.clone();
+                                    if let Some(k_width) = kept_node.location.width.take() {
+                                        kept_node.location.width = Some(width.clone() + k_width);
                                     }
                                     let i = if direction_forwards { 3 } else { 1 };
-                                    kept_node.location.padding[i] =
-                                        &kept_node.location.padding[i] + &width;
+                                    kept_node.location.padding[i] = std::mem::replace(
+                                        &mut kept_node.location.padding[i],
+                                        Length::Zero,
+                                    ) + width;
                                 }
                                 FlexDirection::Column => {
-                                    let height = height.as_ref() + gap;
-                                    if let Some(k_height) = kept_node.location.height.as_mut() {
-                                        *k_height = &height + k_height;
+                                    let height = height.into_owned() + gap.clone();
+                                    if let Some(k_height) = kept_node.location.height.take() {
+                                        kept_node.location.height = Some(height.clone() + k_height);
                                     }
                                     let i = if direction_forwards { 0 } else { 2 };
-                                    kept_node.location.padding[i] =
-                                        &kept_node.location.padding[i] + &height;
+                                    kept_node.location.padding[i] = std::mem::replace(
+                                        &mut kept_node.location.padding[i],
+                                        Length::Zero,
+                                    ) + height;
                                 }
                             }
                             match direction_forwards {

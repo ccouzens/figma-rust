@@ -11,10 +11,10 @@ use serde::{Deserialize, Serialize};
 
 mod html_formatter;
 mod inset;
-mod size;
+mod length;
 pub use html_formatter::{format_css, HtmlFormatter};
 pub use inset::Inset;
-pub use size::Size;
+pub use length::Length;
 
 use super::css_properties::{absolute_bounding_box, fills_color, stroke_color, CssProperties};
 
@@ -62,17 +62,17 @@ pub enum StrokeStyle {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct FlexContainer {
+pub struct FlexContainer<'a> {
     pub align_items: AlignItems,
     pub direction: FlexDirection,
-    pub gap: Size,
+    pub gap: Length<'a>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub justify_content: Option<JustifyContent>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct Location {
-    pub padding: [Size; 4],
+pub struct Location<'a> {
+    pub padding: [Length<'a>; 4],
     #[serde(skip_serializing_if = "Option::is_none")]
     pub align_self: Option<AlignSelf>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -80,9 +80,9 @@ pub struct Location {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub inset: Option<[Inset; 4]>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub height: Option<Size>,
+    pub height: Option<Length<'a>>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub width: Option<Size>,
+    pub width: Option<Length<'a>>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -103,11 +103,11 @@ pub struct Appearance {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct FrameAppearance {
+pub struct FrameAppearance<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub background: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub border_radius: Option<[Size; 4]>,
+    pub border_radius: Option<[Length<'a>; 4]>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub box_shadow: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -141,10 +141,10 @@ pub struct IntermediateNode<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub figma: Option<Figma<'a>>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub flex_container: Option<FlexContainer>,
-    pub location: Location,
+    pub flex_container: Option<FlexContainer<'a>>,
+    pub location: Location<'a>,
     pub appearance: Appearance,
-    pub frame_appearance: FrameAppearance,
+    pub frame_appearance: FrameAppearance<'a>,
     pub node_type: IntermediateNodeType<'a>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub href: Option<Cow<'a, str>>,
@@ -170,7 +170,7 @@ impl<'a> IntermediateNode<'a> {
                     Some(CounterAxisAlignItems::Max) => AlignItems::FlexEnd,
                     Some(CounterAxisAlignItems::Baseline) => AlignItems::Baseline,
                 };
-                let gap = Size::Pixels(node.item_spacing.unwrap_or(0.0));
+                let gap = Length::new_from_option_pixels(node.item_spacing);
                 let justify_content = match node.primary_axis_align_items {
                     None => None,
                     Some(PrimaryAxisAlignItems::Min) => Some(JustifyContent::FlexStart),
@@ -196,10 +196,10 @@ impl<'a> IntermediateNode<'a> {
             },
             location: Location {
                 padding: [
-                    Size::Pixels(node.padding_top.unwrap_or(0.0)),
-                    Size::Pixels(node.padding_right.unwrap_or(0.0)),
-                    Size::Pixels(node.padding_bottom.unwrap_or(0.0)),
-                    Size::Pixels(node.padding_left.unwrap_or(0.0)),
+                    Length::new_from_option_pixels(node.padding_top),
+                    Length::new_from_option_pixels(node.padding_right),
+                    Length::new_from_option_pixels(node.padding_bottom),
+                    Length::new_from_option_pixels(node.padding_left),
                 ],
                 align_self: match (
                     parent.and_then(|p| p.layout_mode.as_ref()),
@@ -277,7 +277,7 @@ impl<'a> IntermediateNode<'a> {
                     ) if counter_axis_sizing_mode != &Some(AxisSizingMode::Fixed) => None,
                     _ => absolute_bounding_box(node)
                         .and_then(|b| b.height)
-                        .map(Size::Pixels),
+                        .map(|h| Length::new_from_option_pixels(Some(h))),
                 },
                 width: match (parent, node) {
                     (
@@ -337,7 +337,7 @@ impl<'a> IntermediateNode<'a> {
                     ) if counter_axis_sizing_mode != &Some(AxisSizingMode::Fixed) => None,
                     _ => absolute_bounding_box(node)
                         .and_then(|b| b.width)
-                        .map(Size::Pixels),
+                        .map(|w| Length::new_from_option_pixels(Some(w))),
                 },
             },
             appearance: Appearance {
@@ -383,10 +383,10 @@ impl<'a> IntermediateNode<'a> {
                     .rectangle_corner_radii()
                     .map(|[top, right, bottom, left]| {
                         [
-                            Size::Pixels(top),
-                            Size::Pixels(right),
-                            Size::Pixels(bottom),
-                            Size::Pixels(left),
+                            Length::new_from_option_pixels(Some(top)),
+                            Length::new_from_option_pixels(Some(right)),
+                            Length::new_from_option_pixels(Some(bottom)),
+                            Length::new_from_option_pixels(Some(left)),
                         ]
                     }),
                 box_shadow: node.box_shadow(),
@@ -508,9 +508,8 @@ impl<'a> IntermediateNode<'a> {
                     padding: [top, right, bottom, left],
                     ..
                 } = &self.location;
-                if (top != &Size::Pixels(0.0) || bottom != &Size::Pixels(0.0)) && height.is_some()
-                    || (right != &Size::Pixels(0.0) || left != &Size::Pixels(0.0))
-                        && width.is_some()
+                if (top != &Length::Zero || bottom != &Length::Zero) && height.is_some()
+                    || (right != &Length::Zero || left != &Length::Zero) && width.is_some()
                 {
                     Some(Cow::Borrowed("border-box"))
                 } else {
@@ -540,7 +539,7 @@ impl<'a> IntermediateNode<'a> {
             (
                 "gap",
                 self.flex_container.as_ref().and_then(|c| {
-                    if c.gap == Size::Pixels(0.0) {
+                    if c.gap == Length::Zero {
                         None
                     } else {
                         Some(Cow::Owned(format!("{}", c.gap)))
@@ -610,12 +609,7 @@ impl<'a> IntermediateNode<'a> {
             ),
             ("padding", {
                 let p = &self.location.padding;
-                if p == &[
-                    Size::Pixels(0.0),
-                    Size::Pixels(0.0),
-                    Size::Pixels(0.0),
-                    Size::Pixels(0.0),
-                ] {
+                if p == &[Length::Zero, Length::Zero, Length::Zero, Length::Zero] {
                     None
                 } else {
                     Some(Cow::Owned(format!("{} {} {} {}", p[0], p[1], p[2], p[3])))

@@ -15,7 +15,7 @@ keywords = ["Figma"]
 figma-schema = { path = "../figma-schema", version = "0.3.0" }
 anyhow = "1.0.68"
 html-escape = "0.2.13"
-indexmap = { version = "1.9.2", features = ["serde"] }
+indexmap = { version = "2.0.0", features = ["serde"] }
 itertools = "0.10.5"
 lightningcss = "1.0.0-alpha.40"
 serde = { version = "1.0", features = ["derive"] }
