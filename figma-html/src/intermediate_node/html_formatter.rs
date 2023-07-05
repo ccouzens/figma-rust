@@ -83,8 +83,7 @@ fn common_attributes(
     if let Some(href) = intermediate_node.href.as_deref() {
         attribute(f, level, "href", href.borrow())?;
     }
-    let css = format_css(level + 1, &intermediate_node.naive_css_string())
-        .map_err(|_| std::fmt::Error)?;
+    let css = format_css(level + 1, &intermediate_node.naive_css_string()).unwrap();
     if !css.trim().is_empty() {
         attribute(f, level, "style", &css)?;
     }

@@ -196,7 +196,7 @@ impl<'a> fmt::Display for Length<'a> {
                 if multiplier != &1.0 {
                     write!(f, "{multiplier}*")?;
                 }
-                write!(f, "var(--{name}")?;
+                write!(f, "var(--{name})")?;
             }
             Self::Addition { terms } => {
                 for (i, term) in terms.iter().enumerate() {
