@@ -6,6 +6,7 @@ use std::{
 use figma_schema::Node;
 use html_escape::{encode_style, encode_text};
 mod inherited_properties;
+pub use inherited_properties::InheritedProperties;
 pub mod mutator;
 
 use self::intermediate_node::{
