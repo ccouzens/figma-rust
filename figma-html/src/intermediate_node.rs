@@ -95,6 +95,8 @@ pub struct Appearance {
     pub font: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub opacity: Option<f64>,
+    /// Whether it is important to apply `white-space: pre-wrap`. All nodes
+    /// should support it, but not all nodes need it.
     pub preserve_whitespace: bool,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub text_tranform: Option<TextCase>,

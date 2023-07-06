@@ -112,7 +112,7 @@ impl<'a> Length<'a> {
                     values: IndexMap::new(),
                     variables: IndexMap::new(),
                 };
-                fn add_value<'a>(new: &mut Scope<'a>, unit: LengthUnit, value: f64) {
+                fn add_value(new: &mut Scope<'_>, unit: LengthUnit, value: f64) {
                     *new.values.entry(unit).or_insert(0.0) += value;
                 }
                 fn add_var<'a>(
