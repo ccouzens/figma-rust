@@ -3,8 +3,11 @@ use crate::{
     intermediate_node::{IntermediateNode, IntermediateNodeType},
 };
 
-mod collapse_empty_siblings;
+mod collapse_to_padding;
 mod drop_empty_absolute_frames;
+
+pub use collapse_to_padding::collapse_to_padding;
+pub use drop_empty_absolute_frames::drop_empty_absolute_frames;
 
 pub fn recursive_visitor_mut(
     node: &mut IntermediateNode,
@@ -51,6 +54,3 @@ pub fn recursive_filter(
     }
     mutated
 }
-
-pub use collapse_empty_siblings::collapse_empty_siblings;
-pub use drop_empty_absolute_frames::drop_empty_absolute_frames;

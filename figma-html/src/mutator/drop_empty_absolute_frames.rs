@@ -7,6 +7,14 @@ use crate::{
 
 use super::recursive_filter;
 
+/**
+Drop empty absolutely positioned frames
+
+Drop frames with:
+- no children
+- no background background or stroke
+- absolutely positioned so no affect on parent size
+ */
 pub fn drop_empty_absolute_frames(
     node: &mut IntermediateNode,
     _css_variables: &mut CSSVariablesMap,
@@ -25,6 +33,7 @@ pub fn drop_empty_absolute_frames(
                                      stroke: None,
                                      ..
                                  },
+                            href: None,
                              ..
                         } if children.is_empty())
         },
