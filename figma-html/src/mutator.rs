@@ -4,9 +4,11 @@ use crate::{
 };
 
 mod collapse_to_padding;
+mod combine_parent_child;
 mod drop_empty_absolute_frames;
 
 pub use collapse_to_padding::collapse_to_padding;
+pub use combine_parent_child::combine_parent_child;
 pub use drop_empty_absolute_frames::drop_empty_absolute_frames;
 
 pub fn recursive_visitor_mut(
@@ -47,8 +49,9 @@ pub fn recursive_filter(
         *children = children
             .drain(..)
             .filter(|child| {
-                mutated = true;
-                visitor(child, &inherited_properties)
+                let keep = visitor(child, &inherited_properties);
+                mutated |= !keep;
+                keep
             })
             .collect();
     }
