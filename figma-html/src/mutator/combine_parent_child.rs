@@ -73,14 +73,16 @@ pub fn combine_parent_child(
                 ..
             } = grand_parent
             {
-                if !matches!(
-                    grand_parent.flex_container,
-                    Some(FlexContainer {
-                        align_items: AlignItems::Stretch,
-                        ..
-                    })
-                ) {
-                    for parent in parents.iter_mut() {
+                for parent in parents.iter_mut() {
+                    if parent.location.inset.is_some()
+                        || !matches!(
+                            grand_parent.flex_container,
+                            Some(FlexContainer {
+                                align_items: AlignItems::Stretch,
+                                ..
+                            })
+                        )
+                    {
                         mutated = parent_child_combiner(parent) | mutated;
                     }
                 }
