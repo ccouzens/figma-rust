@@ -16,28 +16,14 @@ Generate HTML files from files fetched through the
   data-figma-type="Component"
   style="
     background: var(--Other-Green);
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    color: var(--Background);
+    font: var(--Desktop-Paragraph-Body);
     padding: 8px 12px 7px;
-    display: flex;
     position: absolute;
     inset: 23px auto auto 17px;
     box-shadow: inset 0 -2px #002d18;
   "
->
-  <div
-    data-figma-name="Content: Text"
-    data-figma-id="1:9"
-    data-figma-type="Text"
-    style="
-      color: var(--Background);
-      font: var(--Desktop-Paragraph-Body);
-    "
-  >
-    Button
-  </div>
-</div>
+>Button</div>
 ```
 
 The CSS used to format the HTML is inline on each HTML tag. No attempt is yet
@@ -49,9 +35,6 @@ Using
 mostly prevents that as it gets converted to flex-box. In the example above
 absolute positioning is used to position the outer `<div>` as the component-set
 itself doesn't use auto-layout.
-
-The HTML maps directly to nodes within Figma. A deeply nested Figma design will
-generate deeply nested html.
 
 No fallback fonts are specified.
 

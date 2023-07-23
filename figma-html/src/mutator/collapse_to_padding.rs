@@ -20,8 +20,6 @@ pub fn collapse_to_padding(
     node: &mut IntermediateNode,
     _css_variables: &mut CSSVariablesMap,
 ) -> bool {
-    let mut mutated = false;
-
     recursive_visitor_mut(
         node,
         &InheritedProperties::default(),
@@ -108,14 +106,13 @@ pub fn collapse_to_padding(
                                     + gap.clone()
                                     + primary_axis_size.into_owned();
                                 children.remove(index);
-                                mutated = true;
+                                return true;
                             }
                         }
                     }
                 }
             }
+            false
         },
-    );
-
-    mutated
+    )
 }

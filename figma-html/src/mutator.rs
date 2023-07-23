@@ -14,16 +14,18 @@ pub use drop_empty_absolute_frames::drop_empty_absolute_frames;
 pub fn recursive_visitor_mut(
     node: &mut IntermediateNode,
     inherited_properties: &InheritedProperties,
-    visitor: &mut impl FnMut(&mut IntermediateNode, &InheritedProperties),
-) {
-    visitor(node, inherited_properties);
+    visitor: &mut impl FnMut(&mut IntermediateNode, &InheritedProperties) -> bool,
+) -> bool {
+    let mut mutated = false;
+    mutated = visitor(node, inherited_properties) | mutated;
     let inherited_properties = InheritedProperties::inherit(node, inherited_properties);
 
     if let IntermediateNodeType::Frame { ref mut children } = node.node_type {
         for child in children.iter_mut() {
-            recursive_visitor_mut(child, &inherited_properties, visitor);
+            mutated = recursive_visitor_mut(child, &inherited_properties, visitor) | mutated;
         }
     }
+    mutated
 }
 
 /**
