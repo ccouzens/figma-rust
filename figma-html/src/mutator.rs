@@ -6,11 +6,16 @@ use crate::{
 mod collapse_to_padding;
 mod combine_parent_child;
 mod drop_empty_absolute_frames;
+mod elevate_frame_appearance_properties;
 
 pub use collapse_to_padding::collapse_to_padding;
 pub use combine_parent_child::combine_parent_child;
 pub use drop_empty_absolute_frames::drop_empty_absolute_frames;
+pub use elevate_frame_appearance_properties::elevate_frame_appearance_properties;
 
+/**
+Recursive node visitor with callback that can mutate the node
+ */
 pub fn recursive_visitor_mut(
     node: &mut IntermediateNode,
     inherited_properties: &InheritedProperties,

@@ -32,7 +32,7 @@ In order to do this certain conditions have to be met:
   - The parent cannot be align-self stretch.
   - The grandparent cannot have align-items stretch.
   - This is because it's complicated to combine the child's flex properties
-    into the parnt if it's not the full size of the parent.
+    into the parent if it's not the full size of the parent.
 
 From the parent take:
 * The figma properties (name, id and type)

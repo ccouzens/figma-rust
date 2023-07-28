@@ -21,6 +21,7 @@ pub fn main(
     while mutator::combine_parent_child(&mut node, &mut css_variables)
         || mutator::collapse_to_padding(&mut node, &mut css_variables)
         || mutator::drop_empty_absolute_frames(&mut node, &mut css_variables)
+        || mutator::elevate_frame_appearance_properties(&mut node, &mut css_variables)
     {}
 
     intermediate_node_to_html_writer(stdout, &node, &css_variables)
