@@ -20,6 +20,7 @@ pub fn main(
     let mut node = figma_node_to_intermediate_node(body, &mut css_variables);
     while mutator::combine_parent_child(&mut node, &mut css_variables)
         || mutator::collapse_to_padding(&mut node, &mut css_variables)
+        || mutator::collapse_to_gap(&mut node, &mut css_variables)
         || mutator::drop_empty_absolute_frames(&mut node, &mut css_variables)
         || mutator::elevate_frame_appearance_properties(&mut node, &mut css_variables)
     {}

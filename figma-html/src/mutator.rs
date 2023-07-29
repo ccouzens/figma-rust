@@ -3,11 +3,13 @@ use crate::{
     intermediate_node::{IntermediateNode, IntermediateNodeType},
 };
 
+mod collapse_to_gap;
 mod collapse_to_padding;
 mod combine_parent_child;
 mod drop_empty_absolute_frames;
 mod elevate_frame_appearance_properties;
 
+pub use collapse_to_gap::collapse_to_gap;
 pub use collapse_to_padding::collapse_to_padding;
 pub use combine_parent_child::combine_parent_child;
 pub use drop_empty_absolute_frames::drop_empty_absolute_frames;

@@ -56,7 +56,7 @@ pub fn collapse_to_padding(
                     }];
 
                     let mut static_children = children
-                        .iter_mut()
+                        .iter()
                         .enumerate()
                         .filter(|(_, c)| c.location.inset.is_none());
 
