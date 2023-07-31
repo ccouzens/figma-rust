@@ -31,6 +31,11 @@ fn close_start_tag(f: &mut impl Write, level: u16) -> std::fmt::Result {
     write!(f, ">")
 }
 
+fn close_self_closing_tag(f: &mut impl Write, level: u16) -> std::fmt::Result {
+    indent(f, level)?;
+    write!(f, "/>")
+}
+
 fn attribute(f: &mut impl Write, level: u16, name: &str, value: &str) -> std::fmt::Result {
     indent(f, level + 1)?;
     writeln!(f, "{name}=\"{}\"", encode_double_quoted_attribute(value))
@@ -101,13 +106,14 @@ impl<'a> Display for HtmlFormatter<'a> {
             IntermediateNodeType::Vector => {
                 open_start_tag(f, self.nesting_depth, "svg")?;
                 common_attributes(f, self.nesting_depth, self.intermediate_node)?;
-                attribute(f, self.nesting_depth, "viewBox", "-5 -81 100 100")?;
+                attribute(f, self.nesting_depth, "viewBox", "0 0 1 1")?;
                 close_start_tag(f, self.nesting_depth)?;
-                open_start_tag(f, self.nesting_depth + 1, "text")?;
-                attribute(f, self.nesting_depth + 1, "font-size", "90")?;
-                close_start_tag(f, self.nesting_depth + 1)?;
-                text(f, self.nesting_depth + 1, "�")?;
-                end_tag(f, self.nesting_depth + 1, "text")?;
+                open_start_tag(f, self.nesting_depth + 1, "rect")?;
+                attribute(f, self.nesting_depth + 1, "x", "-10")?;
+                attribute(f, self.nesting_depth + 1, "y", "-10")?;
+                attribute(f, self.nesting_depth + 1, "width", "20")?;
+                attribute(f, self.nesting_depth + 1, "height", "20")?;
+                close_self_closing_tag(f, self.nesting_depth + 1)?;
                 end_tag(f, self.nesting_depth, "svg")?;
             }
             IntermediateNodeType::Text { text: inner_text } => {
