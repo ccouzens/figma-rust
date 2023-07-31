@@ -609,13 +609,6 @@ impl<'a> IntermediateNode<'a> {
                     }
                 }),
             ),
-            (
-                "overflow",
-                self.frame_appearance
-                    .border_radius
-                    .is_some()
-                    .then_some(Cow::Borrowed("hidden")),
-            ),
             ("padding", {
                 let p = &self.location.padding;
                 if p == &[Length::Zero, Length::Zero, Length::Zero, Length::Zero] {

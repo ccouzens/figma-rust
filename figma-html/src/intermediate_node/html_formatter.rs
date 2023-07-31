@@ -109,10 +109,10 @@ impl<'a> Display for HtmlFormatter<'a> {
                 attribute(f, self.nesting_depth, "viewBox", "0 0 1 1")?;
                 close_start_tag(f, self.nesting_depth)?;
                 open_start_tag(f, self.nesting_depth + 1, "rect")?;
-                attribute(f, self.nesting_depth + 1, "x", "-10")?;
-                attribute(f, self.nesting_depth + 1, "y", "-10")?;
-                attribute(f, self.nesting_depth + 1, "width", "20")?;
-                attribute(f, self.nesting_depth + 1, "height", "20")?;
+                attribute(f, self.nesting_depth + 1, "x", "-0.2")?;
+                attribute(f, self.nesting_depth + 1, "y", "-0.2")?;
+                attribute(f, self.nesting_depth + 1, "width", "1.4")?;
+                attribute(f, self.nesting_depth + 1, "height", "1.4")?;
                 close_self_closing_tag(f, self.nesting_depth + 1)?;
                 end_tag(f, self.nesting_depth, "svg")?;
             }
