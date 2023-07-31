@@ -614,7 +614,7 @@ impl<'a> IntermediateNode<'a> {
                 self.frame_appearance
                     .border_radius
                     .is_some()
-                    .then_some(Cow::Borrowed("auto")),
+                    .then_some(Cow::Borrowed("hidden")),
             ),
             ("padding", {
                 let p = &self.location.padding;
