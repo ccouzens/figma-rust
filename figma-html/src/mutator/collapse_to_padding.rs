@@ -49,8 +49,8 @@ pub fn collapse_to_padding(
             {
                 for &direction_forwards in [false, true].iter() {
                     let padding_side = &mut parent_padding[match (&direction, direction_forwards) {
-                        (FlexDirection::Row, true) => 1,
-                        (FlexDirection::Row, false) => 3,
+                        (FlexDirection::Row, true) => 3,
+                        (FlexDirection::Row, false) => 1,
                         (FlexDirection::Column, true) => 0,
                         (FlexDirection::Column, false) => 2,
                     }];
