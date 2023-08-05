@@ -27,7 +27,7 @@ pub struct CSSVariable {
 
 pub type CSSVariablesMap<'a> = IndexMap<Cow<'a, str>, CSSVariable>;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq)]
 pub enum AlignItems {
     Stretch,
     FlexStart,
@@ -36,7 +36,7 @@ pub enum AlignItems {
     Baseline,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub enum AlignSelf {
     Stretch,
 }
@@ -47,7 +47,7 @@ pub enum FlexDirection {
     Column,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone, Copy)]
 pub enum JustifyContent {
     FlexStart,
     Center,
@@ -567,13 +567,11 @@ impl<'a> IntermediateNode<'a> {
             (
                 "justify-content",
                 self.flex_container.as_ref().and_then(|c| {
-                    c.justify_content.as_ref().map(|j| {
-                        Cow::Borrowed(match j {
-                            JustifyContent::FlexStart => "flex-start",
-                            JustifyContent::Center => "center",
-                            JustifyContent::FlexEnd => "flex-end",
-                            JustifyContent::SpaceBetween => "space-between",
-                        })
+                    c.justify_content.as_ref().and_then(|j| match j {
+                        JustifyContent::FlexStart => None,
+                        JustifyContent::Center => Some(Cow::Borrowed("center")),
+                        JustifyContent::FlexEnd => Some(Cow::Borrowed("flex-end")),
+                        JustifyContent::SpaceBetween => Some(Cow::Borrowed("space-between")),
                     })
                 }),
             ),

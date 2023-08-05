@@ -68,7 +68,7 @@ pub fn elevate_frame_appearance_properties(
                             })
                         )
                     {
-                        mutated = parent_child_elevator(parent) | mutated;
+                        mutated |= parent_child_elevator(parent);
                     }
                 }
             }
@@ -76,7 +76,7 @@ pub fn elevate_frame_appearance_properties(
         },
     );
 
-    mutated = parent_child_elevator(node) | mutated;
+    mutated |= parent_child_elevator(node);
     mutated
 }
 
