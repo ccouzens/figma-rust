@@ -61,7 +61,7 @@ pub enum StrokeStyle {
     Dashed,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct FlexContainer<'a> {
     pub align_items: AlignItems,
     pub direction: FlexDirection,

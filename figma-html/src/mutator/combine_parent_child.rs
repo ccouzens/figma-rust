@@ -12,6 +12,43 @@ enum Alignment {
 }
 
 impl Alignment {
+    fn from_flex_container_width(fc: &FlexContainer, child_alignment: Option<&AlignSelf>) -> Self {
+        match fc {
+            FlexContainer {
+                direction: FlexDirection::Row,
+                justify_content,
+                ..
+            } => Alignment::Justify(justify_content.unwrap_or(JustifyContent::FlexStart)),
+
+            FlexContainer {
+                direction: FlexDirection::Column,
+                align_items,
+                ..
+            } => Alignment::Align(match child_alignment {
+                Some(AlignSelf::Stretch) => AlignItems::Stretch,
+                None => *align_items,
+            }),
+        }
+    }
+
+    fn from_flex_container_height(fc: &FlexContainer, child_alignment: Option<&AlignSelf>) -> Self {
+        match fc {
+            FlexContainer {
+                direction: FlexDirection::Row,
+                align_items,
+                ..
+            } => Alignment::Align(match child_alignment {
+                Some(AlignSelf::Stretch) => AlignItems::Stretch,
+                None => *align_items,
+            }),
+            FlexContainer {
+                direction: FlexDirection::Column,
+                justify_content,
+                ..
+            } => Alignment::Justify(justify_content.unwrap_or(JustifyContent::FlexStart)),
+        }
+    }
+
     fn as_simplified_main_axis_alignment(&self) -> Option<JustifyContent> {
         match self {
             Alignment::Justify(JustifyContent::FlexStart | JustifyContent::SpaceBetween) => {
@@ -39,6 +76,20 @@ impl Alignment {
         }
     }
 }
+
+enum FlexAttempt {
+    Parent,
+    Child,
+    Horizonal,
+    Vertical,
+}
+
+const BLOCK_FLEX: FlexContainer = FlexContainer {
+    align_items: AlignItems::Stretch,
+    direction: FlexDirection::Column,
+    gap: Length::Zero,
+    justify_content: None,
+};
 
 /**
 Combine child nodes into their parent
@@ -165,194 +216,216 @@ pub fn combine_parent_child(
                 return false;
             }
 
-            let child_has_multiple_children = match &child.node_type {
-                IntermediateNodeType::Frame { children } if children.len() > 1 => true,
-                _ => false,
-            };
-
-            let parent_width_alignment = match parent.flex_container.as_ref() {
-                None => Alignment::Align(AlignItems::Stretch),
-
-                Some(FlexContainer {
-                    direction: FlexDirection::Row,
-                    justify_content,
-                    ..
-                }) => Alignment::Justify(justify_content.unwrap_or(JustifyContent::FlexStart)),
-
-                Some(FlexContainer {
-                    direction: FlexDirection::Column,
-                    align_items,
-                    ..
-                }) => Alignment::Align(match child.location.align_self {
-                    Some(AlignSelf::Stretch) => AlignItems::Stretch,
-                    None => *align_items,
-                }),
-            };
-
-            let parent_height_alignment = match parent.flex_container.as_ref() {
-                None => Alignment::Align(AlignItems::FlexStart),
-                Some(FlexContainer {
-                    direction: FlexDirection::Row,
-                    align_items,
-                    ..
-                }) => Alignment::Align(match child.location.align_self {
-                    Some(AlignSelf::Stretch) => AlignItems::Stretch,
-                    None => *align_items,
-                }),
-                Some(FlexContainer {
-                    direction: FlexDirection::Column,
-                    justify_content,
-                    ..
-                }) => Alignment::Justify(justify_content.unwrap_or(JustifyContent::FlexStart)),
-            };
-
-            let (
-                parent_main_axis_alignment,
-                parent_counter_axis_alignment,
-                child_is_main_sized,
-                child_is_counter_axis_sized,
-                parent_is_main_axis_sized,
-                parent_is_counter_axis_sized,
-            ) = match child.flex_container.as_ref().map(|f| f.direction) {
-                None | Some(FlexDirection::Column) => (
-                    parent_height_alignment,
-                    parent_width_alignment,
-                    child.location.height.is_some(),
-                    child.location.width.is_some(),
-                    *height_from_descent_inclusive,
-                    *width_from_descent_inclusive,
+            let grandchildren = match &mut child.node_type {
+                IntermediateNodeType::Frame { ref mut children } => Some(
+                    children
+                        .iter_mut()
+                        .filter(|c| c.location.inset.is_none())
+                        .collect::<Vec<_>>(),
                 ),
-                Some(FlexDirection::Row) => (
-                    parent_width_alignment,
-                    parent_height_alignment,
-                    child.location.width.is_some(),
-                    child.location.height.is_some(),
-                    *width_from_descent_inclusive,
-                    *height_from_descent_inclusive,
-                ),
+                _ => None,
             };
 
-            let justify_content = match (
-                child_is_main_sized,
-                parent_is_main_axis_sized,
-                parent_main_axis_alignment.as_simplified_main_axis_alignment(),
-            ) {
-                (true, true, _) => return false,
-                (true, false, _) => child
-                    .flex_container
-                    .as_ref()
-                    .and_then(|f| f.justify_content),
-                (false, true, None) => return false,
-                (false, true, Some(j)) => Some(j),
-                (false, false, Some(j)) => Some(j),
-                (false, false, None) => child
-                    .flex_container
-                    .as_ref()
-                    .and_then(|f| f.justify_content),
-            };
+            let child_has_multiple_children = grandchildren
+                .as_ref()
+                .map(|gc| gc.len() > 1)
+                .unwrap_or(false);
 
-            let align_items = match (
-                child_is_counter_axis_sized,
-                parent_is_counter_axis_sized,
-                child_has_multiple_children,
-                parent_counter_axis_alignment.as_counter_axis_alignment(),
-            ) {
-                (true, true, _, _) => return false,
-                (true, false, _, _) | (false, false, true, _) => child
-                    .flex_container
-                    .as_ref()
-                    .map(|f| f.align_items)
-                    .unwrap_or(AlignItems::Stretch),
-                (false, true, true, parent_align_items) => {
-                    if parent_align_items
-                        == child
-                            .flex_container
-                            .as_ref()
-                            .map(|f| f.align_items)
-                            .unwrap_or(AlignItems::Stretch)
-                    {
-                        parent_align_items
-                    } else {
-                        return false;
-                    }
-                }
-                (false, _, false, parent_align_items) => parent_align_items,
-            };
+            let parent_flex = parent
+                .flex_container
+                .as_ref()
+                .unwrap_or(&BLOCK_FLEX)
+                .clone();
+            let child_flex = child.flex_container.as_ref().unwrap_or(&BLOCK_FLEX).clone();
 
-            if let Some(width) = child.location.width.take() {
-                parent.location.width = Some(
-                    width + parent.location.padding[1].clone() + parent.location.padding[3].clone(),
-                );
-            }
-
-            if let Some(height) = child.location.height.take() {
-                parent.location.height = Some(
-                    height
-                        + parent.location.padding[0].clone()
-                        + parent.location.padding[2].clone(),
-                );
-            }
-
-            parent.flex_container = child.flex_container.take();
-            match parent.flex_container {
-                Some(ref mut f) => {
-                    f.justify_content = justify_content;
-                    f.align_items = align_items;
-                }
-                None => {
-                    if justify_content.is_some() {
-                        parent.flex_container = Some(FlexContainer {
-                            align_items: align_items,
-                            direction: FlexDirection::Column,
-                            gap: Length::Zero,
-                            justify_content,
-                        })
-                    }
-                }
-            };
-            parent.appearance = Appearance {
-                color: child
-                    .appearance
-                    .color
-                    .take()
-                    .or(parent.appearance.color.take()),
-                fill: child
-                    .appearance
-                    .fill
-                    .take()
-                    .or(parent.appearance.fill.take()),
-                font: child
-                    .appearance
-                    .font
-                    .take()
-                    .or(parent.appearance.font.take()),
-                opacity: parent.appearance.opacity.take(),
-                preserve_whitespace: child.appearance.preserve_whitespace
-                    || parent.appearance.preserve_whitespace,
-                text_tranform: child
-                    .appearance
-                    .text_tranform
-                    .take()
-                    .or(parent.appearance.text_tranform.take()),
-                text_decoration_line: child
-                    .appearance
-                    .text_decoration_line
-                    .take()
-                    .or(parent.appearance.text_decoration_line.take()),
-            };
-
-            for i in 0..4 {
-                parent.location.padding[i] =
-                    std::mem::replace(&mut parent.location.padding[i], Length::Zero)
-                        + std::mem::replace(&mut child.location.padding[i], Length::Zero);
-            }
-
-            parent.node_type = std::mem::replace(
-                &mut child.node_type,
-                IntermediateNodeType::Frame { children: vec![] },
+            let parent_width_alignment = Alignment::from_flex_container_width(
+                &parent_flex,
+                child.location.align_self.as_ref(),
+            );
+            let parent_height_alignment = Alignment::from_flex_container_height(
+                &parent_flex,
+                child.location.align_self.as_ref(),
             );
 
-            true
+            let grandchild_align_self = match (&grandchildren, child_has_multiple_children) {
+                (None, _) | (_, true) => None,
+                (Some(gc), false) => gc.first().and_then(|n| n.location.align_self.as_ref()),
+            };
+
+            let child_width_alignment =
+                Alignment::from_flex_container_width(&child_flex, grandchild_align_self);
+            let child_height_alignment =
+                Alignment::from_flex_container_height(&child_flex, grandchild_align_self);
+
+            for attempt in [
+                FlexAttempt::Parent,
+                FlexAttempt::Child,
+                FlexAttempt::Horizonal,
+                FlexAttempt::Vertical,
+            ] {
+                if !matches!(attempt, FlexAttempt::Child) && child_has_multiple_children {
+                    continue;
+                }
+
+                let mut flex_container: FlexContainer = match (
+                    attempt,
+                    parent.flex_container.as_ref(),
+                    child.flex_container.as_ref(),
+                ) {
+                    (FlexAttempt::Parent, None, _) => continue,
+                    (FlexAttempt::Parent, Some(fc), _) => fc.clone(),
+                    (FlexAttempt::Child, _, Some(fc)) => fc.clone(),
+                    (FlexAttempt::Horizonal, _, _) => FlexContainer {
+                        direction: FlexDirection::Row,
+                        ..BLOCK_FLEX
+                    },
+                    (FlexAttempt::Vertical, _, _) | (FlexAttempt::Child, _, None) => {
+                        BLOCK_FLEX.clone()
+                    }
+                };
+                let (
+                    child_main_axis_alignment,
+                    child_counter_axis_alignment,
+                    parent_main_axis_alignment,
+                    parent_counter_axis_alignment,
+                    child_is_main_sized,
+                    child_is_counter_axis_sized,
+                    parent_is_main_axis_sized,
+                    parent_is_counter_axis_sized,
+                ) = match flex_container.direction {
+                    FlexDirection::Column => (
+                        child_height_alignment,
+                        child_width_alignment,
+                        parent_height_alignment,
+                        parent_width_alignment,
+                        child.location.height.is_some(),
+                        child.location.width.is_some(),
+                        *height_from_descent_inclusive,
+                        *width_from_descent_inclusive,
+                    ),
+                    FlexDirection::Row => (
+                        child_width_alignment,
+                        child_height_alignment,
+                        parent_width_alignment,
+                        parent_height_alignment,
+                        child.location.width.is_some(),
+                        child.location.height.is_some(),
+                        *width_from_descent_inclusive,
+                        *height_from_descent_inclusive,
+                    ),
+                };
+
+                let justify_content = match (
+                    child_is_main_sized,
+                    parent_is_main_axis_sized,
+                    child_main_axis_alignment.as_simplified_main_axis_alignment(),
+                    parent_main_axis_alignment.as_simplified_main_axis_alignment(),
+                ) {
+                    (true, true, _, _) => return false,
+                    (true, false, Some(j), _) => Some(j),
+                    (true, false, None, _) => continue,
+                    (false, true, _, None) => continue,
+                    (false, true, _, Some(j)) => Some(j),
+                    (false, false, _, Some(j)) => Some(j),
+                    (false, false, Some(j), None) => Some(j),
+                    (false, false, None, None) => continue,
+                };
+
+                let align_items = match (
+                    child_is_counter_axis_sized,
+                    parent_is_counter_axis_sized,
+                    child_has_multiple_children,
+                    child_counter_axis_alignment.as_counter_axis_alignment(),
+                    parent_counter_axis_alignment.as_counter_axis_alignment(),
+                ) {
+                    (true, true, _, _, _) => return false,
+                    (false, true, false, _, pa) => pa,
+                    (false, true, true, ca, pa) => {
+                        if ca == pa {
+                            pa
+                        } else {
+                            continue;
+                        }
+                    }
+                    (false, false, true, ca, _) => ca,
+                    (false, false, false, _, pa) => pa,
+                    (true, false, _, ca, _) => ca,
+                };
+
+                match (grandchildren, child_has_multiple_children) {
+                    (None, _) | (_, true) => {}
+                    (Some(mut gc), false) => {
+                        if let Some(gc) = gc.first_mut() {
+                            gc.location.align_self = None;
+                        }
+                    }
+                };
+
+                if let Some(width) = child.location.width.take() {
+                    parent.location.width = Some(
+                        width
+                            + parent.location.padding[1].clone()
+                            + parent.location.padding[3].clone(),
+                    );
+                }
+
+                if let Some(height) = child.location.height.take() {
+                    parent.location.height = Some(
+                        height
+                            + parent.location.padding[0].clone()
+                            + parent.location.padding[2].clone(),
+                    );
+                }
+
+                flex_container.justify_content = justify_content;
+                flex_container.align_items = align_items;
+                parent.flex_container = Some(flex_container);
+
+                parent.appearance = Appearance {
+                    color: child
+                        .appearance
+                        .color
+                        .take()
+                        .or(parent.appearance.color.take()),
+                    fill: child
+                        .appearance
+                        .fill
+                        .take()
+                        .or(parent.appearance.fill.take()),
+                    font: child
+                        .appearance
+                        .font
+                        .take()
+                        .or(parent.appearance.font.take()),
+                    opacity: parent.appearance.opacity.take(),
+                    preserve_whitespace: child.appearance.preserve_whitespace
+                        || parent.appearance.preserve_whitespace,
+                    text_tranform: child
+                        .appearance
+                        .text_tranform
+                        .take()
+                        .or(parent.appearance.text_tranform.take()),
+                    text_decoration_line: child
+                        .appearance
+                        .text_decoration_line
+                        .take()
+                        .or(parent.appearance.text_decoration_line.take()),
+                };
+
+                for i in 0..4 {
+                    parent.location.padding[i] =
+                        std::mem::replace(&mut parent.location.padding[i], Length::Zero)
+                            + std::mem::replace(&mut child.location.padding[i], Length::Zero);
+                }
+
+                parent.node_type = std::mem::replace(
+                    &mut child.node_type,
+                    IntermediateNodeType::Frame { children: vec![] },
+                );
+
+                return true;
+            }
+            false
         },
     )
 }

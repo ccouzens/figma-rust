@@ -141,12 +141,12 @@ pub fn recursive_visitor_mut_sized_downwards<'a, 'b>(
             // If there are multiple static children, assume the parent could be sized from a sibling
             let static_child = child.location.inset.is_none();
             let child_props = RecursiveVisitorMutSizedDownwardsProps {
-                width_from_descent_inclusive: (static_child && static_child_count > 1)
-                    || props.width_from_descent_inclusive
-                        && width_set_by_parent(child, parent_flex_direction, parent_align_items),
-                height_from_descent_inclusive: (static_child && static_child_count > 1)
-                    || props.height_from_descent_inclusive
-                        && height_set_by_parent(child, parent_flex_direction, parent_align_items),
+                width_from_descent_inclusive: ((static_child && static_child_count > 1)
+                    || props.width_from_descent_inclusive)
+                    && width_set_by_parent(child, parent_flex_direction, parent_align_items),
+                height_from_descent_inclusive: ((static_child && static_child_count > 1)
+                    || props.height_from_descent_inclusive)
+                    && height_set_by_parent(child, parent_flex_direction, parent_align_items),
                 node: child,
             };
 
