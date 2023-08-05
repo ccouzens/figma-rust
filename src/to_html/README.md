@@ -13,7 +13,6 @@ Generate HTML files from files fetched through the
 <div
   data-figma-name="Viewport=Desktop, Type=Primary, Hover=False, Focus=False, Disabled=False"
   data-figma-id="1:19"
-  data-figma-type="Component"
   style="
     background: var(--Other-Green);
     color: var(--Background);

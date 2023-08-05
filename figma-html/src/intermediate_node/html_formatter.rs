@@ -83,7 +83,6 @@ fn common_attributes(
     if let Some(figma) = intermediate_node.figma.as_ref() {
         attribute(f, level, "data-figma-name", figma.name.borrow())?;
         attribute(f, level, "data-figma-id", figma.id.borrow())?;
-        attribute(f, level, "data-figma-type", &format!("{:?}", figma.r#type))?;
     }
     if let Some(href) = intermediate_node.href.as_deref() {
         attribute(f, level, "href", href.borrow())?;
