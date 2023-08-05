@@ -12,13 +12,23 @@ enum Alignment {
 }
 
 impl Alignment {
-    fn from_flex_container_width(fc: &FlexContainer, child_alignment: Option<&AlignSelf>) -> Self {
+    fn from_flex_container_width(
+        fc: &FlexContainer,
+        child_alignment: Option<&AlignSelf>,
+        child_flex_grow: Option<f64>,
+    ) -> Self {
         match fc {
             FlexContainer {
                 direction: FlexDirection::Row,
                 justify_content,
                 ..
-            } => Alignment::Justify(justify_content.unwrap_or(JustifyContent::FlexStart)),
+            } => {
+                if child_flex_grow == Some(1.0) {
+                    Alignment::Align(AlignItems::Stretch)
+                } else {
+                    Alignment::Justify(justify_content.unwrap_or(JustifyContent::FlexStart))
+                }
+            }
 
             FlexContainer {
                 direction: FlexDirection::Column,
@@ -31,7 +41,11 @@ impl Alignment {
         }
     }
 
-    fn from_flex_container_height(fc: &FlexContainer, child_alignment: Option<&AlignSelf>) -> Self {
+    fn from_flex_container_height(
+        fc: &FlexContainer,
+        child_alignment: Option<&AlignSelf>,
+        child_flex_grow: Option<f64>,
+    ) -> Self {
         match fc {
             FlexContainer {
                 direction: FlexDirection::Row,
@@ -45,7 +59,13 @@ impl Alignment {
                 direction: FlexDirection::Column,
                 justify_content,
                 ..
-            } => Alignment::Justify(justify_content.unwrap_or(JustifyContent::FlexStart)),
+            } => {
+                if child_flex_grow == Some(1.0) {
+                    Alignment::Align(AlignItems::Stretch)
+                } else {
+                    Alignment::Justify(justify_content.unwrap_or(JustifyContent::FlexStart))
+                }
+            }
         }
     }
 
@@ -217,12 +237,15 @@ pub fn combine_parent_child(
             }
 
             let grandchildren = match &mut child.node_type {
-                IntermediateNodeType::Frame { ref mut children } => Some(
-                    children
-                        .iter_mut()
-                        .filter(|c| c.location.inset.is_none())
-                        .collect::<Vec<_>>(),
-                ),
+                IntermediateNodeType::Frame {
+                    children: ref mut grandchildren,
+                } => {
+                    if grandchildren.iter().any(|gc| gc.location.inset.is_some()) {
+                        return false;
+                    }
+
+                    Some(grandchildren)
+                }
                 _ => None,
             };
 
@@ -241,21 +264,33 @@ pub fn combine_parent_child(
             let parent_width_alignment = Alignment::from_flex_container_width(
                 &parent_flex,
                 child.location.align_self.as_ref(),
+                child.location.flex_grow,
             );
             let parent_height_alignment = Alignment::from_flex_container_height(
                 &parent_flex,
                 child.location.align_self.as_ref(),
+                child.location.flex_grow,
             );
 
             let grandchild_align_self = match (&grandchildren, child_has_multiple_children) {
                 (None, _) | (_, true) => None,
                 (Some(gc), false) => gc.first().and_then(|n| n.location.align_self.as_ref()),
             };
+            let grandchild_flex_grow = match (&grandchildren, child_has_multiple_children) {
+                (None, _) | (_, true) => None,
+                (Some(gc), false) => gc.first().and_then(|n| n.location.flex_grow),
+            };
 
-            let child_width_alignment =
-                Alignment::from_flex_container_width(&child_flex, grandchild_align_self);
-            let child_height_alignment =
-                Alignment::from_flex_container_height(&child_flex, grandchild_align_self);
+            let child_width_alignment = Alignment::from_flex_container_width(
+                &child_flex,
+                grandchild_align_self,
+                grandchild_flex_grow,
+            );
+            let child_height_alignment = Alignment::from_flex_container_height(
+                &child_flex,
+                grandchild_align_self,
+                grandchild_flex_grow,
+            );
 
             for attempt in [
                 FlexAttempt::Parent,
@@ -354,9 +389,10 @@ pub fn combine_parent_child(
 
                 match (grandchildren, child_has_multiple_children) {
                     (None, _) | (_, true) => {}
-                    (Some(mut gc), false) => {
+                    (Some(gc), false) => {
                         if let Some(gc) = gc.first_mut() {
                             gc.location.align_self = None;
+                            gc.location.flex_grow = None;
                         }
                     }
                 };
