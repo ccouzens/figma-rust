@@ -18,7 +18,11 @@ Generate HTML files from files fetched through the
     background: var(--Other-Green);
     color: var(--Background);
     font: var(--Desktop-Paragraph-Body);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     padding: 8px 12px 7px;
+    display: flex;
     position: absolute;
     inset: 23px auto auto 17px;
     box-shadow: inset 0 -2px #002d18;
