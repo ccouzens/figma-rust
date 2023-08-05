@@ -1,12 +1,6 @@
-use crate::{
-    intermediate_node::{
-        AlignItems, AlignSelf, CSSVariablesMap, FlexContainer, FrameAppearance, Inset,
-        IntermediateNode, IntermediateNodeType, Length,
-    },
-    InheritedProperties,
-};
+use crate::intermediate_node::{CSSVariablesMap, IntermediateNode, IntermediateNodeType, Length};
 
-use super::recursive_visitor_mut;
+use super::{recursive_visitor_mut_sized_downwards, RecursiveVisitorMutSizedDownwardsProps};
 
 /**
 Elevate frame appearance properties and href to the parent node.
@@ -48,133 +42,94 @@ pub fn elevate_frame_appearance_properties(
     node: &mut IntermediateNode,
     _css_variables: &mut CSSVariablesMap,
 ) -> bool {
-    let mut mutated = recursive_visitor_mut(
-        node,
-        &InheritedProperties::default(),
-        &mut |grand_parent, _inherited_properties| {
-            let mut mutated = false;
-            if let IntermediateNode {
-                node_type: IntermediateNodeType::Frame { children: parents },
-                ..
-            } = grand_parent
-            {
-                for parent in parents.iter_mut() {
-                    if parent.location.inset.is_some()
-                        || !matches!(
-                            grand_parent.flex_container,
-                            Some(FlexContainer {
-                                align_items: AlignItems::Stretch,
-                                ..
-                            })
-                        )
-                    {
-                        mutated |= parent_child_elevator(parent);
-                    }
-                }
-            }
-            mutated
+    recursive_visitor_mut_sized_downwards(
+        RecursiveVisitorMutSizedDownwardsProps {
+            node,
+            width_from_descent_inclusive: false,
+            height_from_descent_inclusive: false,
         },
-    );
+        &mut |RecursiveVisitorMutSizedDownwardsProps {
+                  node: parent,
+                  width_from_descent_inclusive,
+                  height_from_descent_inclusive,
+                  ..
+              }| {
+            let children = match parent {
+                IntermediateNode {
+                    node_type: IntermediateNodeType::Frame { children },
+                    ..
+                } => children,
+                _ => return false,
+            };
 
-    mutated |= parent_child_elevator(node);
-    mutated
-}
+            let mut static_children = children
+                .iter_mut()
+                .filter(|c| c.location.inset.is_none())
+                .collect::<Vec<_>>();
 
-/**
-Check if the child properties are eligible to be elevated to the parent and do so.
-Assumes the grandparent either doesn't exist, or has already been validated
-to not apply align-items: stretch to the parent.
-*/
-fn parent_child_elevator(parent: &mut IntermediateNode) -> bool {
-    if parent.location.width.is_some() || parent.location.height.is_some() {
-        return false;
-    }
+            if static_children.len() != 1 {
+                return false;
+            }
 
-    if let Some(flex_grow) = parent.location.flex_grow {
-        if flex_grow != 0.0 {
-            return false;
-        }
-    }
+            let static_child = match static_children.first_mut() {
+                Some(child) => child,
+                None => return false,
+            };
 
-    if let Some(inset) = &parent.location.inset {
-        if !(matches!(inset, &[Inset::Auto, _, _, _] | &[_, _, Inset::Auto, _])
-            && matches!(inset, &[_, Inset::Auto, _, _] | &[_, _, _, Inset::Auto]))
-        {
-            return false;
-        }
-    }
-
-    if matches!(parent.location.align_self, Some(AlignSelf::Stretch)) {
-        return false;
-    }
-
-    if !matches!(
-        parent.location.padding,
-        [Length::Zero, Length::Zero, Length::Zero, Length::Zero]
-    ) {
-        return false;
-    }
-
-    if let IntermediateNode {
-        node_type: IntermediateNodeType::Frame { children },
-        ..
-    } = parent
-    {
-        let mut static_children = children.iter_mut().filter(|n| n.location.inset.is_none());
-        if let (Some(child), None) = (static_children.next(), static_children.next()) {
-            if child.frame_appearance.border_radius.is_some()
-                && !matches!(
-                    parent,
-                    IntermediateNode {
-                        frame_appearance: FrameAppearance {
-                            background: None,
-                            border_radius: None,
-                            box_shadow: None,
-                            stroke: None
-                        },
-                        href: None,
-                        ..
-                    }
-                )
+            if static_child.location.width.is_some() && *width_from_descent_inclusive
+                || static_child.location.height.is_some() && *height_from_descent_inclusive
             {
+                return false;
+            }
+
+            if !matches!(
+                parent.location.padding,
+                [Length::Zero, Length::Zero, Length::Zero, Length::Zero]
+            ) {
                 return false;
             }
 
             let mut mutated = false;
 
             if parent.frame_appearance.background.is_none()
-                && child.frame_appearance.background.is_some()
+                && static_child.frame_appearance.background.is_some()
             {
-                parent.frame_appearance.background = child.frame_appearance.background.take();
+                parent.frame_appearance.background =
+                    static_child.frame_appearance.background.take();
                 mutated = true;
             }
 
-            if parent.frame_appearance.border_radius.is_none()
-                && child.frame_appearance.border_radius.is_some()
+            if (parent.frame_appearance.border_radius.is_none()
+                || parent.frame_appearance.border_radius
+                    == static_child.frame_appearance.border_radius)
+                && static_child.frame_appearance.border_radius.is_some()
             {
-                parent.frame_appearance.border_radius = child.frame_appearance.border_radius.take();
+                parent.frame_appearance.border_radius =
+                    static_child.frame_appearance.border_radius.take();
                 mutated = true;
             }
 
             if parent.frame_appearance.box_shadow.is_none()
-                && child.frame_appearance.box_shadow.is_some()
+                && static_child.frame_appearance.box_shadow.is_some()
             {
-                parent.frame_appearance.box_shadow = child.frame_appearance.box_shadow.take();
+                parent.frame_appearance.box_shadow =
+                    static_child.frame_appearance.box_shadow.take();
                 mutated = true;
             }
 
-            if parent.frame_appearance.stroke.is_none() && child.frame_appearance.stroke.is_some() {
-                parent.frame_appearance.stroke = child.frame_appearance.stroke.take();
+            if parent.frame_appearance.stroke.is_none()
+                && static_child.frame_appearance.stroke.is_some()
+            {
+                parent.frame_appearance.stroke = static_child.frame_appearance.stroke.take();
                 mutated = true;
             }
 
-            if child.href.is_some() {
-                parent.href = child.href.take();
+            if static_child.href.is_some() {
+                parent.href = static_child.href.take();
                 mutated = true;
             }
 
-            return mutated;
-        }
-    }
-    false
+            mutated
+        },
+    )
 }
