@@ -47,7 +47,7 @@ pub enum FlexDirection {
     Column,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, Copy)]
+#[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq)]
 pub enum JustifyContent {
     FlexStart,
     Center,

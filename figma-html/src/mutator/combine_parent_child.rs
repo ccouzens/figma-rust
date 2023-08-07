@@ -5,7 +5,7 @@ use crate::intermediate_node::{
 
 use super::{recursive_visitor_mut_sized_downwards, RecursiveVisitorMutSizedDownwardsProps};
 
-#[derive(Copy, Clone, Debug)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 enum Alignment {
     Justify(JustifyContent),
     Align(AlignItems),
@@ -69,30 +69,43 @@ impl Alignment {
         }
     }
 
-    fn as_simplified_main_axis_alignment(&self) -> Option<JustifyContent> {
-        match self {
-            Alignment::Justify(JustifyContent::FlexStart | JustifyContent::SpaceBetween) => {
-                Some(JustifyContent::FlexStart)
+    /**
+    Convert to main axis alignment (justify content).
+
+    The bool signifies if the children should have flex-grow set
+    */
+    fn as_simplified_main_axis_alignment(
+        &self,
+        single_child: bool,
+    ) -> Option<(JustifyContent, bool)> {
+        match (self, single_child) {
+            (Alignment::Justify(j), _) => Some((*j, false)),
+            (Alignment::Align(AlignItems::FlexStart), _) => {
+                Some((JustifyContent::FlexStart, false))
             }
-            Alignment::Justify(JustifyContent::Center) => Some(JustifyContent::Center),
-            Alignment::Justify(JustifyContent::FlexEnd) => Some(JustifyContent::FlexEnd),
-            Alignment::Align(AlignItems::Baseline | AlignItems::FlexStart) => {
-                Some(JustifyContent::FlexStart)
+            (Alignment::Align(AlignItems::Center), _) => Some((JustifyContent::Center, false)),
+            (Alignment::Align(AlignItems::FlexEnd), _) => Some((JustifyContent::FlexEnd, false)),
+            (Alignment::Align(AlignItems::Stretch), true) => {
+                Some((JustifyContent::FlexStart, true))
             }
-            Alignment::Align(AlignItems::Center) => Some(JustifyContent::Center),
-            Alignment::Align(AlignItems::FlexEnd) => Some(JustifyContent::FlexEnd),
-            Alignment::Align(AlignItems::Stretch) => None,
+            (Alignment::Align(AlignItems::Stretch), false) => None,
+            (Alignment::Align(AlignItems::Baseline), true) => {
+                Some((JustifyContent::FlexStart, false))
+            }
+            (Alignment::Align(AlignItems::Baseline), false) => None,
         }
     }
 
-    fn as_counter_axis_alignment(&self) -> AlignItems {
-        match self {
-            Alignment::Align(x) => *x,
-            Alignment::Justify(JustifyContent::FlexStart | JustifyContent::SpaceBetween) => {
-                AlignItems::FlexStart
+    fn as_counter_axis_alignment(&self, single_child: bool) -> Option<AlignItems> {
+        match (self, single_child) {
+            (Alignment::Align(x), _) => Some(*x),
+            (Alignment::Justify(JustifyContent::FlexStart), _)
+            | (Alignment::Justify(JustifyContent::SpaceBetween), true) => {
+                Some(AlignItems::FlexStart)
             }
-            Alignment::Justify(JustifyContent::FlexEnd) => AlignItems::FlexEnd,
-            Alignment::Justify(JustifyContent::Center) => AlignItems::Center,
+            (Alignment::Justify(JustifyContent::FlexEnd), _) => Some(AlignItems::FlexEnd),
+            (Alignment::Justify(JustifyContent::Center), _) => Some(AlignItems::Center),
+            (Alignment::Justify(JustifyContent::SpaceBetween), false) => None,
         }
     }
 }
@@ -343,48 +356,82 @@ pub fn combine_parent_child(
                         child_height_alignment,
                         parent_width_alignment,
                         parent_height_alignment,
-                        child.location.width.is_some(),
-                        child.location.height.is_some(),
+                        child.location.width.is_some()
+                            || child.location.flex_grow == Some(1.0)
+                                && *width_from_descent_inclusive,
+                        child.location.height.is_some()
+                            || (child.location.align_self == Some(AlignSelf::Stretch)
+                                || parent_height_alignment
+                                    == Alignment::Align(AlignItems::Stretch))
+                                && *height_from_descent_inclusive,
                         *width_from_descent_inclusive,
                         *height_from_descent_inclusive,
                     ),
                 };
 
-                let justify_content = match (
-                    child_is_main_sized,
+                let main_axis_equal = child.location.flex_grow == Some(1.0) && !child_is_main_sized;
+                let counter_axis_equal = (child.location.align_self == Some(AlignSelf::Stretch)
+                    || parent_counter_axis_alignment == Alignment::Align(AlignItems::Stretch))
+                    && !child_is_counter_axis_sized;
+
+                let (justify_content, use_flex_grow) = match (
                     parent_is_main_axis_sized,
-                    child_main_axis_alignment.as_simplified_main_axis_alignment(),
-                    parent_main_axis_alignment.as_simplified_main_axis_alignment(),
+                    child_is_main_sized,
+                    parent_main_axis_alignment.as_simplified_main_axis_alignment(true),
+                    child_main_axis_alignment
+                        .as_simplified_main_axis_alignment(!child_has_multiple_children),
+                    main_axis_equal,
                 ) {
-                    (true, true, _, _) => return false,
-                    (true, false, Some(j), _) => Some(j),
-                    (true, false, None, _) => continue,
-                    (false, true, _, None) => continue,
-                    (false, true, _, Some(j)) => Some(j),
-                    (false, false, _, Some(j)) => Some(j),
-                    (false, false, Some(j), None) => Some(j),
-                    (false, false, None, None) => continue,
+                    (true, true, _, _, _) => return false,
+                    (true, false, Some(pj), _, false) => pj,
+                    (true, false, None, _, false) => continue,
+                    (true, false, _, Some(cj), true) => cj,
+                    (true, false, _, None, true) => continue,
+                    (false, true, _, Some(cj), _) => cj,
+                    (false, true, _, None, _) => continue,
+                    (false, false, None, None, _) => continue,
+                    (false, false, None, Some(cj), _) => cj,
+                    (false, false, Some(_pj), None, true) => continue,
+                    (false, false, Some(pj), None, false) => pj,
+                    (false, false, _, Some(cj), true) => cj,
+                    // Flex no stretch is boring, avoid it
+                    (false, false, Some((JustifyContent::FlexStart, false)), Some(cj), false) => cj,
+                    (false, false, Some(pj), Some((JustifyContent::FlexStart, false)), false) => pj,
+                    (false, false, Some(pj), Some(_cj), false) => pj,
                 };
 
                 let align_items = match (
-                    child_is_counter_axis_sized,
                     parent_is_counter_axis_sized,
+                    child_is_counter_axis_sized,
+                    parent_counter_axis_alignment.as_counter_axis_alignment(true),
+                    child_counter_axis_alignment
+                        .as_counter_axis_alignment(!child_has_multiple_children),
                     child_has_multiple_children,
-                    child_counter_axis_alignment.as_counter_axis_alignment(),
-                    parent_counter_axis_alignment.as_counter_axis_alignment(),
+                    counter_axis_equal,
                 ) {
-                    (true, true, _, _, _) => return false,
-                    (false, true, false, _, pa) => pa,
-                    (false, true, true, ca, pa) => {
-                        if ca == pa {
+                    (true, true, _, _, _, _) => return false,
+                    (false, _, _, Some(ca), true, _) => ca,
+                    (false, _, _, None, true, _) => {
+                        continue;
+                    }
+                    (true, false, Some(pa), _, false, false) => pa,
+                    (true, false, Some(pa), Some(ca), true, false) => {
+                        if pa == ca {
                             pa
                         } else {
                             continue;
                         }
                     }
-                    (false, false, true, ca, _) => ca,
-                    (false, false, false, _, pa) => pa,
-                    (true, false, _, ca, _) => ca,
+                    (true, false, None, _, _, false) => continue,
+                    (_, _, _, Some(ca), _, true) => ca,
+                    (_, _, _, None, _, true) => continue,
+                    (_, _, _, None, true, _) => continue,
+                    (false, _, Some(pa), None, false, false) => pa,
+                    (_, _, None, None, _, _) => continue,
+
+                    (false, _, None, Some(ca), false, false) => ca,
+                    (false, true, _, Some(ca), false, false) => ca,
+                    (false, false, Some(pa), Some(_), false, false) => pa,
                 };
 
                 match (grandchildren, child_has_multiple_children) {
@@ -392,7 +439,7 @@ pub fn combine_parent_child(
                     (Some(gc), false) => {
                         if let Some(gc) = gc.first_mut() {
                             gc.location.align_self = None;
-                            gc.location.flex_grow = None;
+                            gc.location.flex_grow = if use_flex_grow { Some(1.0) } else { None };
                         }
                     }
                 };
@@ -413,7 +460,7 @@ pub fn combine_parent_child(
                     );
                 }
 
-                flex_container.justify_content = justify_content;
+                flex_container.justify_content = Some(justify_content);
                 flex_container.align_items = align_items;
                 parent.flex_container = Some(flex_container);
 
