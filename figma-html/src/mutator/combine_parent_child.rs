@@ -315,21 +315,14 @@ pub fn combine_parent_child(
                     continue;
                 }
 
-                let mut flex_container: FlexContainer = match (
-                    attempt,
-                    parent.flex_container.as_ref(),
-                    child.flex_container.as_ref(),
-                ) {
-                    (FlexAttempt::Parent, None, _) => continue,
-                    (FlexAttempt::Parent, Some(fc), _) => fc.clone(),
-                    (FlexAttempt::Child, _, Some(fc)) => fc.clone(),
-                    (FlexAttempt::Horizonal, _, _) => FlexContainer {
+                let mut flex_container: FlexContainer = match attempt {
+                    FlexAttempt::Parent => parent_flex.clone(),
+                    FlexAttempt::Child => child_flex.clone(),
+                    FlexAttempt::Horizonal => FlexContainer {
                         direction: FlexDirection::Row,
                         ..BLOCK_FLEX
                     },
-                    (FlexAttempt::Vertical, _, _) | (FlexAttempt::Child, _, None) => {
-                        BLOCK_FLEX.clone()
-                    }
+                    FlexAttempt::Vertical => BLOCK_FLEX.clone(),
                 };
                 let (
                     child_main_axis_alignment,
@@ -369,10 +362,21 @@ pub fn combine_parent_child(
                     ),
                 };
 
-                let main_axis_equal = child.location.flex_grow == Some(1.0) && !child_is_main_sized;
-                let counter_axis_equal = (child.location.align_self == Some(AlignSelf::Stretch)
-                    || parent_counter_axis_alignment == Alignment::Align(AlignItems::Stretch))
-                    && !child_is_counter_axis_sized;
+                let (main_axis_equal, counter_axis_equal) =
+                    match flex_container.direction == parent_flex.direction {
+                        true => (
+                            child.location.flex_grow == Some(1.0),
+                            (child.location.align_self == Some(AlignSelf::Stretch)
+                                || parent_flex.align_items == AlignItems::Stretch)
+                                && !child_is_counter_axis_sized,
+                        ),
+                        false => (
+                            (child.location.align_self == Some(AlignSelf::Stretch)
+                                || parent_flex.align_items == AlignItems::Stretch)
+                                && !child_is_main_sized,
+                            child.location.flex_grow == Some(1.0),
+                        ),
+                    };
 
                 let (justify_content, use_flex_grow) = match (
                     parent_is_main_axis_sized,
