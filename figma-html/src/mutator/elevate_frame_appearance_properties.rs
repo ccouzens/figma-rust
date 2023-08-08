@@ -1,6 +1,12 @@
-use crate::intermediate_node::{CSSVariablesMap, IntermediateNode, IntermediateNodeType, Length};
+use crate::intermediate_node::{
+    AlignItems, AlignSelf, CSSVariablesMap, FlexDirection, IntermediateNode, IntermediateNodeType,
+    Length,
+};
 
-use super::{recursive_visitor_mut_sized_downwards, RecursiveVisitorMutSizedDownwardsProps};
+use super::{
+    combine_parent_child::BLOCK_FLEX, recursive_visitor_mut_sized_downwards,
+    RecursiveVisitorMutSizedDownwardsProps,
+};
 
 /**
 Elevate frame appearance properties and href to the parent node.
@@ -76,12 +82,41 @@ pub fn elevate_frame_appearance_properties(
                 None => return false,
             };
 
-            if static_child.location.width.is_some() && *width_from_descent_inclusive
-                || static_child.location.height.is_some() && *height_from_descent_inclusive
             {
-                return false;
-            }
+                let parent_flex = parent.flex_container.as_ref().unwrap_or(&BLOCK_FLEX);
+                let (
+                    parent_is_main_axis_sized,
+                    parent_is_counter_axis_sized,
+                    _child_is_main_axis_sized,
+                    child_is_counter_axis_sized,
+                ) = match parent_flex.direction {
+                    FlexDirection::Row => (
+                        *width_from_descent_inclusive,
+                        *height_from_descent_inclusive,
+                        static_child.location.width.is_some(),
+                        static_child.location.height.is_some(),
+                    ),
+                    FlexDirection::Column => (
+                        *height_from_descent_inclusive,
+                        *width_from_descent_inclusive,
+                        static_child.location.height.is_some(),
+                        static_child.location.width.is_some(),
+                    ),
+                };
 
+                if parent_is_main_axis_sized && static_child.location.flex_grow != Some(1.0) {
+                    return false;
+                }
+                if parent_is_counter_axis_sized && child_is_counter_axis_sized {
+                    return false;
+                }
+                if parent_is_counter_axis_sized
+                    && parent_flex.align_items != AlignItems::Stretch
+                    && static_child.location.align_self != Some(AlignSelf::Stretch)
+                {
+                    return false;
+                }
+            }
             if !matches!(
                 parent.location.padding,
                 [Length::Zero, Length::Zero, Length::Zero, Length::Zero]

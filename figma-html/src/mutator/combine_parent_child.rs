@@ -117,7 +117,7 @@ enum FlexAttempt {
     Vertical,
 }
 
-const BLOCK_FLEX: FlexContainer = FlexContainer {
+pub const BLOCK_FLEX: FlexContainer = FlexContainer {
     align_items: AlignItems::Stretch,
     direction: FlexDirection::Column,
     gap: Length::Zero,
