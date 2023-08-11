@@ -150,7 +150,7 @@ impl CssProperties for Node {
         let line_height = font_style.line_height_px;
         let family = &font_style.font_family;
 
-        let font_value = format!("{style} {variant} {weight} {size}px/{line_height}px {family}");
+        let font_value = format!(r#"{style} {variant} {weight} {size}px/{line_height}px "{family}""#);
 
         match self.styles.as_ref().and_then(|s| s.text.as_deref()) {
             Some(s_ref) => match css_variables.get_mut(s_ref) {
