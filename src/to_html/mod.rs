@@ -12,7 +12,7 @@ pub fn main(
     _stderr: &mut impl Write,
     node_id: &str,
 ) -> Result<()> {
-    let body = find_figma_node_by_id(file, node_id)
+    let (body, _) = find_figma_node_by_id(file, node_id)
         .with_context(|| format!("Failed to find node with id {}", node_id))?;
 
     let mut css_variables = file_collect_css_variables(file);

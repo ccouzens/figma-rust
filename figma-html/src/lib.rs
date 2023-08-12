@@ -37,12 +37,11 @@ pub fn file_collect_css_variables(file: &figma_schema::File) -> CSSVariablesMap 
 pub fn find_figma_node_by_id<'a>(
     file: &'a figma_schema::File,
     node_id: &str,
-) -> Option<&'a figma_schema::Node> {
-    let (node, _) = file
+) -> Option<(&'a figma_schema::Node, Vec<&'a Node>)> {
+    file
         .document
         .depth_first_stack_iter()
-        .find(|(n, _)| n.id == node_id)?;
-    Some(node)
+        .find(|(n, _)| n.id == node_id)
 }
 
 pub fn figma_node_to_intermediate_node<'a>(
