@@ -56,6 +56,7 @@ pub fn intermediate_node_to_html_writer(
     writer: &mut impl Write,
     node: &IntermediateNode,
     css_variables: &CSSVariablesMap,
+    additional_css_rules: &str,
 ) -> Result<(), std::io::Error> {
     let mut naive_css = "margin: 0;".to_string();
     for v in css_variables.values() {
@@ -76,6 +77,7 @@ pub fn intermediate_node_to_html_writer(
   ><head
     ><meta charset="utf-8" /><title>{}</title
     ><style type="text/css">
+{additional_css_rules}
       body {{{}}}
     </style></head
   ><body

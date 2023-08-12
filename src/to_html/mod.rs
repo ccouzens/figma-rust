@@ -25,6 +25,6 @@ pub fn main(
         || mutator::elevate_frame_appearance_properties(&mut node, &mut css_variables)
     {}
 
-    intermediate_node_to_html_writer(stdout, &node, &css_variables)
+    intermediate_node_to_html_writer(stdout, &node, &css_variables, "")
         .context("Failed to write HTML to stdout")
 }
